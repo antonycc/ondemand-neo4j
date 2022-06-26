@@ -1,0 +1,3 @@
+brew install openjdk@18
+java -version
+./gradlew --version

@@ -22,19 +22,19 @@ On-demand Neo4j:
 
 # TODO
 
-* Create annoted classes for persistence.
+* Create annotated classes for persistence.
 * Add a Spring Boot hosted REST API.
 * Run unit tests against an embedded database.
 * Run against an official Docker image.
 * Restore state into a containerised instance and backup on shutdown.
 * Add encrypted secrets to the repository.
 * Deploy REST API as an AWS Lambda which synchronously restores from Amazon EC2 into an embedded database.
-* Add defered synchronous AWS Lambda which responds 503 + RetryAfter (start time).
+* Add referred synchronous AWS Lambda which responds 503 + RetryAfter (start time).
 * Deploy a EC2 hosted static site with demo links to start and query the database.
 * Script to generate API keys.
 * Protect APIs which consume resources with an API key.
 * Add a logged in area with AWS Cognito restricting access to operations which consume resources and add a pre-built API key.
-* Deploy using Amazon ECS which is started on demand and shutdown when not in use and an AWS Lambda which starts suggests a call rety period.
+* Deploy using Amazon ECS which is started on demand and shutdown when not in use and an AWS Lambda which starts suggests a call retry period.
 * Deploy a Neo4J browser based connection browser in an ECS cluster and link to the on-demand management.
 * Use AWS Cognito generate a session API key accepted by the provisioning APIs.
 

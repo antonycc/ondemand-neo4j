@@ -51,7 +51,7 @@ dependencies {
 
     // All logging via SLF4J
     implementation("org.slf4j:slf4j-api:1.7.36")
-    implementation("io.github.microutils:kotlin-logging-jvm:2.1.21"){
+    implementation("io.github.microutils:kotlin-logging-jvm:2.1.23"){
         exclude("org.jetbrains.kotlin")
         exclude("org.slf4j")
     }
@@ -62,6 +62,10 @@ dependencies {
     // Testing
     testImplementation(kotlin("test"))
 
+    // Spring Data Neo4j
+    //implementation("org.springframework.boot:spring-boot-starter-data-neo4j:2.7.1")
+    //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
+    implementation("org.springframework.data:spring-data-neo4j:6.3.1")
 }
 
 tasks.test {

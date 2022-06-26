@@ -22,6 +22,8 @@ On-demand Neo4j:
 
 # TODO
 
+* Reinstate coverage analysis
+* Reintroduce static analysis
 * Create annotated classes for persistence.
 * Add a Spring Boot hosted REST API.
 * Run unit tests against an embedded database.
@@ -34,7 +36,7 @@ On-demand Neo4j:
 * Script to generate API keys.
 * Protect APIs which consume resources with an API key.
 * Add a logged in area with AWS Cognito restricting access to operations which consume resources and add a pre-built API key.
-* Deploy using Amazon ECS which is started on demand and shutdown when not in use and an AWS Lambda which starts suggests a call retry period.
+* Deploy using Amazon ECS which is started on demand and shutdown when not in use and an AWS Lambda which suggests a call retry period.
 * Deploy a Neo4J browser based connection browser in an ECS cluster and link to the on-demand management.
 * Use AWS Cognito generate a session API key accepted by the provisioning APIs.
 
@@ -144,3 +146,39 @@ The following files are copies of or derivatives of Semantic Version Gradle Plug
 .github/workflows/increment_version.yml
   - Copy of https://github.com/dipien/semantic-version-gradle-plugin/blob/master/.github/workflows/increment_version.yml
 ```
+
+## Licence - libschemaorg
+
+libschemaorg is released under the Mozilla Public License, v. 2.0:
+```java
+/**
+ * libschemaorg builds Source Code from the Schema.org OWL file
+ * Copyright (C) 2022  Antony Cartwright, Polycode Limited
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * Mozilla Public License, v. 2.0 for more details.
+ */
+```
+
+## Licence - Schema.org
+
+libschemaorg uses the Schema from Schema.org which is released under the Creative Commons Attribution-ShareAlike License (version 3.0): https://creativecommons.org/licenses/by-sa/3.0/
+Schema.org Version 14.0 is currently used and this can be downloaded from https://schema.org/docs/schemaorg.owl
+( Release archive: https://github.com/schemaorg/schemaorg/tree/main/data/releases/14.0/ )
+The following files are copies of or derivatives of Schema.org schemas:
+```shell
+./src/test/resources/schemaorg.owl - Schema.org Version 14.0: copy of https://schema.org/docs/schemaorg.owl
+```
+Java objects generated from these files are referenced in libschemaorg source code and tests
+
+## Foundational tutorials
+
+* https://docs.spring.io/spring-data/neo4j/docs/current/reference/html/
+* https://github.com/neo4j-examples/movies-java-spring-data-neo4j/blob/sdn6-full-example/pom.xml
+* https://github.com/neo4j-examples/movies-java-spring-data-neo4j/blob/main/src/test/java/movies/spring/data/neo4j/movies/MovieServiceTest.java

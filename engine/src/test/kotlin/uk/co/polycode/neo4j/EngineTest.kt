@@ -1,5 +1,6 @@
-package uk.co.polycode.neo4j.engine
+package uk.co.polycode.neo4j
 
+import kotlin.test.*
 
 /**
  * On-demand Neo4j is an exploration of Neo4j with deployment to AWS
@@ -14,10 +15,9 @@ package uk.co.polycode.neo4j.engine
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * Mozilla Public License, v. 2.0 for more details.
  */
- class Engine {
-
-    fun main() {
-        println("Hello On-Demand Neo4j Engine World!")
+class EngineTest {
+    @Test fun testEngine() {
+        Engine().main()
+        assertTrue(Engine().toString().isNotBlank())
     }
 }
-

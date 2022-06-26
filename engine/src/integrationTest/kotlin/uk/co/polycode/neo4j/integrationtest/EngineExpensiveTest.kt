@@ -1,6 +1,6 @@
-package uk.co.polycode.neo4j.engine.integrationtest
+package uk.co.polycode.neo4j.integrationtest
 
-import uk.co.polycode.neo4j.engine.Engine
+import uk.co.polycode.neo4j.Engine
 import kotlin.test.*
 
 /**

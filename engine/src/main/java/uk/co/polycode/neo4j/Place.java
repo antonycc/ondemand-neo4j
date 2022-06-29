@@ -3,8 +3,6 @@ package uk.co.polycode.neo4j;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
-import java.lang.Boolean;
-import java.lang.String;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -21,12 +19,22 @@ import java.math.BigInteger;
  *
  */
 @Node
-public class Place extends Thing {
+public class Place { // extends Thing {
+
+	/**
+	 * The synthetic key for this item.
+	 */
+	@Id
+	public String id;
+
+	/**
+	 * A Place is a Thing
+	 */
+	public Thing thing;
 
 	/**
 	 * Physical address of the item.
 	 */
-	@Id
 	public PostalAddress address;
 
 	/**

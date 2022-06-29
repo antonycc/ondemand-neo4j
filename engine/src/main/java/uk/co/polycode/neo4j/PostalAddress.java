@@ -3,8 +3,6 @@ package uk.co.polycode.neo4j;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
-import java.lang.String;
-
 /**
  * PostalAddress
  *
@@ -18,7 +16,18 @@ import java.lang.String;
  *
  */
 @Node
-public class PostalAddress extends Thing {
+public class PostalAddress { // extends Thing {
+
+	/**
+	 * The synthetic key for this item.
+	 */
+	@Id
+	public String id;
+
+	/**
+	 * A PostalAddress is a Thing
+	 */
+	public Thing thing;
 
 	/**
 	 * The country. For example, USA. You can also provide the two-letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1 alpha-2 country code</a>.
@@ -43,7 +52,6 @@ public class PostalAddress extends Thing {
 	/**
 	 * The postal code. For example, 94043.
 	 */
-	@Id
 	public String postalCode;
 
 	/**

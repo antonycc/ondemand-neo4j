@@ -13,6 +13,9 @@ import java.net.URI
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // Mozilla Public License, v. 2.0 for more details.
 
+val kotlinVersion: String by project
+val targetJvmVersion: String by project
+
 buildscript {
     repositories {
         mavenCentral() // or gradlePluginPortal()
@@ -26,17 +29,16 @@ apply(plugin = "com.dipien.semantic-version")
 plugins {
     `kotlin-dsl`
     base
-    application
     `maven-publish`
-    id("org.jetbrains.kotlin.jvm") version "1.7.0-RC2"  // "1.5.31" // "1.6.21"
+    id("org.jetbrains.kotlin.jvm") version "1.7.0"
 }
 
 afterEvaluate {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            apiVersion = "1.6"
-            languageVersion = "1.6"
-            jvmTarget = "1.8"
+            apiVersion = kotlinVersion // "1.7"
+            languageVersion = kotlinVersion //"1.7"
+            jvmTarget = targetJvmVersion // "11"
         }
     }
 }
@@ -98,24 +100,24 @@ publishing {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(targetJvmVersion))
     }
 }
 
 repositories {
-    mavenCentral()
+    //mavenCentral()
 }
 
 // Check: gradle -q dependencies --configuration compileClasspath
 dependencies {
 
     // All logging via SLF4J
-    implementation("org.slf4j:slf4j-api:1.7.36")
-    implementation("io.github.microutils:kotlin-logging-jvm:2.1.21"){
-        exclude("org.jetbrains.kotlin")
-        exclude("org.slf4j")
-    }
+    //implementation("org.slf4j:slf4j-api:1.7.36")
+    //implementation("io.github.microutils:kotlin-logging-jvm:2.1.21"){
+    //    exclude("org.jetbrains.kotlin")
+    //    exclude("org.slf4j")
+    //}
 
     // Run as Jar in Java8+
-    implementation(kotlin("stdlib-jdk8"))
+    //implementation(kotlin("stdlib-jdk8"))
 }

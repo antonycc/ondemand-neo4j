@@ -19,7 +19,19 @@ import java.time.ZonedDateTime;
  *
  */
 @Node
-public class Person extends Thing {
+public class Person { // extends Thing {
+
+	/**
+	 * The synthetic key for this item.
+	 */
+	@Id
+	public String id;
+
+	/**
+	 * A Person is a Thing
+	 */
+	public Thing thing;
+
 	/**
 	 * An additional name for a Person, can be used for a middle name.
 	 */
@@ -248,7 +260,6 @@ public class Person extends Thing {
 	/**
 	 * The Tax / Fiscal ID of the organization or person, e.g. the TIN in the US or the CIF/NIF in Spain.
 	 */
-	@Id
 	public String taxID;
 
 	/**
@@ -259,7 +270,6 @@ public class Person extends Thing {
 	/**
 	 * The Value-added Tax ID of the organization or person.
 	 */
-	@Id
 	public String vatID;
 
 	/**

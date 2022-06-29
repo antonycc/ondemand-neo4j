@@ -3,7 +3,6 @@ package uk.co.polycode.neo4j;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
-import java.lang.String;
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
 
@@ -20,7 +19,18 @@ import java.time.ZonedDateTime;
  *
  */
 @Node
-public class Organization extends Thing {
+public class Organization { // extends Thing {
+
+	/**
+	 * The synthetic key for this item.
+	 */
+	@Id
+	public String id;
+
+	/**
+	 * An Organisation is a Thing
+	 */
+	public Thing thing;
 
 	/**
 	 * Physical address of the item.
@@ -110,7 +120,6 @@ public class Organization extends Thing {
 	/**
 	 * An organization identifier as defined in ISO 6523(-1). Note that many existing organization identifiers such as <a href="https://schema.org/leiCode">leiCode</a>, <a href="https://schema.org/duns">duns</a> and <a href="https://schema.org/vatID">vatID</a> can be expressed as an ISO 6523 identifier by setting the ICD part of the ISO 6523 identifier accordingly.
 	 */
-	@Id
 	public String iso6523Code;
 
 	/**
@@ -131,13 +140,11 @@ public class Organization extends Thing {
 	/**
 	 * The official name of the organization, e.g. the registered company name.
 	 */
-	@Id
 	public String legalName;
 
 	/**
 	 * An organization identifier that uniquely identifies a legal entity as defined in ISO 17442.
 	 */
-	@Id
 	public String leiCode;
 
 	/**
@@ -213,7 +220,6 @@ public class Organization extends Thing {
 	/**
 	 * The Tax / Fiscal ID of the organization or person, e.g. the TIN in the US or the CIF/NIF in Spain.
 	 */
-	@Id
 	public String taxID;
 
 	/**
@@ -224,7 +230,6 @@ public class Organization extends Thing {
 	/**
 	 * The Value-added Tax ID of the organization or person.
 	 */
-	@Id
 	public String vatID;
 
 	/**

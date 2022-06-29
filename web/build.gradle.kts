@@ -12,34 +12,32 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // Mozilla Public License, v. 2.0 for more details.
 
+val kotlinVersion: String by project
+val targetJvmVersion: String by project
+
 buildscript {
-    repositories {
-        mavenCentral() // or gradlePluginPortal()
-    }
 }
 
 plugins {
     `kotlin-dsl`
-    application
-    `maven-publish`
     id("org.unbroken-dome.test-sets") version "4.0.0"
-    id("org.jetbrains.kotlin.jvm") version "1.7.0-RC2"  // "1.5.31" // "1.6.21"
+    id("org.jetbrains.kotlin.jvm") version "1.7.0"
     id("com.github.jk1.dependency-license-report") version "2.0"
 }
 
 afterEvaluate {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            apiVersion = "1.6"
-            languageVersion = "1.6"
-            jvmTarget = "1.8"
+            apiVersion = kotlinVersion
+            languageVersion = kotlinVersion
+            jvmTarget = targetJvmVersion
         }
     }
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(targetJvmVersion))
     }
 }
 
@@ -47,18 +45,7 @@ repositories {
     mavenCentral()
 }
 
-// Check: gradle -q dependencies --configuration compileClasspath
 dependencies {
-
-    // All logging via SLF4J
-    implementation("org.slf4j:slf4j-api:1.7.36")
-    implementation("io.github.microutils:kotlin-logging-jvm:2.1.21"){
-        exclude("org.jetbrains.kotlin")
-        exclude("org.slf4j")
-    }
-
-    // Run as Jar in Java8+
-    implementation(kotlin("stdlib-jdk8"))
 
     // Testing
     testImplementation(kotlin("test"))
@@ -91,7 +78,7 @@ testSets {
 }
 
 task<Test>("integrationTest"){
-    description = "Runs the integration tests"
+    description = "Runs the integration tests project: web"
     group = "verification"
     testClassesDirs = sourceSets["integrationTest"].output.classesDirs
     classpath = sourceSets["integrationTest"].runtimeClasspath

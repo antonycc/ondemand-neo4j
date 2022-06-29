@@ -12,33 +12,32 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // Mozilla Public License, v. 2.0 for more details.
 
+val kotlinVersion: String by project
+val targetJvmVersion: String by project
+
 buildscript {
-    repositories {
-        mavenCentral()
-    }
 }
 
 plugins {
     `kotlin-dsl`
     application
-    `maven-publish`
     id("org.unbroken-dome.test-sets") version "4.0.0"
-    id("org.jetbrains.kotlin.jvm") version "1.7.0-RC2"  // "1.5.31" // "1.6.21"
+    id("org.jetbrains.kotlin.jvm") version "1.7.0"
 }
 
 afterEvaluate {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            apiVersion = "1.6"
-            languageVersion = "1.6"
-            jvmTarget = "1.8"
+            apiVersion = kotlinVersion
+            languageVersion = kotlinVersion
+            jvmTarget = targetJvmVersion
         }
     }
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(targetJvmVersion))
     }
 }
 
@@ -55,17 +54,35 @@ dependencies {
         exclude("org.jetbrains.kotlin")
         exclude("org.slf4j")
     }
+    //exclude("io.github.microutils:kotlin-logging-jvm")
 
     // Run as Jar in Java8+
     implementation(kotlin("stdlib-jdk8"))
 
-    // Testing
-    testImplementation(kotlin("test"))
-
     // Spring Data Neo4j
     //implementation("org.springframework.boot:spring-boot-starter-data-neo4j:2.7.1")
     //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
-    implementation("org.springframework.data:spring-data-neo4j:6.3.1")
+    implementation("org.springframework.data:spring-data-neo4j:6.3.1") {
+        exclude("org.slf4j")
+    }
+    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.1")//{
+
+    // Testing
+    testImplementation(kotlin("test"))
+
+    // Spring Boot testing with Neo4J test harness
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.1"){
+        //exclude("org.junit.vintage:junit-vintage-engine")
+        //exclude("org.mockito:mockito-core")
+        //exclude("org.springframework.boot:spring-boot-starter-logging")
+        exclude("ch.qos.logback")
+        //exclude("org.slf4j")
+    }
+    testImplementation("org.testcontainers:neo4j:1.17.2")//{
+    testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0")//{
+    testImplementation("org.neo4j.test:neo4j-harness:4.4.8")//{
+    //testCompile project(':A').sourceSets.test.output
+
 }
 
 tasks.test {
@@ -95,7 +112,7 @@ testSets {
 }
 
 task<Test>("integrationTest"){
-    description = "Runs the integration tests"
+    description = "Runs the integration tests project: engine"
     group = "verification"
     testClassesDirs = sourceSets["integrationTest"].output.classesDirs
     classpath = sourceSets["integrationTest"].runtimeClasspath

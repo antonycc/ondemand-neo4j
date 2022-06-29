@@ -1,6 +1,8 @@
 package uk.co.polycode.neo4j
 
 import mu.KotlinLogging
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
 
 private val logger = KotlinLogging.logger {}
 
@@ -17,16 +19,23 @@ private val logger = KotlinLogging.logger {}
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * Mozilla Public License, v. 2.0 for more details.
  */
- class Engine {
+@SpringBootApplication
+open class Engine {
 
-    fun main() {
+    fun main(args: Array<String>) {
+        SpringApplication.run(this::class.java, *args)
+        hello()
+    }
+
+    fun hello() {
         val person = Person()
         val place = Place()
         val organization = Organization()
         val thing = Thing()
         val postalAddress = PostalAddress()
-        logger.debug { "${person} ${place} ${organization} ${thing} ${postalAddress}" }
-        println("Hello On-Demand Neo4j Engine World!")
+        // TODO: reinstate logging
+        logger.info { "${person} ${place} ${organization} ${thing} ${postalAddress} [Logged at INFO]" }
+        println("Hello from On-Demand Neo4j Engine!")
     }
 }
 

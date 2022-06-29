@@ -14,7 +14,7 @@ Be a useful starting point for a low utilisation project using Neo4j and a demon
 # Done
 
 On-demand Neo4j:
-* Nothing yet.
+* Test Neo4j in a Spring test Context
 
 # Bugs
 
@@ -182,3 +182,5 @@ Java objects generated from these files are referenced in libschemaorg source co
 * https://docs.spring.io/spring-data/neo4j/docs/current/reference/html/
 * https://github.com/neo4j-examples/movies-java-spring-data-neo4j/blob/sdn6-full-example/pom.xml
 * https://github.com/neo4j-examples/movies-java-spring-data-neo4j/blob/main/src/test/java/movies/spring/data/neo4j/movies/MovieServiceTest.java
+* https://github.com/neo4j/neo4j-java-driver-spring-boot-starter/tree/master/examples/testing-with-neo4j-harness
+* https://github.com/Wayne-P/kotlindogdemo

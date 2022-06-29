@@ -24,4 +24,12 @@ open class OntologyService {
         }
     //}
 
+    open fun getGivenNames(): List<String>? =
+        this.driver?.session()?.use { session ->
+            return session.run("MATCH (m:Person) RETURN m ORDER BY m.name ASC").stream()
+                .map { r -> r.get("m").asNode() }
+                .map { n -> n.get("givenName").asString() }
+                .collect(Collectors.toList())
+        }
+    //}
 }

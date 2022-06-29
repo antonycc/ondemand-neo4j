@@ -53,3 +53,4 @@ out/
 # Macos files
 **/.DS_Store
 
+/deps.txt

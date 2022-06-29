@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
+import java.util.UUID
 import kotlin.test.*
 
 /**
@@ -33,8 +34,8 @@ class EngineTest {
                 .withDisabledServer()
                 .withFixture(
                     ""
-                            + "CREATE (FirstPersonName:Person {givenName:'Bilbo', familyName:'Baggins'})\n"
-                            + "CREATE (SecondPersonName:Person {givenName:'Frodo', familyName:'Baggins'})\n"
+                            + "CREATE (FirstPersonName:Person {id:'0001', givenName:'Bilbo', familyName:'Baggins'})\n"
+                            + "CREATE (SecondPersonName:Person {id:'0002', givenName:'Frodo', familyName:'Baggins'})\n"
                            // + "CREATE (ThirdPersonName:Person {givenName:'Gandalf', familyName:'The Grey'})\n"
                 )
                 .build()
@@ -42,10 +43,36 @@ class EngineTest {
     }
 
     @Test
-    fun shouldRetrieveMovieTitles(@Autowired ontologyService: OntologyService) {
+    fun shouldRetrieveFamilyNames(@Autowired ontologyService: OntologyService) {
         Assertions.assertThat(ontologyService.getFamilyNames())
             .hasSize(2)
             .contains("Baggins")
+    }
+
+    @Test
+    fun shouldRetrieveFamilyNamesFromRepository(@Autowired personRepository: PersonRepository,
+                                                @Autowired ontologyService: OntologyService) {
+        val person1 = Person().apply {
+            id = UUID.randomUUID().toString()
+            givenName = "Gandalf"
+            familyName = "The Grey"
+        }
+        val person2 = Person().apply {
+            id = UUID.randomUUID().toString()
+            givenName = "Gandalf"
+            familyName = "The White"
+        }
+        personRepository.deleteAll()
+        personRepository.save<Person>(person1)
+        personRepository.save<Person>(person2)
+        //val dogRover = Dog(name = "rover")
+        //val kennelForRover = Kennel(dog = dogRover)
+        // kennelforRover saves correctly as well now
+        //kennelRepository.save<Kennel>(kennelForRover)
+
+        Assertions.assertThat(ontologyService.getGivenNames())
+            .hasSize(2)
+            .contains("Gandalf")
     }
 
     @Test fun testEngine() {

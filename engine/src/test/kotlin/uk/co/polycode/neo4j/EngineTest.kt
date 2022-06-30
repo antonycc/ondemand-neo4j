@@ -44,7 +44,7 @@ class EngineTest {
 
     @Test
     fun shouldRetrieveFamilyNames(@Autowired ontologyService: OntologyService) {
-        Assertions.assertThat(ontologyService.getFamilyNames())
+        Assertions.assertThat(ontologyService.getFamilyNameForPersons())
             .hasSize(2)
             .contains("Baggins")
     }
@@ -70,9 +70,24 @@ class EngineTest {
         // kennelforRover saves correctly as well now
         //kennelRepository.save<Kennel>(kennelForRover)
 
-        Assertions.assertThat(ontologyService.getGivenNames())
+        Assertions.assertThat(ontologyService.getGivenNameForPersons())
             .hasSize(2)
             .contains("Gandalf")
+    }
+
+    @Test
+    fun shouldRetrievePhotosForPlace(@Autowired placeRepository: PlaceRepository,
+                                     @Autowired ontologyService: OntologyService) {
+        val place1 = Place().apply {
+            id = UUID.randomUUID().toString()
+            photo = "test-photo"
+        }
+        placeRepository.deleteAll()
+        placeRepository.save<Place>(place1)
+        
+        Assertions.assertThat(ontologyService.getPhotoForPlaces())
+            .hasSize(1)
+            .contains("test-photo")
     }
 
     @Test fun testEngine() {

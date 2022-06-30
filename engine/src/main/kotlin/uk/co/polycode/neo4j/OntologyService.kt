@@ -15,21 +15,27 @@ open class OntologyService {
     //    this.driver = driver
     //}
 
-    open fun getFamilyNames(): List<String>? =
+    open fun getFamilyNameForPersons(): List<String>? =
         this.driver?.session()?.use { session ->
             return session.run("MATCH (m:Person) RETURN m ORDER BY m.name ASC").stream()
                 .map { r -> r.get("m").asNode() }
                 .map { n -> n.get("familyName").asString() }
                 .collect(Collectors.toList())
         }
-    //}
 
-    open fun getGivenNames(): List<String>? =
+    open fun getGivenNameForPersons(): List<String>? =
         this.driver?.session()?.use { session ->
             return session.run("MATCH (m:Person) RETURN m ORDER BY m.name ASC").stream()
                 .map { r -> r.get("m").asNode() }
                 .map { n -> n.get("givenName").asString() }
                 .collect(Collectors.toList())
         }
-    //}
+
+    open fun getPhotoForPlaces(): List<String>? =
+        this.driver?.session()?.use { session ->
+            return session.run("MATCH (m:Place) RETURN m ORDER BY m.name ASC").stream()
+                .map { r -> r.get("m").asNode() }
+                .map { n -> n.get("photo").asString() }
+                .collect(Collectors.toList())
+        }
 }

@@ -32,26 +32,12 @@ class EngineTest {
         open fun neo4j(): Neo4j {
             return Neo4jBuilders.newInProcessBuilder()
                 .withDisabledServer()
-                .withFixture(
-                    ""
-                            + "CREATE (FirstPersonName:Person {id:'0001', givenName:'Bilbo', familyName:'Baggins'})\n"
-                            + "CREATE (SecondPersonName:Person {id:'0002', givenName:'Frodo', familyName:'Baggins'})\n"
-                           // + "CREATE (ThirdPersonName:Person {givenName:'Gandalf', familyName:'The Grey'})\n"
-                )
                 .build()
         }
     }
 
     @Test
-    fun shouldRetrieveFamilyNames(@Autowired ontologyService: OntologyService) {
-        Assertions.assertThat(ontologyService.getFamilyNameForPersons())
-            .hasSize(2)
-            .contains("Baggins")
-    }
-
-    @Test
-    fun shouldRetrieveFamilyNamesFromRepository(@Autowired personRepository: PersonRepository,
-                                                @Autowired ontologyService: OntologyService) {
+    fun shouldRetrieveFamilyNamesFromRepository(@Autowired personRepository: PersonRepository) {
         val person1 = Person().apply {
             id = UUID.randomUUID().toString()
             givenName = "Gandalf"
@@ -65,33 +51,28 @@ class EngineTest {
         personRepository.deleteAll()
         personRepository.save<Person>(person1)
         personRepository.save<Person>(person2)
+
+        // TODO: Relationships - https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
         //val dogRover = Dog(name = "rover")
         //val kennelForRover = Kennel(dog = dogRover)
         // kennelforRover saves correctly as well now
         //kennelRepository.save<Kennel>(kennelForRover)
 
-        Assertions.assertThat(ontologyService.getGivenNameForPersons())
+        Assertions.assertThat(personRepository.findByGivenName("Gandalf"))
             .hasSize(2)
-            .contains("Gandalf")
     }
 
     @Test
-    fun shouldRetrievePhotosForPlace(@Autowired placeRepository: PlaceRepository,
-                                     @Autowired ontologyService: OntologyService) {
+    fun shouldRetrievePhotosForPlace(@Autowired placeRepository: PlaceRepository) {
         val place1 = Place().apply {
             id = UUID.randomUUID().toString()
             photo = "test-photo"
         }
         placeRepository.deleteAll()
         placeRepository.save<Place>(place1)
-        
-        Assertions.assertThat(ontologyService.getPhotoForPlaces())
+
+        Assertions.assertThat(placeRepository.findAll().map { it.photo })
             .hasSize(1)
             .contains("test-photo")
-    }
-
-    @Test fun testEngine() {
-        Engine().hello()
-        assertTrue(Engine().toString().isNotBlank())
     }
 }

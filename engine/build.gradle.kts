@@ -80,7 +80,9 @@ dependencies {
     }
     testImplementation("org.testcontainers:neo4j:1.17.2")//{
     testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0")//{
-    testImplementation("org.neo4j.test:neo4j-harness:4.4.8")//{
+    testImplementation("org.neo4j.test:neo4j-harness:4.4.8") {
+        exclude("org.slf4j:slf4j-nop")
+    }
     //testCompile project(':A').sourceSets.test.output
 
 }

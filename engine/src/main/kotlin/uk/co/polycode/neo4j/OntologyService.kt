@@ -3,6 +3,7 @@ package uk.co.polycode.neo4j
 import org.neo4j.driver.Driver
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.UUID
 import java.util.stream.Collectors
 
 @Service
@@ -38,4 +39,18 @@ open class OntologyService {
                 .map { n -> n.get("photo").asString() }
                 .collect(Collectors.toList())
         }
+
+    companion object{
+        fun toCypher(p: Person): String =
+            "CREATE (${p.givenName}${p.familyName}:Person { id:'${UUID.randomUUID()}'" +
+                        ", givenName:'${p.givenName}'" +
+                        ", familyName:'${p.familyName}'" +
+                    "})\n"
+
+        // TODO: Create a place including an attribute from Thing like name
+        fun toCypher(p: Place): String =
+            "CREATE (${p.photo}:Place { id:'${UUID.randomUUID()}'" +
+                        ", photo:'${p.photo}'" +
+                    "})\n"
+    }
 }

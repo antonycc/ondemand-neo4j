@@ -1,9 +1,11 @@
 package uk.co.polycode.neo4j;
 
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
 import java.net.URL;
+import java.util.UUID;
 
 /**
  * Thing
@@ -24,7 +26,8 @@ public class Thing {
 	 * The synthetic key for this item.
 	 */
 	@Id
-	public String id;
+	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	public UUID id;
 
 	/**
 	 * An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.
@@ -59,6 +62,7 @@ public class Thing {
 	/**
 	 * The name of the item.
 	 */
+	// TODO: Consider unique name: https://stackoverflow.com/a/52319884/4325719
 	public String name;
 
 	/**

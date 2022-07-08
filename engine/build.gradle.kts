@@ -45,6 +45,13 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    all {
+        exclude(group = "org.slf4j", module = "slf4j-log4j12")
+        exclude(group = "org.slf4j", module = "slf4j-nop")
+    }
+}
+
 // Check: gradle -q dependencies --configuration compileClasspath
 dependencies {
 
@@ -66,6 +73,9 @@ dependencies {
         exclude("org.slf4j")
     }
     implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.1")//{
+
+    // To string
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 
     // Testing
     testImplementation(kotlin("test"))

@@ -1,13 +1,8 @@
 package uk.co.polycode.neo4j
 
 import org.assertj.core.api.Assertions
-import org.neo4j.harness.Neo4j
-import org.neo4j.harness.Neo4jBuilders
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
-import java.util.UUID
 import kotlin.test.*
 
 /**
@@ -26,37 +21,29 @@ import kotlin.test.*
 @SpringBootTest
 class EngineTest {
 
-    @TestConfiguration // <.>
-    open class TestHarnessConfig() {
-        @Bean // <.>
-        open fun neo4j(): Neo4j {
-            return Neo4jBuilders.newInProcessBuilder()
-                .withDisabledServer()
-                .build()
-        }
-    }
+    //@TestConfiguration // <.>
+    //open class TestHarnessConfig() {
+    //    @Bean // <.>
+    //    open fun neo4j(): Neo4j {
+    //        return Neo4jBuilders.newInProcessBuilder()
+    //            .withDisabledServer()
+    //            .build()
+    //    }
+    //}
 
     @Test
     fun shouldRetrieveFamilyNamesFromRepository(@Autowired personRepository: PersonRepository) {
         val person1 = Person().apply {
-            id = UUID.randomUUID().toString()
             givenName = "Gandalf"
             familyName = "The Grey"
         }
         val person2 = Person().apply {
-            id = UUID.randomUUID().toString()
             givenName = "Gandalf"
             familyName = "The White"
         }
         personRepository.deleteAll()
         personRepository.save<Person>(person1)
         personRepository.save<Person>(person2)
-
-        // TODO: Relationships - https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
-        //val dogRover = Dog(name = "rover")
-        //val kennelForRover = Kennel(dog = dogRover)
-        // kennelforRover saves correctly as well now
-        //kennelRepository.save<Kennel>(kennelForRover)
 
         Assertions.assertThat(personRepository.findByGivenName("Gandalf"))
             .hasSize(2)
@@ -65,7 +52,6 @@ class EngineTest {
     @Test
     fun shouldRetrievePhotosForPlace(@Autowired placeRepository: PlaceRepository) {
         val place1 = Place().apply {
-            id = UUID.randomUUID().toString()
             photo = "test-photo"
         }
         placeRepository.deleteAll()
@@ -75,4 +61,83 @@ class EngineTest {
             .hasSize(1)
             .contains("test-photo")
     }
+
+    @Test
+    fun shouldSaveAggregatedObject(@Autowired personRepository: PersonRepository,
+                                   @Autowired thingRepository: ThingRepository) {
+        val person1 = Person().apply {
+            thing = Thing().apply {
+                name = "Gandalf"
+            }
+            givenName = "Gandalf"
+            familyName = "The Grey"
+        }
+        val person2 = Person().apply {
+            thing = Thing().apply {
+                name = "Gandalf"
+            }
+            givenName = "Gandalf"
+            familyName = "The White"
+        }
+        personRepository.deleteAll()
+        thingRepository.deleteAll()
+        personRepository.save<Person>(person1)
+        personRepository.save<Person>(person2)
+
+        Assertions.assertThat(personRepository.findByGivenName("Gandalf"))
+            .hasSize(2)
+        Assertions.assertThat(personRepository.findAll().map { it.thing.name })
+            .hasSize(2)
+            .contains("Gandalf")
+        Assertions.assertThat(thingRepository.findAll())
+            .hasSize(2)
+
+        //Assertions.assertThat(personRepository.findByThingName("gandalf"))
+        //    .hasSize(1)
+    }
+
+    // TODO: Relationships - https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
+    @Test
+    fun shouldSaveRelatedObject(@Autowired placeRepository: PlaceRepository,
+                                @Autowired personRepository: PersonRepository,
+                                @Autowired ontologyRepositories: OntologyRepositories) {
+        val place1 = Place().apply {
+                thing = Thing().apply {
+                    name = "The Shire"
+                }
+            }
+        val person1 = Person().apply {
+            thing = Thing().apply {
+                name = "Bilbo"
+            }
+            givenName = "Bilbo"
+            familyName = "Baggins"
+            birthPlace = place1
+        }
+        val person2 = Person().apply {
+            thing = Thing().apply {
+                name = "Frodo"
+            }
+            givenName = "Frodo"
+            familyName = "Baggins"
+            birthPlace = place1
+        }
+        personRepository.deleteAll()
+        placeRepository.deleteAll()
+        personRepository.save<Person>(person1)
+        personRepository.save<Person>(person2)
+
+        val exportJson = ontologyRepositories.toJsonString()
+        Assertions.assertThat(exportJson).contains("The Shire").contains("Baggins")
+        //println(exportJson)
+
+        Assertions.assertThat(personRepository.findByFamilyName("Baggins"))
+            .hasSize(2)
+        Assertions.assertThat(personRepository.findAll().map { it.birthPlace.thing.name })
+            .hasSize(2)
+            .contains("The Shire")
+        Assertions.assertThat(placeRepository.findAll())
+            .hasSize(1)
+    }
 }
+

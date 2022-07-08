@@ -1,10 +1,12 @@
 package uk.co.polycode.neo4j;
 
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.UUID;
 
 /**
  * Place
@@ -25,7 +27,8 @@ public class Place { // extends Thing {
 	 * The synthetic key for this item.
 	 */
 	@Id
-	public String id;
+	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	public UUID id;
 
 	/**
 	 * A Place is a Thing
@@ -203,5 +206,6 @@ public class Place { // extends Thing {
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
 	public String isDefinedBy = "https://schema.org/Place";
+
 }
 

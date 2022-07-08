@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# OWL to Java generates Source Code from the W3C Web Ontology Language (OWL)
+# On-demand Neo4j is an exploration of Neo4j with deployment to AWS
 # Copyright (C) 2022  Antony Cartwright, Polycode Limited
 #
 # This Source Code Form is subject to the terms of the Mozilla Public

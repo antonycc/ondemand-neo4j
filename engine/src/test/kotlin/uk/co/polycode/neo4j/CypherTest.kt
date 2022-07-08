@@ -1,12 +1,8 @@
 package uk.co.polycode.neo4j
 
 import org.assertj.core.api.Assertions
-import org.neo4j.harness.Neo4j
-import org.neo4j.harness.Neo4jBuilders
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
 import kotlin.test.*
 
 /**
@@ -25,31 +21,59 @@ import kotlin.test.*
 @SpringBootTest
 class CypherTest {
 
-    @TestConfiguration // <.>
+    /*@TestConfiguration // <.>
     open class TestHarnessConfig() {
         @Bean // <.>
         open fun neo4j(): Neo4j {
             return Neo4jBuilders.newInProcessBuilder()
                 .withDisabledServer()
-                .withFixture(
-                    ""
-                            + OntologyService.toCypher(Person().apply { givenName="Bilbo"; familyName="Baggins" })
-                            + OntologyService.toCypher(Person().apply { givenName="Frodo"; familyName="Baggins" })
-                            + OntologyService.toCypher(Place().apply { photo = "testPhoto" })
-                )
                 .build()
         }
-    }
+    }*/
+    //            .withFixture(
+    //                ""
+    //                        + OntologyService.toCypher(Person().apply { givenName="Bilbo"; familyName="Baggins" })
+    //                        + OntologyService.toCypher(Person().apply { givenName="Frodo"; familyName="Baggins" })
+    //                        + OntologyService.toCypher(Place().apply { photo = "testPhoto" })
+    //            )
 
     @Test
-    fun shouldRetrieveFamilyNames(@Autowired ontologyService: OntologyService) {
+    fun shouldRetrieveFamilyNames(@Autowired ontologyService: OntologyService,
+                                  @Autowired personRepository: PersonRepository) {
+        val person1 = Person().apply {
+            givenName = "Bilbo"
+            familyName = "Baggins"
+        }
+        val person2 = Person().apply {
+            givenName = "Frodo"
+            familyName = "Baggins"
+        }
+        personRepository.deleteAll()
+        //personRepository.save<Person>(person1)
+        //personRepository.save<Person>(person2)
+        ontologyService.runQuery(OntologyService.toCypher(person1))
+        ontologyService.runQuery(OntologyService.toCypher(person2))
         Assertions.assertThat(ontologyService.getFamilyNameForPersons())
             .hasSize(2)
             .contains("Baggins")
     }
 
     @Test
-    fun shouldRetrieveGivenNames(@Autowired ontologyService: OntologyService) {
+    fun shouldRetrieveGivenNames(@Autowired ontologyService: OntologyService,
+                                 @Autowired personRepository: PersonRepository) {
+        val person1 = Person().apply {
+            givenName = "Bilbo"
+            familyName = "Baggins"
+        }
+        val person2 = Person().apply {
+            givenName = "Frodo"
+            familyName = "Baggins"
+        }
+        personRepository.deleteAll()
+        //personRepository.save<Person>(person1)
+        //personRepository.save<Person>(person2)
+        ontologyService.runQuery(OntologyService.toCypher(person1))
+        ontologyService.runQuery(OntologyService.toCypher(person2))
         Assertions.assertThat(ontologyService.getGivenNameForPersons())
             .hasSize(2)
             .first()
@@ -57,7 +81,12 @@ class CypherTest {
     }
 
     @Test
-    fun shouldRetrievePhotos(@Autowired ontologyService: OntologyService) {
+    fun shouldRetrievePhotos(@Autowired ontologyService: OntologyService,
+                             @Autowired placeRepository: PlaceRepository) {
+        val place = Place().apply { photo = "testPhoto" }
+        placeRepository.deleteAll()
+        //placeRepository.save<Place>(place)
+        ontologyService.runQuery(OntologyService.toCypher(place))
         Assertions.assertThat(ontologyService.getPhotoForPlaces())
             .hasSize(1)
             .first()

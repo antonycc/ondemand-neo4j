@@ -11,8 +11,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # Mozilla Public License, v. 2.0 for more details.
 #
-# Purpose: Run the gradle build inside a container for Java 11 and mount the local workspace
+# Purpose: Run neo4j locally with a browser: http://localhost:7474/browser/
 # Usage:
-#    ./build--in-docker.sh
+#    ./run-neo4j-in-docker.sh
 
-docker run --interactive --tty --mount type=bind,source="$(pwd)",target=/workspace eclipse-temurin:11-jdk bash -c 'cd /workspace && ./gradlew clean build -x test'
+#docker run --interactive --tty --mount type=bind,source="$(pwd)",target=/workspace eclipse-temurin:18-jdk bash -c 'cd /workspace && ./gradlew clean build -x test'
+docker compose up

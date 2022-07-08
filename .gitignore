@@ -1,51 +1,53 @@
 # Build files
-build/
-/app/build/
+/build/
+/engine/build/
+/api/build/
+/web/build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
 # Gradle files
-.gradle
+**/.gradle
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
 
 # Cache of project
-.gradletasknamecache
+**/.gradletasknamecache
 
 # Ignore Gradle GUI config
-gradle-app.setting
+**/gradle-app.setting
 
 ### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
+**/.apt_generated
+**/.classpath
+**/.factorypath
+**/.project
+**/.settings
+**/.springBeans
+**/.sts4-cache
+**/bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
+**/.idea
+**/*.iws
+**/*.iml
+**/*.ipr
+**/out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
 ### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+**/nbproject/private/
+**/nbbuild/
+**/dist/
+**/nbdist/
+**/.nb-gradle/
 
 ### VS Code ###
-.vscode/
+**/.vscode/
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
@@ -53,4 +55,7 @@ out/
 # Macos files
 **/.DS_Store
 
-/deps.txt
+**/deps.txt
+
+# Secret files
+**/credentials-c63c75aa.env

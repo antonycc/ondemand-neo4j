@@ -1,10 +1,12 @@
 package uk.co.polycode.neo4j;
 
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 /**
  * Organization
@@ -25,7 +27,8 @@ public class Organization { // extends Thing {
 	 * The synthetic key for this item.
 	 */
 	@Id
-	public String id;
+	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	public UUID id;
 
 	/**
 	 * An Organisation is a Thing

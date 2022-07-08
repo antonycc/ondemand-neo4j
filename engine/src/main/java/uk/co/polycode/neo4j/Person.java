@@ -1,11 +1,15 @@
 package uk.co.polycode.neo4j;
 
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
+import java.util.UUID;
+
 /**
  * Person
  *
@@ -25,7 +29,8 @@ public class Person { // extends Thing {
 	 * The synthetic key for this item.
 	 */
 	@Id
-	public String id;
+	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	public UUID id;
 
 	/**
 	 * A Person is a Thing
@@ -65,6 +70,7 @@ public class Person { // extends Thing {
 	/**
 	 * The place where the person was born.
 	 */
+	@Relationship(type = "BIRTH_PLACEHAS", direction = Relationship.Direction.OUTGOING)
 	public Place birthPlace;
 
 	/**

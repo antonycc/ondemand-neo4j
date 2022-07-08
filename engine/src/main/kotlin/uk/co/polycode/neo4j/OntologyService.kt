@@ -40,6 +40,12 @@ open class OntologyService {
                 .collect(Collectors.toList())
         }
 
+    open fun runQuery(query: String) {
+        this.driver?.session()?.use { session ->
+            session.run(query)
+        }
+    }
+
     companion object{
         fun toCypher(p: Person): String =
             "CREATE (${p.givenName}${p.familyName}:Person { id:'${UUID.randomUUID()}'" +

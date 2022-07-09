@@ -1,9 +1,10 @@
 package uk.co.polycode.neo4j;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -23,6 +24,7 @@ import java.util.UUID;
  *
  */
 @Node
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id") // Needed when attributes are nodes
 public class Person { // extends Thing {
 
 	/**
@@ -70,7 +72,8 @@ public class Person { // extends Thing {
 	/**
 	 * The place where the person was born.
 	 */
-	@Relationship(type = "BIRTH_PLACEHAS", direction = Relationship.Direction.OUTGOING)
+	//@Relationship(type = "BIRTH_PLACEHAS", direction = Relationship.Direction.OUTGOING)
+	//@JsonManagedReference
 	public Place birthPlace;
 
 	/**

@@ -1,8 +1,13 @@
 package uk.co.polycode.neo4j
 
 import org.assertj.core.api.Assertions
+import org.neo4j.harness.Neo4j
+import org.neo4j.harness.Neo4jBuilders
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.context.annotation.Bean
+import java.io.*
 import kotlin.test.*
 
 /**
@@ -21,15 +26,33 @@ import kotlin.test.*
 @SpringBootTest
 class EngineTest {
 
-    //@TestConfiguration // <.>
-    //open class TestHarnessConfig() {
-    //    @Bean // <.>
-    //    open fun neo4j(): Neo4j {
-    //        return Neo4jBuilders.newInProcessBuilder()
-    //            .withDisabledServer()
-    //            .build()
-    //    }
-    //}
+    @TestConfiguration // <.>
+    open class TestHarnessConfig() {
+        @Bean // <.>
+        open fun neo4j(): Neo4j {
+            return Neo4jBuilders.newInProcessBuilder()
+                .withDisabledServer()
+                .build()
+        }
+    }
+
+    @Test
+    fun hasValidNeo4jConfig(@Autowired neo4j: Neo4j) {
+        val expectedDatabase = "neo4j"
+        Assertions.assertThat(neo4j).isNotNull
+        //println("bolt URI: ${neo4j.boltURI()}")
+        //println("http URI: ${neo4j.httpURI()}")
+        //println("https URI: ${neo4j.httpsURI()}")
+        //println(neo4j.config())
+        //val baos = ByteArrayOutputStream()
+        //neo4j.printLogs(PrintStream(baos, true, StandardCharsets.UTF_8.name()))
+        //println(baos.toString(StandardCharsets.UTF_8.name()))
+        val databases = neo4j.databaseManagementService().listDatabases()
+        //println("databases: ${databases}")
+        Assertions.assertThat(databases).hasSizeGreaterThan(0).contains(expectedDatabase)
+        val database = neo4j.databaseManagementService().database(expectedDatabase)
+        Assertions.assertThat(database.isAvailable(1000)).isTrue
+    }
 
     @Test
     fun shouldRetrieveFamilyNamesFromRepository(@Autowired personRepository: PersonRepository) {
@@ -96,7 +119,6 @@ class EngineTest {
         //    .hasSize(1)
     }
 
-    // TODO: Relationships - https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
     @Test
     fun shouldSaveRelatedObject(@Autowired placeRepository: PlaceRepository,
                                 @Autowired personRepository: PersonRepository,
@@ -139,5 +161,51 @@ class EngineTest {
         Assertions.assertThat(placeRepository.findAll())
             .hasSize(1)
     }
+
+    @Test
+    fun shouldSaveRecursiveObject(@Autowired placeRepository: PlaceRepository,
+                                @Autowired personRepository: PersonRepository,
+                                @Autowired ontologyRepositories: OntologyRepositories) {
+        val place1 = Place().apply {
+            thing = Thing().apply {
+                name = "The Shire"
+            }
+        }
+        val person1 = Person().apply {
+            thing = Thing().apply {
+                name = "Frodo"
+            }
+            givenName = "Frodo"
+            familyName = "Baggins"
+            birthPlace = place1
+        }
+        place1.mostFamousPerson = person1
+        personRepository.deleteAll()
+        placeRepository.deleteAll()
+        personRepository.save<Person>(person1)
+
+        val exportJson = ontologyRepositories.toJsonString()
+        Assertions.assertThat(exportJson).contains("The Shire").contains("Baggins")
+        println(exportJson)
+        //File(fileName).writeText(exportJson)
+        File("./neo4j-test-export.json")
+            .printWriter().use { out -> out.println(exportJson) }
+        Assertions.assertThat(personRepository.findByFamilyName("Baggins"))
+            .hasSize(1)
+        Assertions.assertThat(placeRepository.findAll().map { it.thing.name })
+            .hasSize(1)
+            .contains("The Shire")
+        //val actualPlace = placeRepository.findAll()[0]
+        Assertions.assertThat(placeRepository.findAll().map { it.mostFamousPerson.givenName })
+            .hasSize(1)
+            .contains("Frodo")
+    }
+
+    // TODO: Relationships - https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
+
+    // TODO: Relationship cardinality. e.g. Person::Organization affiliation (multiple) - Are all Node properties Lists?
+
+    // TODO: Relationship properties. e.g. Person::Organization affiliation since
+
 }
 

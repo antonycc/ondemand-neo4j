@@ -62,7 +62,6 @@ public class Thing {
 	/**
 	 * The name of the item.
 	 */
-	// TODO: Consider unique name: https://stackoverflow.com/a/52319884/4325719
 	public String name;
 
 	/**

@@ -105,7 +105,7 @@ java {
 }
 
 repositories {
-    //mavenCentral()
+    mavenCentral()
 }
 
 // Check: gradle -q dependencies --configuration compileClasspath

@@ -1,5 +1,7 @@
 package uk.co.polycode.neo4j;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -21,6 +23,7 @@ import java.util.UUID;
  *
  */
 @Node
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id") // Needed when attributes are nodes
 public class Organization { // extends Thing {
 
 	/**

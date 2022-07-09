@@ -59,3 +59,6 @@
 
 # Secret files
 **/credentials-c63c75aa.env
+
+# Debug exports
+**/neo4j-test-export.json

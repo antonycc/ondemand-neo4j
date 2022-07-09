@@ -1,5 +1,7 @@
 package uk.co.polycode.neo4j;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -21,6 +23,7 @@ import java.util.UUID;
  *
  */
 @Node
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id") // Needed when attributes are nodes
 public class Place { // extends Thing {
 
 	/**
@@ -34,6 +37,12 @@ public class Place { // extends Thing {
 	 * A Place is a Thing
 	 */
 	public Thing thing;
+
+	/**
+	 * The subjective concept of the most famous person associated with this place.
+	 */
+	//@JsonBackReference
+	public Person mostFamousPerson;
 
 	/**
 	 * Physical address of the item.

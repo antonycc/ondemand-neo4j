@@ -1,8 +1,9 @@
-package uk.co.polycode.neo4j
+package uk.co.polycode.neo4j.integrationtest
 
 import org.assertj.core.api.Assertions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import uk.co.polycode.neo4j.*
 import kotlin.test.*
 
 /**
@@ -39,7 +40,8 @@ class CypherTest {
 
     @Test
     fun shouldRetrieveFamilyNames(@Autowired ontologyService: OntologyService,
-                                  @Autowired personRepository: PersonRepository) {
+                                  @Autowired personRepository: PersonRepository
+    ) {
         val person1 = Person().apply {
             givenName = "Bilbo"
             familyName = "Baggins"
@@ -60,7 +62,8 @@ class CypherTest {
 
     @Test
     fun shouldRetrieveGivenNames(@Autowired ontologyService: OntologyService,
-                                 @Autowired personRepository: PersonRepository) {
+                                 @Autowired personRepository: PersonRepository
+    ) {
         val person1 = Person().apply {
             givenName = "Bilbo"
             familyName = "Baggins"
@@ -82,7 +85,8 @@ class CypherTest {
 
     @Test
     fun shouldRetrievePhotos(@Autowired ontologyService: OntologyService,
-                             @Autowired placeRepository: PlaceRepository) {
+                             @Autowired placeRepository: PlaceRepository
+    ) {
         val place = Place().apply { photo = "testPhoto" }
         placeRepository.deleteAll()
         //placeRepository.save<Place>(place)

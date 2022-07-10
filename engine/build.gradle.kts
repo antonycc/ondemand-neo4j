@@ -77,19 +77,21 @@ dependencies {
     // To string
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 
+    // Reflection utilities
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+
     // Testing
     testImplementation(kotlin("test"))
 
     // Spring Boot testing with Neo4J test harness
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.1"){
-        //exclude("org.junit.vintage:junit-vintage-engine")
-        //exclude("org.mockito:mockito-core")
-        //exclude("org.springframework.boot:spring-boot-starter-logging")
         exclude("ch.qos.logback")
-        //exclude("org.slf4j")
     }
-    testImplementation("org.testcontainers:neo4j:1.17.2")//{
-    testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0")//{
+    //testImplementation("org.testcontainers:neo4j:1.17.2")//{
+    // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency org.eclipse.jetty:jetty-http:9.4.43.v20210629 CVE-2021-28169 5.3 Exposure of Sensitive Information to an Unauthorized Actor vulnerability with medium severity found  Results powered by Checkmarx(c)
+    // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency io.netty:netty-common:4.1.75.Final CVE-2022-24823 5.5 Exposure of Resource to Wrong Sphere vulnerability with medium severity found  Results powered by Checkmarx(c)
+    // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency commons-collections:commons-collections:3.2.2 Cx78f40514-81ff 7.5 Uncontrolled Recursion vulnerability with medium severity found  Results powered by Checkmarx(c)
+    testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0")
     testImplementation("org.neo4j.test:neo4j-harness:4.4.8") {
         exclude("org.slf4j:slf4j-nop")
     }

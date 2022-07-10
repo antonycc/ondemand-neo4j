@@ -2,6 +2,8 @@ package uk.co.polycode.neo4j
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.commons.lang3.reflect.FieldUtils
+import org.apache.commons.lang3.reflect.MethodUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.neo4j.repository.Neo4jRepository
 import org.springframework.data.repository.query.Param
@@ -28,26 +30,27 @@ import java.util.*
 @Service
 open class OntologyRepositories {
     @Autowired
-    lateinit var organizationRepository: OrganizationRepository
+    lateinit var organization: OrganizationRepository
     @Autowired
-    lateinit var personRepository: PersonRepository
+    lateinit var person: PersonRepository
     @Autowired
-    lateinit var placeRepository: PlaceRepository
+    lateinit var place: PlaceRepository
     @Autowired
-    lateinit var postalAddressRepository: PostalAddressRepository
+    lateinit var postalAddress: PostalAddressRepository
     @Autowired
-    lateinit var thingRepository: ThingRepository
+    lateinit var thing: ThingRepository
 
     fun toJsonString(): String =
         ObjectMapper()
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
             .writerWithDefaultPrettyPrinter()
-            .writeValueAsString(mapOf(
-                "organization" to organizationRepository.findAll(),
-                "person" to personRepository.findAll(),
-                "place" to placeRepository.findAll(),
-                "postalAddress" to postalAddressRepository.findAll(),
-                "thing" to thingRepository.findAll()
-            ))
+            .writeValueAsString(
+                FieldUtils.getAllFields(this::class.java).asSequence()
+                    .map { it.name }
+                    .associateWith { findAll(it) }
+            )
+
+    private fun findAll(it: String?) =
+        MethodUtils.invokeExactMethod(FieldUtils.readDeclaredField(this, it), "findAll")
 }
 

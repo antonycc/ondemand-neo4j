@@ -1,12 +1,12 @@
 package uk.co.polycode.neo4j
 
 import org.assertj.core.api.Assertions
-import org.neo4j.harness.Neo4j
-import org.neo4j.harness.Neo4jBuilders
+//import org.neo4j.harness.Neo4j
+//import org.neo4j.harness.Neo4jBuilders
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
+//import org.springframework.boot.test.context.TestConfiguration
+//import org.springframework.context.annotation.Bean
 import java.io.*
 import kotlin.test.*
 
@@ -26,7 +26,7 @@ import kotlin.test.*
 @SpringBootTest
 class EngineTest {
 
-    @TestConfiguration // <.>
+    /*@TestConfiguration // <.>
     open class TestHarnessConfig() {
         @Bean // <.>
         open fun neo4j(): Neo4j {
@@ -52,21 +52,58 @@ class EngineTest {
         Assertions.assertThat(databases).hasSizeGreaterThan(0).contains(expectedDatabase)
         val database = neo4j.databaseManagementService().database(expectedDatabase)
         Assertions.assertThat(database.isAvailable(1000)).isTrue
+    }*/
+
+    private val placeWithPhoto = Place().apply {
+        photo = "test-photo"
+    }
+    private val theShire = Place().apply {
+        thing = Thing().apply {
+            name = "The Shire"
+        }
+    }
+
+    private val gandalfTheGrey = Person().apply {
+        thing = Thing().apply {
+            name = "Gandalf"
+        }
+        givenName = "Gandalf"
+        familyName = "The Grey"
+    }
+    private val gandalfTheWhite = Person().apply {
+        thing = Thing().apply {
+            name = "Gandalf"
+        }
+        givenName = "Gandalf"
+        familyName = "The White"
+    }
+    private val bilbo = Person().apply {
+        thing = Thing().apply {
+            name = "Bilbo"
+        }
+        givenName = "Bilbo"
+        familyName = "Baggins"
+        birthPlace = theShire
+    }
+    private val frodo = Person().apply {
+        thing = Thing().apply {
+            name = "Frodo"
+        }
+        givenName = "Frodo"
+        familyName = "Baggins"
+        birthPlace = theShire
+    }
+    // Create recursive relationship
+    init {
+        frodo.birthPlace.mostFamousPerson = frodo
     }
 
     @Test
     fun shouldRetrieveFamilyNamesFromRepository(@Autowired personRepository: PersonRepository) {
-        val person1 = Person().apply {
-            givenName = "Gandalf"
-            familyName = "The Grey"
-        }
-        val person2 = Person().apply {
-            givenName = "Gandalf"
-            familyName = "The White"
-        }
+
         personRepository.deleteAll()
-        personRepository.save<Person>(person1)
-        personRepository.save<Person>(person2)
+        personRepository.save<Person>(gandalfTheGrey)
+        personRepository.save<Person>(gandalfTheWhite)
 
         Assertions.assertThat(personRepository.findByGivenName("Gandalf"))
             .hasSize(2)
@@ -74,11 +111,9 @@ class EngineTest {
 
     @Test
     fun shouldRetrievePhotosForPlace(@Autowired placeRepository: PlaceRepository) {
-        val place1 = Place().apply {
-            photo = "test-photo"
-        }
+
         placeRepository.deleteAll()
-        placeRepository.save<Place>(place1)
+        placeRepository.save<Place>(placeWithPhoto)
 
         Assertions.assertThat(placeRepository.findAll().map { it.photo })
             .hasSize(1)
@@ -88,24 +123,11 @@ class EngineTest {
     @Test
     fun shouldSaveAggregatedObject(@Autowired personRepository: PersonRepository,
                                    @Autowired thingRepository: ThingRepository) {
-        val person1 = Person().apply {
-            thing = Thing().apply {
-                name = "Gandalf"
-            }
-            givenName = "Gandalf"
-            familyName = "The Grey"
-        }
-        val person2 = Person().apply {
-            thing = Thing().apply {
-                name = "Gandalf"
-            }
-            givenName = "Gandalf"
-            familyName = "The White"
-        }
+
         personRepository.deleteAll()
         thingRepository.deleteAll()
-        personRepository.save<Person>(person1)
-        personRepository.save<Person>(person2)
+        personRepository.save<Person>(gandalfTheGrey)
+        personRepository.save<Person>(gandalfTheWhite)
 
         Assertions.assertThat(personRepository.findByGivenName("Gandalf"))
             .hasSize(2)
@@ -115,43 +137,20 @@ class EngineTest {
         Assertions.assertThat(thingRepository.findAll())
             .hasSize(2)
 
-        //Assertions.assertThat(personRepository.findByThingName("gandalf"))
-        //    .hasSize(1)
     }
 
     @Test
     fun shouldSaveRelatedObject(@Autowired placeRepository: PlaceRepository,
                                 @Autowired personRepository: PersonRepository,
                                 @Autowired ontologyRepositories: OntologyRepositories) {
-        val place1 = Place().apply {
-                thing = Thing().apply {
-                    name = "The Shire"
-                }
-            }
-        val person1 = Person().apply {
-            thing = Thing().apply {
-                name = "Bilbo"
-            }
-            givenName = "Bilbo"
-            familyName = "Baggins"
-            birthPlace = place1
-        }
-        val person2 = Person().apply {
-            thing = Thing().apply {
-                name = "Frodo"
-            }
-            givenName = "Frodo"
-            familyName = "Baggins"
-            birthPlace = place1
-        }
+
         personRepository.deleteAll()
         placeRepository.deleteAll()
-        personRepository.save<Person>(person1)
-        personRepository.save<Person>(person2)
+        personRepository.save<Person>(bilbo)
+        personRepository.save<Person>(frodo)
 
         val exportJson = ontologyRepositories.toJsonString()
         Assertions.assertThat(exportJson).contains("The Shire").contains("Baggins")
-        //println(exportJson)
 
         Assertions.assertThat(personRepository.findByFamilyName("Baggins"))
             .hasSize(2)
@@ -166,30 +165,17 @@ class EngineTest {
     fun shouldSaveRecursiveObject(@Autowired placeRepository: PlaceRepository,
                                 @Autowired personRepository: PersonRepository,
                                 @Autowired ontologyRepositories: OntologyRepositories) {
-        val place1 = Place().apply {
-            thing = Thing().apply {
-                name = "The Shire"
-            }
-        }
-        val person1 = Person().apply {
-            thing = Thing().apply {
-                name = "Frodo"
-            }
-            givenName = "Frodo"
-            familyName = "Baggins"
-            birthPlace = place1
-        }
-        place1.mostFamousPerson = person1
+
         personRepository.deleteAll()
         placeRepository.deleteAll()
-        personRepository.save<Person>(person1)
+        personRepository.save<Person>(frodo)
 
         val exportJson = ontologyRepositories.toJsonString()
         Assertions.assertThat(exportJson).contains("The Shire").contains("Baggins")
         println(exportJson)
-        //File(fileName).writeText(exportJson)
         File("./neo4j-test-export.json")
             .printWriter().use { out -> out.println(exportJson) }
+
         Assertions.assertThat(personRepository.findByFamilyName("Baggins"))
             .hasSize(1)
         Assertions.assertThat(placeRepository.findAll().map { it.thing.name })
@@ -204,8 +190,14 @@ class EngineTest {
     // TODO: Relationships - https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
 
     // TODO: Relationship cardinality. e.g. Person::Organization affiliation (multiple) - Are all Node properties Lists?
+    // Query both ways
+    // MATCH (tom:Person {name: "Tom Hanks"})-[:ACTED_IN]->(tomHanksMovies) RETURN tom,tomHanksMovies
+    // MATCH (cloudAtlas {title: "Cloud Atlas"})<-[:DIRECTED]-(directors) RETURN directors.name
+    // Wildcard relationships
 
     // TODO: Relationship properties. e.g. Person::Organization affiliation since
+
+    // TODO: Reactive and imperative comparison
 
 }
 

@@ -16,7 +16,7 @@ Be a useful starting point for a low utilisation project using Neo4j and a demon
 On-demand Neo4j:
 * Tests Neo4j in a Spring test Context.
 * Includes annotated classes for persistence.
-
+* Run unit tests against an embedded database.
 
 # Bugs
 
@@ -30,7 +30,7 @@ On-demand Neo4j:
 * Reinstate coverage analysis
 * Reintroduce static analysis
 * Add a Spring Boot hosted REST API.
-* Run unit tests against an embedded database.
+* Import Neo4j into Prolog and run prolog consultations. e.g. grandfather(_, person)
 * Run against an official Docker image.
 * Restore state into a containerised instance and backup on shutdown.
 * Add encrypted secrets to the repository.
@@ -64,9 +64,10 @@ Warning:(82, 24)  Provides transitive vulnerable dependency commons-collections:
 
 # Examples
 
-None yet
-```text
-None
+Running with Docker
+```shell
+docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:4.3.6
+Login http://localhost:7474/  neo4j/secret
 ```
 
 # Contributions

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -41,7 +42,7 @@ public class Place { // extends Thing {
 	/**
 	 * The subjective concept of the most famous person associated with this place.
 	 */
-	//@JsonBackReference
+	@Relationship(type = "HAS_MOST_FAMOUS_PERSON", direction = Relationship.Direction.OUTGOING)
 	public Person mostFamousPerson;
 
 	/**

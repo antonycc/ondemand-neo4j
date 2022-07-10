@@ -16,7 +16,8 @@ Be a useful starting point for a low utilisation project using Neo4j and a demon
 On-demand Neo4j:
 * Tests Neo4j in a Spring test Context.
 * Includes annotated classes for persistence.
-* Run unit tests against an embedded database.
+* Runs tests against an embedded database.
+* Runs tests against official neo4j Docker image
 
 # Bugs
 
@@ -25,13 +26,10 @@ On-demand Neo4j:
 # TODO
 
 * Has relationships which can be queried: https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
-* Has supertypes which can be queried
-* Test against dockerized local
 * Reinstate coverage analysis
 * Reintroduce static analysis
 * Add a Spring Boot hosted REST API.
 * Import Neo4j into Prolog and run prolog consultations. e.g. grandfather(_, person)
-* Run against an official Docker image.
 * Restore state into a containerised instance and backup on shutdown.
 * Add encrypted secrets to the repository.
 * Deploy REST API as an AWS Lambda which synchronously restores from Amazon EC2 into an embedded database.
@@ -44,17 +42,16 @@ On-demand Neo4j:
 * Deploy a Neo4J browser based connection browser in an EkS cluster and link to the on-demand management.
 * Use AWS Cognito generate a session API key accepted by the provisioning APIs.
 
+For owl-to-java:
+* Inline superclasses
+* Replace superclass relationships with explicit relations to all subclasses
+* Declare JsonIdentityInfo for all objects which relate to another Node
+* Annotate to ingest XML from a TVA and import into Neo4J
+* Define relationships explicitly
+* Make isDefinedBy static
+
 # Annoyances
 
-* Have just one slf4j oin the classpath:
-```
-CypherTest STANDARD_ERROR
-    SLF4J: Class path contains multiple SLF4J bindings.
-    SLF4J: Found binding in [jar:file:/Users/antony/.gradle/caches/7.4.2/generated-gradle-jars/gradle-api-7.4.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
-    SLF4J: Found binding in [jar:file:/Users/antony/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-nop/1.7.30/55d4c73dd343efebd236abfeb367c9ef41d55063/slf4j-nop-1.7.30.jar!/org/slf4j/impl/StaticLoggerBinder.class]
-    SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
-    SLF4J: Actual binding is of type [org.gradle.internal.logging.slf4j.OutputEventListenerBackedLoggerContext]
-```
 * Transitive vulnerabilities:
 ```
 Warning:(82, 24)  Provides transitive vulnerable dependency org.eclipse.jetty:jetty-http:9.4.43.v20210629 CVE-2021-28169 5.3 Exposure of Sensitive Information to an Unauthorized Actor vulnerability with medium severity found  Results powered by Checkmarx(c) 
@@ -67,7 +64,10 @@ Warning:(82, 24)  Provides transitive vulnerable dependency commons-collections:
 Running with Docker
 ```shell
 docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:4.3.6
-Login http://localhost:7474/  neo4j/secret
+Login http://localhost:7474/  neo4j/secret\
+Connect to the database
+Find all: MATCH (o) RETURN o
+Find all: persons: MATCH (o:Person) RETURN o
 ```
 
 # Contributions

@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -36,9 +37,58 @@ public class Person { // extends Thing {
 	public UUID id;
 
 	/**
-	 * A Person is a Thing
+	 * An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.
+	 * (From Thing)
 	 */
-	public Thing thing;
+	public String additionalType;
+
+	/**
+	 * An alias for the item.
+	 * (From Thing)
+	 */
+	public String alternateName;
+
+	/**
+	 * A description of the item.
+	 * (From Thing)
+	 */
+	public String description;
+
+	/**
+	 * A sub property of description. A short description of the item used to disambiguate from other, similar items. Information from other properties (in particular, name) may be necessary for the description to be useful for disambiguation.
+	 * (From Thing)
+	 */
+	public String disambiguatingDescription;
+
+	/**
+	 * The identifier property represents any kind of identifier for any kind of <a class="localLink" href="https://schema.org/Thing">Thing</a>, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links. See <a href="/docs/datamodel.html#identifierBg">background notes</a> for more details.
+	 * (From Thing)
+	 */
+	public String identifier;
+
+	/**
+	 * An image of the item. This can be a <a class="localLink" href="https://schema.org/URL">URL</a> or a fully described <a class="localLink" href="https://schema.org/ImageObject">ImageObject</a>.
+	 * (From Thing)
+	 */
+	public String image;
+
+	/**
+	 * The name of the item.
+	 * (From Thing)
+	 */
+	public String name;
+
+	/**
+	 * URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Wikidata entry, or official website.
+	 * (From Thing)
+	 */
+	public String sameAs;
+
+	/**
+	 * URL of the item.
+	 * (From Thing)
+	 */
+	public URL url;
 
 	/**
 	 * An additional name for a Person, can be used for a middle name.
@@ -203,8 +253,15 @@ public class Person { // extends Thing {
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
+	 * (Expanded subclass of Thing to literal association)
 	 */
-	public Thing knowsAbout;
+	public Person knowsAboutPerson;
+
+	/**
+	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
+	 * (Expanded subclass of Thing to literal association)
+	 */
+	public Organization knowsAboutOrganization;
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a known language. We do not distinguish skill levels or reading/writing/speaking/signing here. Use language codes from the <a href="http://tools.ietf.org/html/bcp47">IETF BCP 47 standard</a>.
@@ -309,6 +366,6 @@ public class Person { // extends Thing {
 	/**
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
-	public String isDefinedBy = "https://schema.org/Person";
+	public static String isDefinedBy = "https://schema.org/Person";
 }
 

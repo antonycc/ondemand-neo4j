@@ -17,15 +17,14 @@ import java.util.*
 
 @Repository interface OrganizationRepository : Neo4jRepository<Organization, UUID>
 @Repository interface PersonRepository : Neo4jRepository<Person, UUID>{
+    fun findByName(@Param("name") name: String): List<Person>
     fun findByGivenName(@Param("givenName") givenName: String): List<Person>
     fun findByFamilyName(@Param("familyName") familyName: String): List<Person>
-    //fun findByThingName(@Param("thing.name") thingName: String): List<Person>
 }
 @Repository interface PlaceRepository : Neo4jRepository<Place, UUID>{
-    //fun findAll(): List<PhotosOnly>
+    // TODO: Test lightweight return: fun findAll(): List<PhotosOnly>
 }
 @Repository interface PostalAddressRepository : Neo4jRepository<PostalAddress, UUID>
-@Repository interface ThingRepository : Neo4jRepository<Thing, UUID>
 
 @Service
 open class OntologyRepositories {
@@ -37,8 +36,6 @@ open class OntologyRepositories {
     lateinit var place: PlaceRepository
     @Autowired
     lateinit var postalAddress: PostalAddressRepository
-    @Autowired
-    lateinit var thing: ThingRepository
 
     fun toJsonString(): String =
         ObjectMapper()
@@ -49,8 +46,13 @@ open class OntologyRepositories {
                     .map { it.name }
                     .associateWith { findAll(it) }
             )
-
+    fun deleteFromAllRepositories() {
+        FieldUtils.getAllFields(this::class.java).asSequence()
+                    .forEach { deleteAll(it.name) }
+    }
     private fun findAll(it: String?) =
         MethodUtils.invokeExactMethod(FieldUtils.readDeclaredField(this, it), "findAll")
+    private fun deleteAll(it: String?) =
+        MethodUtils.invokeExactMethod(FieldUtils.readDeclaredField(this, it), "deleteAll")
 }
 

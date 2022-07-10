@@ -1,12 +1,8 @@
 package uk.co.polycode.neo4j
 
 import org.assertj.core.api.Assertions
-//import org.neo4j.harness.Neo4j
-//import org.neo4j.harness.Neo4jBuilders
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-//import org.springframework.boot.test.context.TestConfiguration
-//import org.springframework.context.annotation.Bean
 import java.io.*
 import kotlin.test.*
 
@@ -58,61 +54,77 @@ class EngineTest {
         photo = "test-photo"
     }
     private val theShire = Place().apply {
-        thing = Thing().apply {
-            name = "The Shire"
+        name = "The Shire"
+        address = PostalAddress().apply {
+            name = "Bag End"
+            streetAddress = "1 Bagshot Row"
+            addressLocality = "Hobbiton"
+            addressRegion = "Westfarthing"
+            addressCountry = "The Shire"
+            description = "In a hole in the ground there lived a Hobbit. Not a nasty, dirty, wet hole, filled with the ends of worms and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit down on or to eat: it was a Hobbit-hole, and that means comfort."
         }
+    }
+    private val valinor = Place().apply {
+        name = "Valinor"
+    }
+
+    private val theFellowship = Organization().apply {
+        name = "The Fellowship of the Ring"
     }
 
     private val gandalfTheGrey = Person().apply {
-        thing = Thing().apply {
-            name = "Gandalf"
-        }
+        name = "Gandalf"
         givenName = "Gandalf"
         familyName = "The Grey"
+        birthPlace = valinor
+        memberOf = theFellowship
     }
     private val gandalfTheWhite = Person().apply {
-        thing = Thing().apply {
-            name = "Gandalf"
-        }
+        name = "Gandalf"
         givenName = "Gandalf"
         familyName = "The White"
+        birthPlace = valinor
+        memberOf = theFellowship
     }
     private val bilbo = Person().apply {
-        thing = Thing().apply {
-            name = "Bilbo"
-        }
+        name = "Bilbo"
         givenName = "Bilbo"
         familyName = "Baggins"
         birthPlace = theShire
     }
     private val frodo = Person().apply {
-        thing = Thing().apply {
-            name = "Frodo"
-        }
+        name = "Frodo"
         givenName = "Frodo"
         familyName = "Baggins"
         birthPlace = theShire
+        memberOf = theFellowship
     }
-    // Create recursive relationship
+
+    // Create recursive relationships
     init {
         frodo.birthPlace.mostFamousPerson = frodo
     }
 
-    @Test
-    fun shouldRetrieveFamilyNamesFromRepository(@Autowired personRepository: PersonRepository) {
+    @BeforeTest
+    fun shouldRetrieveFamilyNamesFromRepository(@Autowired ontologyRepositories: OntologyRepositories) {
+        ontologyRepositories.deleteFromAllRepositories()
+    }
 
-        personRepository.deleteAll()
+    @Test
+    fun shouldRetrieveByNamesFromRepository(@Autowired personRepository: PersonRepository) {
+
         personRepository.save<Person>(gandalfTheGrey)
         personRepository.save<Person>(gandalfTheWhite)
 
-        Assertions.assertThat(personRepository.findByGivenName("Gandalf"))
+        Assertions.assertThat(personRepository.findByName("Gandalf"))
             .hasSize(2)
+        Assertions.assertThat(personRepository.findByFamilyName("The Grey"))
+            .hasSize(1)
     }
 
     @Test
     fun shouldRetrievePhotosForPlace(@Autowired placeRepository: PlaceRepository) {
 
-        placeRepository.deleteAll()
         placeRepository.save<Place>(placeWithPhoto)
 
         Assertions.assertThat(placeRepository.findAll().map { it.photo })
@@ -121,40 +133,31 @@ class EngineTest {
     }
 
     @Test
-    fun shouldSaveAggregatedObject(@Autowired personRepository: PersonRepository,
-                                   @Autowired thingRepository: ThingRepository) {
+    fun shouldSaveAggregatedObject(@Autowired personRepository: PersonRepository) {
 
-        personRepository.deleteAll()
-        thingRepository.deleteAll()
         personRepository.save<Person>(gandalfTheGrey)
         personRepository.save<Person>(gandalfTheWhite)
 
         Assertions.assertThat(personRepository.findByGivenName("Gandalf"))
             .hasSize(2)
-        Assertions.assertThat(personRepository.findAll().map { it.thing.name })
+        Assertions.assertThat(personRepository.findAll().map { it.name })
             .hasSize(2)
             .contains("Gandalf")
-        Assertions.assertThat(thingRepository.findAll())
-            .hasSize(2)
+        //Assertions.assertThat(thingRepository.findAll())
+        //    .hasSize(2)
 
     }
 
     @Test
     fun shouldSaveRelatedObject(@Autowired placeRepository: PlaceRepository,
-                                @Autowired personRepository: PersonRepository,
-                                @Autowired ontologyRepositories: OntologyRepositories) {
+                                @Autowired personRepository: PersonRepository) {
 
-        personRepository.deleteAll()
-        placeRepository.deleteAll()
         personRepository.save<Person>(bilbo)
         personRepository.save<Person>(frodo)
 
-        val exportJson = ontologyRepositories.toJsonString()
-        Assertions.assertThat(exportJson).contains("The Shire").contains("Baggins")
-
         Assertions.assertThat(personRepository.findByFamilyName("Baggins"))
             .hasSize(2)
-        Assertions.assertThat(personRepository.findAll().map { it.birthPlace.thing.name })
+        Assertions.assertThat(personRepository.findAll().map { it.birthPlace.name })
             .hasSize(2)
             .contains("The Shire")
         Assertions.assertThat(placeRepository.findAll())
@@ -163,25 +166,15 @@ class EngineTest {
 
     @Test
     fun shouldSaveRecursiveObject(@Autowired placeRepository: PlaceRepository,
-                                @Autowired personRepository: PersonRepository,
-                                @Autowired ontologyRepositories: OntologyRepositories) {
+                                @Autowired personRepository: PersonRepository) {
 
-        personRepository.deleteAll()
-        placeRepository.deleteAll()
         personRepository.save<Person>(frodo)
-
-        val exportJson = ontologyRepositories.toJsonString()
-        Assertions.assertThat(exportJson).contains("The Shire").contains("Baggins")
-        println(exportJson)
-        File("./neo4j-test-export.json")
-            .printWriter().use { out -> out.println(exportJson) }
 
         Assertions.assertThat(personRepository.findByFamilyName("Baggins"))
             .hasSize(1)
-        Assertions.assertThat(placeRepository.findAll().map { it.thing.name })
+        Assertions.assertThat(placeRepository.findAll().map { it.name })
             .hasSize(1)
             .contains("The Shire")
-        //val actualPlace = placeRepository.findAll()[0]
         Assertions.assertThat(placeRepository.findAll().map { it.mostFamousPerson.givenName })
             .hasSize(1)
             .contains("Frodo")
@@ -199,5 +192,21 @@ class EngineTest {
 
     // TODO: Reactive and imperative comparison
 
+    @Test
+    fun shouldExportModelAsJson(@Autowired personRepository: PersonRepository,
+                                  @Autowired ontologyRepositories: OntologyRepositories) {
+
+        personRepository.save<Person>(gandalfTheGrey)
+        personRepository.save<Person>(gandalfTheWhite)
+        personRepository.save<Person>(bilbo)
+        personRepository.save<Person>(frodo)
+
+        val exportJson = ontologyRepositories.toJsonString()
+        Assertions.assertThat(exportJson).contains("The Shire").contains("Baggins")
+        //println(exportJson)
+        File("./build/neo4j-test-export.json")
+            .printWriter().use { out -> out.println(exportJson) }
+
+    }
 }
 

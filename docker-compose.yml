@@ -1,25 +1,22 @@
-# Purpose: Run neo4j locally with a browser: http://localhost:7474/browser/ set pw, e.g. ne04j/ne04j => local/local
+# Purpose: Run neo4j locally with a browser: http://localhost:7474/browser/ with ne04j/secret
 # Usage:
-#  $ docker compose up
-# Source: https://stackoverflow.com/questions/48465046/run-neo4j-with-docker-compose-neo4j-not-accessible-from-localhost7474
+# $ docker compose up
+# Source: docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:4.4.8
 version: '3'
 
 services:
   neo4j:
-    image: neo4j:latest
-    network_mode: "bridge"
+    image: neo4j:4.3.6
     ports:
       - "7474:7474"
       - "7687:7687"
     environment:
       - NEO4J_dbms_security_procedures_unrestricted=apoc.*
       - NEO4J_apoc_import_file_enabled=true
-      - NEO4J_dbms_shell_enabled=true
-    volumes:
-      #- ./plugins:/plugins
-      #- ./data:/data
-      #- ./import:/import
-      - ${HOME}/neo4j/data:/data
-      - ${HOME}/neo4j/logs:/logs
-      - ${HOME}/neo4j/import:/var/lib/neo4j/import
-      - ${HOME}/neo4j/plugins:/plugins
+      #- NEO4J_dbms_shell_enabled=true
+      - NEO4J_AUTH=neo4j/secret
+    #volumes:
+      #- ${HOME}/neo4j/data:/data
+      #- ${HOME}/neo4j/logs:/logs
+      #- ${HOME}/neo4j/import:/var/lib/neo4j/import
+      #- ${HOME}/neo4j/plugins:/plugins

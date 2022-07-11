@@ -1,5 +1,6 @@
 package uk.co.polycode.neo4j
 
+import org.apache.commons.lang3.reflect.FieldUtils
 import org.assertj.core.api.Assertions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -50,7 +51,7 @@ class EngineTest {
         Assertions.assertThat(database.isAvailable(1000)).isTrue
     }*/
 
-    private val placeWithPhoto = Place().apply {
+    private val placeWithPhoto:Place = Place().apply {
         photo = "test-photo"
     }
     private val theShire = Place().apply {
@@ -194,12 +195,20 @@ class EngineTest {
 
     @Test
     fun shouldExportModelAsJson(@Autowired personRepository: PersonRepository,
-                                  @Autowired ontologyRepositories: OntologyRepositories) {
+                                @Autowired placeRepository: PlaceRepository,
+                                @Autowired organizationRepository: OrganizationRepository,
+                                @Autowired postalAddressRepository: PostalAddressRepository,
+                                @Autowired ontologyRepositories: OntologyRepositories) {
 
-        personRepository.save<Person>(gandalfTheGrey)
-        personRepository.save<Person>(gandalfTheWhite)
-        personRepository.save<Person>(bilbo)
-        personRepository.save<Person>(frodo)
+        FieldUtils.getAllFields(this::class.java).asSequence()
+            .forEach {
+                when(val testDataEntity = it.get(this)){
+                    is Person -> personRepository.save<Person>(testDataEntity)
+                    is Place -> placeRepository.save<Place>(testDataEntity)
+                    is Organization -> organizationRepository.save<Organization>(testDataEntity)
+                    is PostalAddress -> postalAddressRepository.save<PostalAddress>(testDataEntity)
+                }
+            }
 
         val exportJson = ontologyRepositories.toJsonString()
         Assertions.assertThat(exportJson).contains("The Shire").contains("Baggins")

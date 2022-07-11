@@ -28,6 +28,7 @@ On-demand Neo4j:
 * Has relationships which can be queried: https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
 * Reinstate coverage analysis
 * Reintroduce static analysis
+* Parameterise Gradle to switch tests between embedded Neo4j and dockerized environment using docker compose
 * Add a Spring Boot hosted REST API.
 * Import Neo4j into Prolog and run prolog consultations. e.g. grandfather(_, person)
 * Restore state into a containerised instance and backup on shutdown.
@@ -62,13 +63,13 @@ Warning:(82, 24)  Provides transitive vulnerable dependency commons-collections:
 # Examples
 
 Running with Docker
+Run Neo4j as defined in the `docker-compose.yml`:
 ```shell
-docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:4.3.6
-Login http://localhost:7474/  neo4j/secret\
-Connect to the database
-Find all: MATCH (o) RETURN o
-Find all: persons: MATCH (o:Person) RETURN o
+% docker compose up
 ```
+Login to http://localhost:7474/ using neo4j/secret\
+Connect to the database and query all objects: `MATCH (o) RETURN o`
+
 
 # Contributions
 

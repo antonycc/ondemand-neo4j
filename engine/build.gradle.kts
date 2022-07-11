@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
 val targetJvmVersion: String by project
+val testWithEmbeddedNeo4j = true
 
 buildscript {
 }
@@ -61,13 +62,11 @@ dependencies {
         exclude("org.jetbrains.kotlin")
         exclude("org.slf4j")
     }
-    //exclude("io.github.microutils:kotlin-logging-jvm")
 
     // Run as Jar in Java8+
     implementation(kotlin("stdlib-jdk8"))
 
     // Spring Data Neo4j
-    //implementation("org.springframework.boot:spring-boot-starter-data-neo4j:2.7.1")
     //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
     implementation("org.springframework.data:spring-data-neo4j:6.3.1") {
         exclude("org.slf4j")
@@ -87,19 +86,18 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.1"){
         exclude("ch.qos.logback")
     }
-    //testImplementation("org.testcontainers:neo4j:1.17.2")//{
-    // Comment out 2 test harness dependencies and run:
-    // % docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:4.4.8
-    // Using config from: ./engine/src/test/resources/application.properties
-    // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency org.eclipse.jetty:jetty-http:9.4.43.v20210629 CVE-2021-28169 5.3 Exposure of Sensitive Information to an Unauthorized Actor vulnerability with medium severity found  Results powered by Checkmarx(c)
-    // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency io.netty:netty-common:4.1.75.Final CVE-2022-24823 5.5 Exposure of Resource to Wrong Sphere vulnerability with medium severity found  Results powered by Checkmarx(c)
-    // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency commons-collections:commons-collections:3.2.2 Cx78f40514-81ff 7.5 Uncontrolled Recursion vulnerability with medium severity found  Results powered by Checkmarx(c)
-    testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0")
-    testImplementation("org.neo4j.test:neo4j-harness:4.4.8") {
-        exclude("org.slf4j:slf4j-nop")
+    if(testWithEmbeddedNeo4j) {
+        // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency org.eclipse.jetty:jetty-http:9.4.43.v20210629 CVE-2021-28169 5.3 Exposure of Sensitive Information to an Unauthorized Actor vulnerability with medium severity found  Results powered by Checkmarx(c)
+        // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency io.netty:netty-common:4.1.75.Final CVE-2022-24823 5.5 Exposure of Resource to Wrong Sphere vulnerability with medium severity found  Results powered by Checkmarx(c)
+        // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency commons-collections:commons-collections:3.2.2 Cx78f40514-81ff 7.5 Uncontrolled Recursion vulnerability with medium severity found  Results powered by Checkmarx(c)
+        testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0")
+        testImplementation("org.neo4j.test:neo4j-harness:4.4.8") {
+            exclude("org.slf4j:slf4j-nop")
+        }
+    }else{
+        // Uses config from: ${projectRoot}/engine/src/test/resources/application.properties
+        // Before executing tests open a shell at the ${projectRoot} and run: docker compose up
     }
-    //testCompile project(':A').sourceSets.test.output
-
 }
 
 tasks.test {

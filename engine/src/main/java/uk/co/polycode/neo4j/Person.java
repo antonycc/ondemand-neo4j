@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -103,7 +105,7 @@ public class Person { // extends Thing {
 	/**
 	 * An organization that this person is affiliated with. For example, a school/university, a club, or a team.
 	 */
-	public Organization affiliation;
+	public List<Organization> affiliation = new ArrayList<>();
 
 	/**
 	 * An organization that the person is an alumni of.
@@ -276,7 +278,8 @@ public class Person { // extends Thing {
 	/**
 	 * An Organization (or ProgramMembership) to which this Person or Organization belongs.
 	 */
-	public Organization memberOf;
+	@Relationship(type = "HAS_MEMBER_OF", direction = Relationship.Direction.OUTGOING)
+	public List<Organization> memberOf = new ArrayList<>();
 
 	/**
 	 * The North American Industry Classification System (NAICS) code for a particular organization or business person.
@@ -367,5 +370,9 @@ public class Person { // extends Thing {
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
 	public static String isDefinedBy = "https://schema.org/Person";
+
+	public String toString(){
+		return name;
+	}
 }
 

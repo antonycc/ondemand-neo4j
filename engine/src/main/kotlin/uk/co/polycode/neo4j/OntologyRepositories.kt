@@ -15,16 +15,21 @@ import java.util.*
 //    val photo: String?
 //}
 
-@Repository interface OrganizationRepository : Neo4jRepository<Organization, UUID>
+@Repository interface OrganizationRepository : Neo4jRepository<Organization, UUID>{
+    fun findByName(@Param("name") name: String): List<Organization>
+}
 @Repository interface PersonRepository : Neo4jRepository<Person, UUID>{
     fun findByName(@Param("name") name: String): List<Person>
     fun findByGivenName(@Param("givenName") givenName: String): List<Person>
     fun findByFamilyName(@Param("familyName") familyName: String): List<Person>
 }
 @Repository interface PlaceRepository : Neo4jRepository<Place, UUID>{
+    //fun findByName(@Param("name") name: String): List<Place>
     // TODO: Test lightweight return: fun findAll(): List<PhotosOnly>
 }
-@Repository interface PostalAddressRepository : Neo4jRepository<PostalAddress, UUID>
+@Repository interface PostalAddressRepository : Neo4jRepository<PostalAddress, UUID>{
+    //fun findByName(@Param("name") name: String): List<PostalAddress>
+}
 
 @Service
 open class OntologyRepositories {

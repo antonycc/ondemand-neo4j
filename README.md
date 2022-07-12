@@ -18,6 +18,7 @@ On-demand Neo4j:
 * Includes annotated classes for persistence.
 * Runs tests against an embedded database.
 * Runs tests against official neo4j Docker image
+* Supports relationship cardinality
 
 # Bugs
 
@@ -25,30 +26,31 @@ On-demand Neo4j:
 
 # TODO
 
-* Has relationships which can be queried: https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
 * Reinstate coverage analysis
 * Reintroduce static analysis
-* Parameterise Gradle to switch tests between embedded Neo4j and dockerized environment using docker compose
 * Add a Spring Boot hosted REST API.
-* Import Neo4j into Prolog and run prolog consultations. e.g. grandfather(_, person)
+* Rest test via HTTP
 * Restore state into a containerised instance and backup on shutdown.
 * Add encrypted secrets to the repository.
 * Deploy REST API as an AWS Lambda which synchronously restores from Amazon EC2 into an embedded database.
-* Add referred synchronous AWS Lambda which responds 503 + RetryAfter (start time).
-* Deploy a EC2 hosted static site with demo links to start and query the database.
+* Add deferred synchronous AWS Lambda which responds 503 + RetryAfter (start time).
+* Deploy an EC2 hosted static site with demo links to start and query the database.
+* Add open source data sets to import, some of which relate to each other.
 * Script to generate API keys.
 * Protect APIs which consume resources with an API key.
 * Add a logged in area with AWS Cognito restricting access to operations which consume resources and add a pre-built API key.
 * Deploy using Amazon ECS which is started on demand and shutdown when not in use and an AWS Lambda which suggests a call retry period.
 * Deploy a Neo4J browser based connection browser in an EkS cluster and link to the on-demand management.
 * Use AWS Cognito generate a session API key accepted by the provisioning APIs.
+* Import Neo4j into Prolog and run prolog consultations. e.g. grandfather(_, person)
+* Parameterise Gradle to switch tests between embedded Neo4j and dockerized environment using docker compose
 
 For owl-to-java:
 * Inline superclasses
 * Replace superclass relationships with explicit relations to all subclasses
 * Declare JsonIdentityInfo for all objects which relate to another Node
 * Annotate to ingest XML from a TVA and import into Neo4J
-* Define relationships explicitly
+* Define relationships explicitly and infer multiplicity
 * Make isDefinedBy static
 
 # Annoyances

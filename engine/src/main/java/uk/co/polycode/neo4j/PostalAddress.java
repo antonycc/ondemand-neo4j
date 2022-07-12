@@ -117,5 +117,9 @@ public class PostalAddress { // extends Thing {
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
 	public static String isDefinedBy = "https://schema.org/PostalAddress";
+
+	public String toString(){
+		return name;
+	}
 }
 

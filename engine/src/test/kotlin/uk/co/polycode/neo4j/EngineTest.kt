@@ -72,20 +72,25 @@ class EngineTest {
     private val theFellowship = Organization().apply {
         name = "The Fellowship of the Ring"
     }
+    private val theOrderOfWizards = Organization().apply {
+        name = "Order of Wizards"
+    }
 
     private val gandalfTheGrey = Person().apply {
         name = "Gandalf"
         givenName = "Gandalf"
         familyName = "The Grey"
         birthPlace = valinor
-        memberOf = theFellowship
+        memberOf.add(theFellowship)
+        memberOf.add(theOrderOfWizards)
     }
     private val gandalfTheWhite = Person().apply {
         name = "Gandalf"
         givenName = "Gandalf"
         familyName = "The White"
         birthPlace = valinor
-        memberOf = theFellowship
+        memberOf.add(theFellowship)
+        memberOf.add(theOrderOfWizards)
     }
     private val bilbo = Person().apply {
         name = "Bilbo"
@@ -98,12 +103,13 @@ class EngineTest {
         givenName = "Frodo"
         familyName = "Baggins"
         birthPlace = theShire
-        memberOf = theFellowship
+        memberOf.add(theFellowship)
     }
 
     // Create recursive relationships
     init {
-        frodo.birthPlace.mostFamousPerson = frodo
+        theShire.famousPerson.add(frodo)
+        theShire.famousPerson.add(bilbo)
     }
 
     @BeforeTest
@@ -117,9 +123,9 @@ class EngineTest {
         personRepository.save<Person>(gandalfTheGrey)
         personRepository.save<Person>(gandalfTheWhite)
 
-        Assertions.assertThat(personRepository.findByName("Gandalf"))
+        Assertions.assertThat(personRepository.findByName(gandalfTheGrey.name))
             .hasSize(2)
-        Assertions.assertThat(personRepository.findByFamilyName("The Grey"))
+        Assertions.assertThat(personRepository.findByFamilyName(gandalfTheGrey.familyName))
             .hasSize(1)
     }
 
@@ -130,7 +136,7 @@ class EngineTest {
 
         Assertions.assertThat(placeRepository.findAll().map { it.photo })
             .hasSize(1)
-            .contains("test-photo")
+            .contains(placeWithPhoto.photo)
     }
 
     @Test
@@ -139,11 +145,11 @@ class EngineTest {
         personRepository.save<Person>(gandalfTheGrey)
         personRepository.save<Person>(gandalfTheWhite)
 
-        Assertions.assertThat(personRepository.findByGivenName("Gandalf"))
+        Assertions.assertThat(personRepository.findByGivenName(gandalfTheGrey.name))
             .hasSize(2)
         Assertions.assertThat(personRepository.findAll().map { it.name })
             .hasSize(2)
-            .contains("Gandalf")
+            .contains(gandalfTheGrey.name)
         //Assertions.assertThat(thingRepository.findAll())
         //    .hasSize(2)
 
@@ -156,11 +162,11 @@ class EngineTest {
         personRepository.save<Person>(bilbo)
         personRepository.save<Person>(frodo)
 
-        Assertions.assertThat(personRepository.findByFamilyName("Baggins"))
+        Assertions.assertThat(personRepository.findByFamilyName(bilbo.familyName))
             .hasSize(2)
         Assertions.assertThat(personRepository.findAll().map { it.birthPlace.name })
             .hasSize(2)
-            .contains("The Shire")
+            .contains(theShire.name)
         Assertions.assertThat(placeRepository.findAll())
             .hasSize(1)
     }
@@ -171,23 +177,47 @@ class EngineTest {
 
         personRepository.save<Person>(frodo)
 
-        Assertions.assertThat(personRepository.findByFamilyName("Baggins"))
+        Assertions.assertThat(personRepository.findByGivenName(bilbo.givenName))
             .hasSize(1)
         Assertions.assertThat(placeRepository.findAll().map { it.name })
             .hasSize(1)
-            .contains("The Shire")
-        Assertions.assertThat(placeRepository.findAll().map { it.mostFamousPerson.givenName })
-            .hasSize(1)
-            .contains("Frodo")
+            .contains(theShire.name)
+        Assertions.assertThat(placeRepository.findAll().map { it.famousPerson }.flatten().map { it.givenName } )
+            .hasSize(2)
+            .contains(frodo.givenName)
     }
 
-    // TODO: Relationships - https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
-
-    // TODO: Relationship cardinality. e.g. Person::Organization affiliation (multiple) - Are all Node properties Lists?
-    // Query both ways
+    // Relationships - https://community.neo4j.com/t5/drivers-stacks/spring-boot-neo4jrepository-find-methods/m-p/36638
+    // Relationship cardinality. e.g. Person::Organization memberOf (multiple)
     // MATCH (tom:Person {name: "Tom Hanks"})-[:ACTED_IN]->(tomHanksMovies) RETURN tom,tomHanksMovies
     // MATCH (cloudAtlas {title: "Cloud Atlas"})<-[:DIRECTED]-(directors) RETURN directors.name
-    // Wildcard relationships
+    @Test
+    fun shouldSaveManyToOne(@Autowired placeRepository: PlaceRepository,
+                            @Autowired personRepository: PersonRepository,
+                            @Autowired organizationRepository: OrganizationRepository) {
+
+        personRepository.save<Person>(frodo)
+        personRepository.save<Person>(gandalfTheGrey)
+
+        Assertions.assertThat(personRepository.findByGivenName(frodo.givenName))
+            .hasSize(1)
+        Assertions.assertThat(placeRepository.findAll().map { it.name })
+            .hasSize(2)
+            .contains(theShire.name)
+        Assertions.assertThat(placeRepository.findAll().map { it.famousPerson }.flatten().map { it.givenName } )
+            .hasSize(2)
+            .contains(bilbo.givenName)
+            .contains(frodo.givenName)
+        // Query both ways
+        Assertions.assertThat(organizationRepository.findByName(theFellowship.name).map { it.member }.flatten().map { it.name } )
+            .hasSize(2)
+            .contains(gandalfTheGrey.name)
+            .contains(frodo.name)
+    }
+
+    // TODO: Wildcard relationships
+
+    // TODO: Add Place for "Bag End" in The Shire and see place of birth at the end of the tree
 
     // TODO: Relationship properties. e.g. Person::Organization affiliation since
 
@@ -211,7 +241,7 @@ class EngineTest {
             }
 
         val exportJson = ontologyRepositories.toJsonString()
-        Assertions.assertThat(exportJson).contains("The Shire").contains("Baggins")
+        Assertions.assertThat(exportJson).contains(theShire.name).contains(bilbo.familyName)
         //println(exportJson)
         File("./build/neo4j-test-export.json")
             .printWriter().use { out -> out.println(exportJson) }

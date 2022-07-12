@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.math.BigInteger;
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -233,7 +236,8 @@ public class Organization { // extends Thing {
 	/**
 	 * A member of an Organization or a ProgramMembership. Organizations can be members of organizations; ProgramMembership is typically for individuals.
 	 */
-	public Person member;
+	@Relationship(type = "HAS_MEMBER_OF", direction = Relationship.Direction.INCOMING)
+	public List<Person> member = new ArrayList<>();
 
 	/**
 	 * An Organization (or ProgramMembership) to which this Person or Organization belongs.
@@ -309,5 +313,9 @@ public class Organization { // extends Thing {
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
 	public static String isDefinedBy = "https://schema.org/Organization";
+
+	public String toString(){
+		return name;
+	}
 }
 

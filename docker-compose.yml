@@ -1,4 +1,4 @@
-# Purpose: Run neo4j locally with a browser: http://localhost:7474/browser/ with ne04j/secret
+# Purpose: Run neo4j locally with a browser: http://localhost:7474/ with ne04j/secret
 # Usage:
 # $ docker compose up
 # Source: docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:4.4.8

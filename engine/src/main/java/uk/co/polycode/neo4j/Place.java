@@ -10,6 +10,8 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -92,8 +94,8 @@ public class Place { // extends Thing {
 	/**
 	 * The subjective concept of the most famous person associated with this place.
 	 */
-	@Relationship(type = "HAS_MOST_FAMOUS_PERSON", direction = Relationship.Direction.OUTGOING)
-	public Person mostFamousPerson;
+	@Relationship(type = "HAS_FAMOUS_PERSON", direction = Relationship.Direction.OUTGOING)
+	public List<Person> famousPerson = new ArrayList<>();
 
 	/**
 	 * Physical address of the item.
@@ -267,5 +269,8 @@ public class Place { // extends Thing {
 	 */
 	public static String isDefinedBy = "https://schema.org/Place";
 
+	public String toString(){
+		return name;
+	}
 }
 

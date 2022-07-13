@@ -2,6 +2,8 @@ package uk.co.polycode.neo4j
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories
+import org.springframework.transaction.annotation.EnableTransactionManagement
 
 /**
  * On-demand Neo4j is an exploration of Neo4j with deployment to AWS
@@ -16,11 +18,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * Mozilla Public License, v. 2.0 for more details.
  */
+@EnableTransactionManagement
+@EnableNeo4jRepositories
 @SpringBootApplication
-open class Engine {
+open class Engine //{
 
     fun main(args: Array<String>) {
         @Suppress("SpreadOperator")
-        SpringApplication.run(this::class.java, *args)
+        SpringApplication.run(Engine::class.java, *args)
     }
-}
+//}

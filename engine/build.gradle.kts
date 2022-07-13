@@ -23,6 +23,7 @@ plugins {
     `kotlin-dsl`
     application
     jacoco
+    id("org.springframework.boot") version "2.7.1"
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
     //id("org.jetbrains.kotlinx.kover") version "0.5.1"
     id("org.unbroken-dome.test-sets") version "4.0.0"
@@ -72,6 +73,11 @@ dependencies {
 
     // Spring Data Neo4j
     //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
+    implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.1"){
+        exclude("ch.qos.logback")
+        exclude("org.apache.logging.log4j")
+        exclude("org.slf4j")
+    }
     implementation("org.springframework.data:spring-data-neo4j:6.3.1") {
         exclude("org.slf4j")
     }

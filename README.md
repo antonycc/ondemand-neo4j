@@ -27,7 +27,7 @@ On-demand Neo4j:
 
 # TODO
 
-* Add a Spring Boot hosted REST API.
+* Add a Spring Boot hosted REST API. - https://github.com/spring-guides/gs-accessing-neo4j-data-rest
 * Rest test via HTTP
 * Add open API docs and Swagger: https://www.baeldung.com/spring-rest-openapi-documentation
 * Restore state into a containerised instance and backup on shutdown.
@@ -72,6 +72,25 @@ Run Neo4j as defined in the `docker-compose.yml`:
 Login to http://localhost:7474/ using neo4j/secret\
 Connect to the database and query all objects: `MATCH (o) RETURN o`
 
+Launch Rest API:
+```shell
+% cd ./engine
+% ../gradlew bootRun
+...
+<===========--> 85% EXECUTING [3m 6s]
+> :engine:bootRun
+```
+
+Query Rest API:
+```shell
+% curl --silent http://localhost:8080 | head -5
+{
+  "_links" : {
+    "places" : {
+      "href" : "http://localhost:8080/places{?page,size,sort}",
+      "templated" : true
+~/projects/ondemand-neo4j % 
+```
 
 # Contributions
 

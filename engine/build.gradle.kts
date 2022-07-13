@@ -22,8 +22,12 @@ buildscript {
 plugins {
     `kotlin-dsl`
     application
+    jacoco
+    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    //id("org.jetbrains.kotlinx.kover") version "0.5.1"
     id("org.unbroken-dome.test-sets") version "4.0.0"
     id("org.jetbrains.kotlin.jvm") version "1.7.0"
+    id("org.barfuin.gradle.taskinfo") version "1.4.0" // ./gradlew tiTree build
 }
 
 afterEvaluate {
@@ -104,6 +108,12 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.named("check").configure {
+    this.setDependsOn(this.dependsOn.filterNot {
+        it is TaskProvider<*> && it.name == "detekt"
+    })
+}
+
 kotlin {
     sourceSets {
         create("integrationTest") {
@@ -132,4 +142,35 @@ task<Test>("integrationTest"){
     testClassesDirs = sourceSets["integrationTest"].output.classesDirs
     classpath = sourceSets["integrationTest"].runtimeClasspath
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
+
+// https://docs.gradle.org/current/userguide/jacoco_plugin.html
+tasks.jacocoTestReport {
+    dependsOn("integrationTest")
+    dependsOn(tasks.test) // normal unit tests are also required to run before generating the report
+}
+
+// See: https://detekt.dev/docs/gettingstarted/gradle/
+detekt {
+    config = files("$projectDir/../detekt/config.yml")
+    buildUponDefaultConfig = true
+    baseline = file("$projectDir/../detekt/baseline.xml")
+    //ignoreFailures = false
+}
+tasks.named("integrationTest").configure {
+    dependsOn("detekt")
+}
+
+//kover {
+    // runAllTestsForProjectTask = true
+//  //isDisabled = true
+//}
+//tasks.named("check").configure {
+//    this.setDependsOn(this.dependsOn.filterNot {
+//        it is TaskProvider<*> && it.name == "koverMergedReport"
+//    })
+//}
+//tasks.named("integrationTest").configure {
+//    dependsOn("koverMergedReport")
+//}

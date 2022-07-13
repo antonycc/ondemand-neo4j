@@ -20,7 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 open class Engine {
 
     fun main(args: Array<String>) {
+        @Suppress("SpreadOperator")
         SpringApplication.run(this::class.java, *args)
     }
 }
-

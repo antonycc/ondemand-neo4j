@@ -62,7 +62,9 @@ class EngineTest {
             addressLocality = "Hobbiton"
             addressRegion = "Westfarthing"
             addressCountry = "The Shire"
-            description = "In a hole in the ground there lived a Hobbit. Not a nasty, dirty, wet hole, filled with the ends of worms and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit down on or to eat: it was a Hobbit-hole, and that means comfort."
+            description = "In a hole in the ground there lived a Hobbit. Not a nasty, dirty, wet hole, filled with " +
+                    "the ends of worms and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit " +
+                    "down on or to eat: it was a Hobbit-hole, and that means comfort."
         }
     }
     private val valinor = Place().apply {
@@ -209,7 +211,8 @@ class EngineTest {
             .contains(bilbo.givenName)
             .contains(frodo.givenName)
         // Query both ways
-        Assertions.assertThat(organizationRepository.findByName(theFellowship.name).map { it.member }.flatten().map { it.name } )
+        Assertions.assertThat(organizationRepository
+            .findByName(theFellowship.name).map { it.member }.flatten().map { it.name } )
             .hasSize(2)
             .contains(gandalfTheGrey.name)
             .contains(frodo.name)

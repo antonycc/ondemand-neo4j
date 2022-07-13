@@ -15,10 +15,11 @@ Be a useful starting point for a low utilisation project using Neo4j and a demon
 
 On-demand Neo4j:
 * Tests Neo4j in a Spring test Context.
-* Includes annotated classes for persistence.
-* Runs tests against an embedded database.
-* Runs tests against official neo4j Docker image
-* Supports relationship cardinality
+* Annotated classes for persistence.
+* Annotated classes for JSON.
+* Export Neo4j as JSON.
+* Can run tests against an embedded database or an official neo4j Docker image.
+* Supports relationship cardinality.
 
 # Bugs
 
@@ -26,10 +27,9 @@ On-demand Neo4j:
 
 # TODO
 
-* Reinstate coverage analysis
-* Reintroduce static analysis
 * Add a Spring Boot hosted REST API.
 * Rest test via HTTP
+* Add open API docs and Swagger: https://www.baeldung.com/spring-rest-openapi-documentation
 * Restore state into a containerised instance and backup on shutdown.
 * Add encrypted secrets to the repository.
 * Deploy REST API as an AWS Lambda which synchronously restores from Amazon EC2 into an embedded database.

@@ -1,6 +1,5 @@
 package uk.co.polycode.neo4j
 
-import io.restassured.RestAssured.*
 import io.restassured.module.jsv.JsonSchemaValidator
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -146,7 +145,7 @@ class ApiTest(
     }
 
     // TODO: Use REST Assured with MvcMock
-    //@Test
+    @Test
     fun validatesWithJsonSchemaWhenPopulated() {
 
         // TODO: Validate with full test data set
@@ -228,8 +227,8 @@ class ApiTest(
      */
     }
 
-    // TODO: Use REST Assured with MvcMock
-    //@Test
+    @Test
+    @Suppress("LongMethod")
     fun shouldExportDocuments() {
 
         // TODO: Export with full test data set
@@ -243,28 +242,71 @@ class ApiTest(
                 }
             }
 
-        val rootDocumentString = get("/").body().prettyPrint()
-        println(rootDocumentString)
+        val rootDocumentString = mvc.get("/"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         rootDocumentFilepath.toFile().printWriter().use { out -> out.println(rootDocumentString) }
         rootDocument = rootDocumentString
 
-        val personsDocumentString = get("/persons").body().prettyPrint()
-        println(personsDocumentString)
+        mvc.get("/no-such-path"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isNotFound() }
+        }
+
+        // The REST Assured way:     get("/persons").body().prettyPrint()
+        // VS The Mock MCV way:  mvc.get("/persons"){}.andReturn().response.contentAsString
+        val personsDocumentString = mvc.get("/persons"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         personsDocumentFilepath.toFile().printWriter().use { out -> out.println(personsDocumentString) }
         personsDocument = personsDocumentString
 
-        val placesDocumentString = get("/places").body().prettyPrint()
-        println(placesDocumentString)
+        val placesDocumentString = mvc.get("/places"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         placesDocumentFilepath.toFile().printWriter().use { out -> out.println(placesDocumentString) }
         placesDocument = placesDocumentString
 
-        val organizationsDocumentString = get("/organizations").body().prettyPrint()
-        println(organizationsDocumentString)
+        val organizationsDocumentString = mvc.get("/organizations"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         organizationsDocumentFilepath.toFile().printWriter().use { out -> out.println(organizationsDocumentString) }
         organizationsDocument = organizationsDocumentString
 
-        val postalAddressesDocumentString = get("/postalAddresses").body().prettyPrint()
-        println(postalAddressesDocumentString)
+        val postalAddressesDocumentString = mvc.get("/postalAddresses"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         postalAddressesDocumentFilepath.toFile().printWriter().use { out -> out.println(postalAddressesDocumentString) }
         postalAddressesDocument = postalAddressesDocumentString
     }

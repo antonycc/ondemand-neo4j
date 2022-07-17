@@ -50,9 +50,8 @@ class CypherTest {
     ) {
         personRepository.deleteAll()
         ontologyService.runQuery(OntologyService.toCypher(person1))
-        ontologyService.runQuery(OntologyService.toCypher(person2))
         Assertions.assertThat(ontologyService.getGivenNameForPersons())
-            .hasSize(2)
+            .hasSize(1)
             .first()
             .isEqualTo("Bilbo")
     }

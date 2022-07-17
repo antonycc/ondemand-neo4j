@@ -1,26 +1,21 @@
 package uk.co.polycode.neo4j
 
-import com.github.victools.jsonschema.generator.*
 import io.restassured.RestAssured.*
-import io.restassured.matcher.RestAssuredMatchers.*
 import io.restassured.module.jsv.JsonSchemaValidator
-import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.nio.file.Paths
 import kotlin.reflect.full.memberProperties
 import kotlin.test.*
-
 
 /**
  * On-demand Neo4j is an exploration of Neo4j with deployment to AWS
@@ -38,34 +33,19 @@ import kotlin.test.*
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-class ApiTest(@Autowired private val testData: TestData,
-              @Autowired private val ontologyRepositories: OntologyRepositories,
-              @Autowired private val personRepository: PersonRepository,
-              @Autowired private val placeRepository: PlaceRepository,
-              @Autowired private val organizationRepository: OrganizationRepository,
-              @Autowired private val postalAddressRepository: PostalAddressRepository,
-              @Autowired private val mvc: MockMvc
+class ApiTest(
+    @Autowired private val testData: TestData,
+    @Autowired private val ontologyRepositories: OntologyRepositories,
+    @Autowired private val postalAddressRepository: PostalAddressRepository,
+    @Autowired private val mvc: MockMvc
 ) {
 
-    private val schemaGeneratorConfigBuilder =
-        SchemaGeneratorConfigBuilder(SchemaVersion.DRAFT_2019_09, OptionPreset.PLAIN_JSON)
-        .with(Option.SCHEMA_VERSION_INDICATOR) // OptionPreset.PLAIN_JSON
-        .with(Option.ADDITIONAL_FIXED_TYPES) // OptionPreset.PLAIN_JSON
-        .with(Option.EXTRA_OPEN_API_FORMAT_VALUES) // OptionPreset.PLAIN_JSON
-        .with(Option.FLATTENED_ENUMS) // OptionPreset.PLAIN_JSON
-        .with(Option.FLATTENED_OPTIONALS) // OptionPreset.PLAIN_JSON
-        .with(Option.FLATTENED_SUPPLIERS) // OptionPreset.PLAIN_JSON
-        .with(Option.VALUES_FROM_CONSTANT_FIELDS) // OptionPreset.PLAIN_JSON
-        //.with(Option.PUBLIC_STATIC_FIELDS)
-        .with(Option.PUBLIC_NONSTATIC_FIELDS) // OptionPreset.PLAIN_JSON
-        .without(Option.NONPUBLIC_NONSTATIC_FIELDS_WITH_GETTERS) // OptionPreset.PLAIN_JSON
-        .without(Option.NONPUBLIC_NONSTATIC_FIELDS_WITHOUT_GETTERS) // OptionPreset.PLAIN_JSON
-        //.with(Option.NULLABLE_FIELDS_BY_DEFAULT)
-        //.with(Option.PLAIN_DEFINITION_KEYS)
-        .with(Option.ALLOF_CLEANUP_AT_THE_END) // OptionPreset.PLAIN_JSON
-
-    private val modelsUnderTest =
-        listOf<Class<*>>(Person::class.java, Place::class.java, Organization::class.java, PostalAddress::class.java)
+    private val modelsUnderTest = listOf<Class<*>>(
+        Person::class.java,
+        Place::class.java,
+        Organization::class.java,
+        PostalAddress::class.java
+    )
     private var jsonSchema: String = "The JSON Schema has not been generated."
     private val jsonSchemaExportFilepath = Paths.get("./build/OntologySchema.json")
     private var rootDocument: String = "The root document not been generated."
@@ -81,12 +61,7 @@ class ApiTest(@Autowired private val testData: TestData,
 
     @BeforeAll
     fun jsonSchemaGenerator() {
-        val generator = SchemaGenerator(schemaGeneratorConfigBuilder.build())
-        val schemaBuilder = generator.buildMultipleSchemaDefinitions()
-        modelsUnderTest.asSequence().forEach { schemaBuilder.createSchemaReference(it) }
-        val jsonSchemaNode = schemaBuilder.collectDefinitions("definitions")
-        Assertions.assertThat(jsonSchemaNode).isNotNull
-        val jsonSchemaString = jsonSchemaNode?.toPrettyString() ?: "The Generated jsonSchema was null."
+        val jsonSchemaString = JavaToJsonSchema(modelsUnderTest).toJsonSchema()
         //println(jsonSchemaString)
         jsonSchemaExportFilepath.toFile().printWriter().use { out -> out.println(jsonSchemaString) }
         jsonSchema = jsonSchemaString
@@ -98,51 +73,76 @@ class ApiTest(@Autowired private val testData: TestData,
     }
 
     @Test
-    fun getIndexExpectingJson() {
+    fun getIndexExpectingJsonOldStyle() {
         mvc.perform(
             MockMvcRequestBuilders
                 .get("/")
                 .accept(MediaType.APPLICATION_JSON)
         )
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            //.andDo(MockMvcResultHandlers.print())
+        .andExpect(MockMvcResultMatchers.status().isOk)
+        .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
     }
 
-    // TODO, switch to new style in: https://www.baeldung.com/kotlin/mockmvc-kotlin-dsl
-    /*
-        mockMvc.post("/mockmvc/validate") {
-          contentType = MediaType.APPLICATION_JSON
-          content = mapper.writeValueAsString(Request(Name("admin", "")))
-          accept = MediaType.APPLICATION_JSON
+    @Test
+    fun getIndexExpectingJsonNewStyle() {
+        mvc.get("/"){
+            accept = MediaType.APPLICATION_JSON
         }.andExpect {
-            status { isOk }
+            status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
-            content { json("{}") }
-        }
-     */
+        }.andDo { MockMvcResultHandlers.print() }
+    }
 
-    // TODO: Use REST Assured with MvcMock
-    //@Test
+    // Use REST Assured with MvcMock:
+    // https://github.com/rest-assured/rest-assured/wiki/Usage#spring-mock-mvc-module
+    @Test
     fun validatesWithJsonSchemaWhenEmpty() {
 
-        get("/").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
-        get("/no-such-path").then().assertThat()
-            .statusCode(HttpStatus.NOT_FOUND.value())
-        get("/persons").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
-        get("/places").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
-        get("/organizations").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
-        get("/postalAddresses").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
+        mvc.get("/"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        } //.andDo { MockMvcResultHandlers.print() }
+
+        mvc.get("/no-such-path"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isNotFound() }
+        }
+
+        mvc.get("/persons"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
+
+        mvc.get("/places"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
+
+        mvc.get("/organizations"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
+
+        mvc.get("/postalAddresses"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
     }
 
     // TODO: Use REST Assured with MvcMock
@@ -163,26 +163,70 @@ class ApiTest(@Autowired private val testData: TestData,
         // TODO: /persons returns HTTP 500 when populated
         //personRepository.save<Person>(testData.bilbo)
 
-        get("/").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
-        get("/no-such-path").then().assertThat()
-            .statusCode(HttpStatus.NOT_FOUND.value())
-        get("/persons").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
-        get("/places").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
-        get("/organizations").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
-        get("/postalAddresses").then().assertThat()
-            .statusCode(HttpStatus.OK.value())
-            .body(JsonSchemaValidator.matchesJsonSchema(jsonSchema))
+        mvc.get("/"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        } //.andDo { MockMvcResultHandlers.print() }
+
+        mvc.get("/no-such-path"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isNotFound() }
+        }
+
+        mvc.get("/persons"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
+
+        mvc.get("/places"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
+
+        mvc.get("/organizations"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
+
+        mvc.get("/postalAddresses"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
     }
 
     // TODO: compare export after injection of same test data set via the API and repository's shouldExportModelAsJson
+
+    // TODO: Post to Mock MVC
+    @Test
+    fun expectPersonToBeSaved() {
+        /*
+        mock.post("/persons") {
+          contentType = MediaType.APPLICATION_JSON
+          content = "TODO: Person as JSON"
+          accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { "TODO: Check body" }
+        }
+     */
+    }
 
     // TODO: Use REST Assured with MvcMock
     //@Test

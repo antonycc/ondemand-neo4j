@@ -86,6 +86,9 @@ dependencies {
     // To string
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 
+    // To JSON Schema
+    implementation("com.github.victools:jsonschema-generator:4.25.0")
+
     // Reflection utilities
     implementation("org.apache.commons:commons-lang3:3.12.0")
 
@@ -115,12 +118,12 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured-all:5.1.1") {
         exclude("org.apache.groovy")
     }
+    // Warning:(121, 24)  Provides transitive vulnerable dependency commons-codec:commons-codec:1.11 Cxeb68d52e-5509 3.7 Exposure of Sensitive Information to an Unauthorized Actor vulnerability with low severity found  Results powered by Checkmarx(c)
     testImplementation("io.rest-assured:kotlin-extensions:5.1.1"){
         exclude("org.apache.groovy")
     }
     // TODO: Warning:(121, 24)  Provides transitive vulnerable dependency com.google.guava:guava:28.2-android CVE-2020-8908 3.3 Incorrect Permission Assignment for Critical Resource vulnerability with low severity found  Results powered by Checkmarx(c)
     testImplementation("io.rest-assured:json-schema-validator:5.1.1")
-    testImplementation("com.github.victools:jsonschema-generator:4.25.0")
 }
 
 tasks.test {

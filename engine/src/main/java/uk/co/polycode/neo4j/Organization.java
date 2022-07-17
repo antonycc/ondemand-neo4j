@@ -236,7 +236,7 @@ public class Organization { // extends Thing {
 	/**
 	 * A member of an Organization or a ProgramMembership. Organizations can be members of organizations; ProgramMembership is typically for individuals.
 	 */
-	@Relationship(type = "HAS_MEMBER_OF", direction = Relationship.Direction.INCOMING)
+	@Relationship(type = "IS_MEMBER_OF", direction = Relationship.Direction.INCOMING)
 	public List<Person> member = new ArrayList<>();
 
 	/**
@@ -313,9 +313,5 @@ public class Organization { // extends Thing {
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
 	public static String isDefinedBy = "https://schema.org/Organization";
-
-	public String toString(){
-		return name;
-	}
 }
 

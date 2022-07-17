@@ -28,7 +28,8 @@ On-demand Neo4j:
 # TODO
 
 * Add a Spring Boot hosted REST API. - https://github.com/spring-guides/gs-accessing-neo4j-data-rest
-* Rest test via HTTP
+* Rest test via HTTP (and run embedded endpoint)
+* Place generated Neo4j export, JSON Schema, Reports: Test, Coverage, Static analysis, and rootDocument in an artefact
 * Add open API docs and Swagger: https://www.baeldung.com/spring-rest-openapi-documentation
 * Restore state into a containerised instance and backup on shutdown.
 * Add encrypted secrets to the repository.
@@ -52,6 +53,7 @@ For owl-to-java:
 * Annotate to ingest XML from a TVA and import into Neo4J
 * Define relationships explicitly and infer multiplicity
 * Make isDefinedBy static
+* JSON schema generator
 
 # Annoyances
 
@@ -89,7 +91,7 @@ Query Rest API:
     "places" : {
       "href" : "http://localhost:8080/places{?page,size,sort}",
       "templated" : true
-~/projects/ondemand-neo4j % 
+% 
 ```
 
 # Contributions

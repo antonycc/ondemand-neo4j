@@ -25,7 +25,6 @@ plugins {
     jacoco
     id("org.springframework.boot") version "2.7.1"
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
-    //id("org.jetbrains.kotlinx.kover") version "0.5.1"
     id("org.unbroken-dome.test-sets") version "4.0.0"
     id("org.jetbrains.kotlin.jvm") version "1.7.0"
     id("org.barfuin.gradle.taskinfo") version "1.4.0" // ./gradlew tiTree build
@@ -59,6 +58,7 @@ configurations {
 }
 
 // Check: gradle -q dependencies --configuration compileClasspath
+// gradle -q dependencies --configuration testRuntimeClasspath | grep -n --color=always -e "^" -e 'polycode'
 dependencies {
 
     // All logging via SLF4J
@@ -92,10 +92,12 @@ dependencies {
     // Testing
     testImplementation(kotlin("test"))
 
-    // Spring Boot testing with Neo4J test harness
+    // Spring Boot testing
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.1"){
         exclude("ch.qos.logback")
     }
+
+    // Spring Boot Neo4J autoconfigured test harness
     if(testWithEmbeddedNeo4j) {
         // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency org.eclipse.jetty:jetty-http:9.4.43.v20210629 CVE-2021-28169 5.3 Exposure of Sensitive Information to an Unauthorized Actor vulnerability with medium severity found  Results powered by Checkmarx(c)
         // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency io.netty:netty-common:4.1.75.Final CVE-2022-24823 5.5 Exposure of Resource to Wrong Sphere vulnerability with medium severity found  Results powered by Checkmarx(c)
@@ -108,6 +110,17 @@ dependencies {
         // Uses config from: ${projectRoot}/engine/src/test/resources/application.properties
         // Before executing tests open a shell at the ${projectRoot} and run: docker compose up
     }
+
+    // API Testing with REST Assured (included with org.springframework.boot:spring-boot-starter-test)
+    testImplementation("io.rest-assured:rest-assured-all:5.1.1") {
+        exclude("org.apache.groovy")
+    }
+    testImplementation("io.rest-assured:kotlin-extensions:5.1.1"){
+        exclude("org.apache.groovy")
+    }
+    // TODO: Warning:(121, 24)  Provides transitive vulnerable dependency com.google.guava:guava:28.2-android CVE-2020-8908 3.3 Incorrect Permission Assignment for Critical Resource vulnerability with low severity found  Results powered by Checkmarx(c)
+    testImplementation("io.rest-assured:json-schema-validator:5.1.1")
+    testImplementation("com.github.victools:jsonschema-generator:4.25.0")
 }
 
 tasks.test {

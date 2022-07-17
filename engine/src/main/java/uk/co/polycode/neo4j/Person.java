@@ -125,7 +125,6 @@ public class Person { // extends Thing {
 	/**
 	 * The place where the person was born.
 	 */
-	@Relationship(type = "HAS_BIRTH_PLACE", direction = Relationship.Direction.OUTGOING)
 	public Place birthPlace;
 
 	/**
@@ -278,7 +277,7 @@ public class Person { // extends Thing {
 	/**
 	 * An Organization (or ProgramMembership) to which this Person or Organization belongs.
 	 */
-	@Relationship(type = "HAS_MEMBER_OF", direction = Relationship.Direction.OUTGOING)
+	@Relationship(type = "IS_MEMBER_OF", direction = Relationship.Direction.OUTGOING)
 	public List<Organization> memberOf = new ArrayList<>();
 
 	/**
@@ -370,9 +369,5 @@ public class Person { // extends Thing {
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
 	public static String isDefinedBy = "https://schema.org/Person";
-
-	public String toString(){
-		return name;
-	}
 }
 

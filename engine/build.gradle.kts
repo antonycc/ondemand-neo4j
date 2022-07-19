@@ -84,7 +84,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.1")//{
 
     // To string
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
+    //implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 
     // To JSON Schema
     implementation("com.github.victools:jsonschema-generator:4.25.0")

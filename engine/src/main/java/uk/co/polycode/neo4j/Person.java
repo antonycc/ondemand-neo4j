@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.math.BigDecimal;
@@ -28,7 +29,8 @@ import java.util.UUID;
  *
  */
 @Node
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id") // Needed when attributes are nodes
+// Needed when attributes are Nodes (at one time) but now the property="id" can't be found on the object (it is there)
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Person { // extends Thing {
 
 	/**
@@ -36,12 +38,14 @@ public class Person { // extends Thing {
 	 */
 	@Id
 	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	@Property(name="id")
 	public UUID id;
 
 	/**
 	 * An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.
 	 * (From Thing)
 	 */
+	// TODO: Copilot says add @Property(name="additionalType")
 	public String additionalType;
 
 	/**

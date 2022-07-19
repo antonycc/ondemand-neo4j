@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.math.BigInteger;
@@ -27,7 +28,8 @@ import java.util.UUID;
  *
  */
 @Node
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id") // Needed when attributes are nodes
+// Needed when attributes are Nodes (at one time) but now the property="id" can't be found on the object (it is there)
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id") //, property="id"
 public class Organization { // extends Thing {
 
 	/**
@@ -35,6 +37,7 @@ public class Organization { // extends Thing {
 	 */
 	@Id
 	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	@Property(name="id")
 	public UUID id;
 
 	/**

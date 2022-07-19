@@ -8,7 +8,7 @@ version: 2
 enable-beta-ecosystems: true
 
 registries:
-  maven:
+  github-antonycc:
     type: maven-repository
     url: https://maven.pkg.github.com/antonycc/ondemand-neo4j
     username: x-access-token
@@ -16,26 +16,36 @@ registries:
 
 updates:
 
-  # Maintain dependencies for Gradle
-  - package-ecosystem: "gradle"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      # UTC
-      time: "01:00"
-       
-  # Maintain dependencies for Maven (via Gradle)
-  - package-ecosystem: "maven"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      # UTC
-      time: "01:15"
-            
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
       # UTC
+      time: "01:15"
+
+  # Maintain dependencies for Gradle
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      # UTC
       time: "01:30"
+
+  # Maintain dependencies for GitHub Maven (via Gradle)
+  - package-ecosystem: "maven"
+    directory: "/maven-repository/github-antonycc"
+    schedule:
+      interval: "daily"
+      # UTC
+      time: "01:45"
+      
+  # Maintain dependencies for Maven (via Gradle)
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      # UTC
+      time: "02:00"
+            
+

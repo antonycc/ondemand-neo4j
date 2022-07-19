@@ -8,7 +8,7 @@ version: 2
 enable-beta-ecosystems: true
 
 registries:
-  maven-github:
+  maven:
     type: maven-repository
     url: https://maven.pkg.github.com/antonycc/ondemand-neo4j
     username: x-access-token

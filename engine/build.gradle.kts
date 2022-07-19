@@ -106,7 +106,7 @@ dependencies {
         // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency io.netty:netty-common:4.1.75.Final CVE-2022-24823 5.5 Exposure of Resource to Wrong Sphere vulnerability with medium severity found  Results powered by Checkmarx(c)
         // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency commons-collections:commons-collections:3.2.2 Cx78f40514-81ff 7.5 Uncontrolled Recursion vulnerability with medium severity found  Results powered by Checkmarx(c)
         testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0")
-        testImplementation("org.neo4j.test:neo4j-harness:4.4.8") {
+        testImplementation("org.neo4j.test:neo4j-harness:4.4.9") {
             exclude("org.slf4j:slf4j-nop")
         }
     }else{

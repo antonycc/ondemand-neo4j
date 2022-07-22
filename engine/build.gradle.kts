@@ -81,7 +81,7 @@ dependencies {
     implementation("org.springframework.data:spring-data-neo4j:6.3.1") {
         exclude("org.slf4j")
     }
-    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.1")//{
+    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.2")//{
 
     // To string
     //implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")

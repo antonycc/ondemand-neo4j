@@ -23,7 +23,7 @@ plugins {
     `kotlin-dsl`
     application
     jacoco
-    id("org.springframework.boot") version "2.7.1"
+    id("org.springframework.boot") version "2.7.2"
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
     id("org.unbroken-dome.test-sets") version "4.0.0"
     id("org.jetbrains.kotlin.jvm") version "1.7.0"

@@ -73,7 +73,7 @@ dependencies {
 
     // Spring Data Neo4j
     //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
-    implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.1"){
+    implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
         exclude("ch.qos.logback")
         exclude("org.apache.logging.log4j")
         exclude("org.slf4j")

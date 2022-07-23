@@ -30,6 +30,7 @@ On-demand Neo4j:
 # TODO
 
 * Cut down circular reference problem to new project with minimal files (all in one test?) and post on stackoverflow.
+* Add the Mapinator (object mapping library so that we can have domain classes for neo4j and json).
 * More co-pilot: https://docs.github.com/en/copilot/getting-started-with-github-copilot/getting-started-with-github-copilot-in-a-jetbrains-ide
 * Don't generate nulls in API responses or Jackson renderings
 * Add open API docs and Swagger: https://www.baeldung.com/spring-rest-openapi-documentation

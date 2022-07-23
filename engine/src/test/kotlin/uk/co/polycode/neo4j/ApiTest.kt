@@ -147,7 +147,8 @@ class ApiTest(
         }
     }
 
-    //@Test
+    @Test()
+    @Ignore("This test fails marshalling the JSON to/from an object with references.")
     fun validatesWithJsonSchemaWhenPopulated() {
 
         testData::class.memberProperties.asSequence()
@@ -227,7 +228,8 @@ class ApiTest(
      */
     }
 
-    //@Test
+    @Test
+    @Ignore("This test fails marshalling the JSON to/from an object with references.")
     @Suppress("LongMethod")
     fun shouldExportDocuments() {
 

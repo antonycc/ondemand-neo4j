@@ -30,6 +30,8 @@ On-demand Neo4j:
 # TODO
 
 * Cut down circular reference problem to new project with minimal files (all in one test?) and post on stackoverflow.
+* https://www.baeldung.com/spring-rest-openapi-documentation
+* https://spring.io/guides/gs/accessing-neo4j-data-rest/
 * Add the Mapinator (object mapping library so that we can have domain classes for neo4j and json).
 * More co-pilot: https://docs.github.com/en/copilot/getting-started-with-github-copilot/getting-started-with-github-copilot-in-a-jetbrains-ide
 * Don't generate nulls in API responses or Jackson renderings
@@ -38,7 +40,8 @@ On-demand Neo4j:
 * Restore state into a containerised instance and backup on shutdown.
 * Add encrypted deployment secrets to the repository.
 * Deploy REST API as an AWS Lambda using CDK which synchronously restores from Amazon EC2 into an embedded database.
-* Consider reactive approach for Spring Data Neo4j.
+* Consider reactive approach for Spring Data Neo4j. https://www.reactive-streams.org/ 
+* And Spring data reactive: https://spring.io/blog/2019/05/16/reactive-transactions-with-spring
 * Add deferred synchronous AWS Lambda which responds 503 + RetryAfter (start time).
 * Deploy an EC2 hosted static site with demo links to start and query the database.
 * Add open source data sets to import, some of which relate to each other.

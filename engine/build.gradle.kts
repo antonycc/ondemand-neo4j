@@ -74,14 +74,18 @@ dependencies {
     // Spring Data Neo4j
     //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
+        exclude("org.slf4j")
         exclude("ch.qos.logback")
         exclude("org.apache.logging.log4j")
-        exclude("org.slf4j")
     }
     implementation("org.springframework.data:spring-data-neo4j:6.3.1") {
         exclude("org.slf4j")
     }
-    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.2")//{
+    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.2"){
+        exclude("org.slf4j")
+        exclude("ch.qos.logback")
+        exclude("org.apache.logging.log4j")
+    }
 
     // To string
     //implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
@@ -105,9 +109,13 @@ dependencies {
         // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency org.eclipse.jetty:jetty-http:9.4.43.v20210629 CVE-2021-28169 5.3 Exposure of Sensitive Information to an Unauthorized Actor vulnerability with medium severity found  Results powered by Checkmarx(c)
         // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency io.netty:netty-common:4.1.75.Final CVE-2022-24823 5.5 Exposure of Resource to Wrong Sphere vulnerability with medium severity found  Results powered by Checkmarx(c)
         // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency commons-collections:commons-collections:3.2.2 Cx78f40514-81ff 7.5 Uncontrolled Recursion vulnerability with medium severity found  Results powered by Checkmarx(c)
-        testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0")
+        testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0"){
+            exclude("org.slf4j")
+            exclude("org.apache.logging.log4j")
+        }
         testImplementation("org.neo4j.test:neo4j-harness:4.4.8") {
-            exclude("org.slf4j:slf4j-nop")
+            exclude("org.slf4j")
+            exclude("org.apache.logging.log4j")
         }
     }else{
         // Uses config from: ${projectRoot}/engine/src/test/resources/application.properties

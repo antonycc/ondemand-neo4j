@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.math.BigDecimal;
@@ -27,7 +28,8 @@ import java.util.UUID;
  *
  */
 @Node
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id") // Needed when attributes are nodes
+// Needed when attributes are Nodes (at one time) but now the property="id" can't be found on the object (it is there)
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Place { // extends Thing {
 
 	/**
@@ -35,71 +37,62 @@ public class Place { // extends Thing {
 	 */
 	@Id
 	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	@Property(name="id")
 	public UUID id;
-
-	/**
-	 * An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.
-	 * (From Thing)
-	 */
-	public String additionalType;
-
-	/**
-	 * An alias for the item.
-	 * (From Thing)
-	 */
-	public String alternateName;
 
 	/**
 	 * A description of the item.
 	 * (From Thing)
 	 */
+	@Property(name="description")
 	public String description;
-
-	/**
-	 * A sub property of description. A short description of the item used to disambiguate from other, similar items. Information from other properties (in particular, name) may be necessary for the description to be useful for disambiguation.
-	 * (From Thing)
-	 */
-	public String disambiguatingDescription;
 
 	/**
 	 * The identifier property represents any kind of identifier for any kind of <a class="localLink" href="https://schema.org/Thing">Thing</a>, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links. See <a href="/docs/datamodel.html#identifierBg">background notes</a> for more details.
 	 * (From Thing)
 	 */
+	@Property(name="identifier")
 	public String identifier;
 
 	/**
 	 * An image of the item. This can be a <a class="localLink" href="https://schema.org/URL">URL</a> or a fully described <a class="localLink" href="https://schema.org/ImageObject">ImageObject</a>.
 	 * (From Thing)
 	 */
+	@Property(name="image")
 	public String image;
 
 	/**
 	 * The name of the item.
 	 * (From Thing)
 	 */
+	@Property(name="name")
 	public String name;
 
 	/**
 	 * URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Wikidata entry, or official website.
 	 * (From Thing)
 	 */
+	@Property(name="sameAs")
 	public String sameAs;
 
 	/**
 	 * URL of the item.
 	 * (From Thing)
 	 */
+	@Property(name="url")
 	public URL url;
 
 	/**
 	 * The subjective concept of the most famous person associated with this place.
 	 */
+	//@Property(name="famousPerson")
 	@Relationship(type = "HAS_FAMOUS_PERSON", direction = Relationship.Direction.OUTGOING)
 	public List<Person> famousPerson = new ArrayList<>();
 
 	/**
 	 * Physical address of the item.
 	 */
+	//@Property(name="address")
 	public PostalAddress address;
 
 	/**
@@ -107,166 +100,98 @@ public class Place { // extends Thing {
 	 *
 	 * For example, in the URL <a href="http://www.starbucks.co.uk/store-locator/etc/detail/3047">...</a> the code "3047" is a branchCode for a particular branch.
 	 */
+	@Property(name="branchCode")
 	public String branchCode;
 
 	/**
 	 * The basic containment relation between a place and one that contains it.
 	 */
+	//@Property(name="containedInPlace")
 	public Place containedInPlace;
 
 	/**
 	 * The basic containment relation between a place and another that it contains.
 	 */
+	//@Property(name="containedIn")
 	public Place containsPlace;
 
-	/**
-	 * The fax number.
-	 */
-	public String faxNumber;
-
-	/**
-	 * Represents a relationship between two geometries (or the places they represent), relating a containing geometry to a contained geometry. "a contains b iff no points of b lie in the exterior of a, and at least one point of the interior of b lies in the interior of a". As defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a>.
-	 */
-	public Place geoContains;
-
-	/**
-	 * Represents a relationship between two geometries (or the places they represent), relating a geometry to another that covers it. As defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a>.
-	 */
-	public Place geoCoveredByPlace;
-
-	/**
-	 * Represents a relationship between two geometries (or the places they represent), relating a covering geometry to a covered geometry. "Every point of b is a point of (the interior or boundary of) a". As defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a>.
-	 */
-	public Place geoCoversPlace;
-
-	/**
-	 * Represents a relationship between two geometries (or the places they represent), relating a geometry to another that crosses it: "a crosses b: they have some but not all interior points in common, and the dimension of the intersection is less than that of at least one of them". As defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a>.
-	 */
-	public Place geoCrossesPlace;
-
-	/**
-	 * Represents spatial relations in which two geometries (or the places they represent) are topologically disjoint: they have no point in common. They form a set of disconnected geometries." (a symmetric relationship, as defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a>)
-	 */
-	public Place geoDisjointPlace;
-
-	/**
-	 * Represents spatial relations in which two geometries (or the places they represent) are topologically equal, as defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a>. "Two geometries are topologically equal if their interiors intersect and no part of the interior or boundary of one geometry intersects the exterior of the other" (a symmetric relationship)
-	 */
-	public Place geoEquals;
-
-	/**
-	 * Represents spatial relations in which two geometries (or the places they represent) have at least one point in common. As defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a>.
-	 */
-	public Place geoIntersectsPlace;
-
-	/**
-	 * Represents a relationship between two geometries (or the places they represent), relating a geometry to another that geospatially overlaps it, i.e. they have some but not all points in common. As defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a>.
-	 */
-	public Place geoOverlaps;
-
-	/**
-	 * Represents spatial relations in which two geometries (or the places they represent) touch: they have at least one boundary point in common, but no interior points." (a symmetric relationship, as defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a> )
-	 */
-	public Place geoTouches;
-
-	/**
-	 * Represents a relationship between two geometries (or the places they represent), relating a geometry to one that contains it, i.e. it is inside (i.e. within) its interior. As defined in <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a>.
-	 */
-	public Place geoWithin;
-
-	/**
-	 * The <a href="http://www.gs1.org/gln">Global Location Number</a> (GLN, sometimes also referred to as International Location Number or ILN) of the respective organization, person, or place. The GLN is a 13-digit number used to identify parties and physical locations.
-	 */
-	public String globalLocationNumber;
 
 	/**
 	 * A URL to a map of the place.
 	 */
+	@Property(name="hasMap")
 	public String hasMap;
 
 	/**
 	 * The International Standard of Industrial Classification of All Economic Activities (ISIC), Revision 4 code for a particular organization, business person, or place.
 	 */
+	@Property(name="isicV4")
 	public String isicV4;
 
 	/**
 	 * Keywords or tags used to describe some item. Multiple textual entries in a keywords list are typically delimited by commas, or by repeating the property.
 	 */
+	@Property(name="keywords")
 	public String keywords;
 
 	/**
 	 * The latitude of a location. For example <code>37.42242</code> (<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS 84</a>).
 	 */
+	@Property(name="latitude")
 	public BigDecimal latitude;
 
 	/**
 	 * An associated logo.
 	 */
+	@Property(name="logo")
 	public String logo;
 
 	/**
 	 * The longitude of a location. For example <code>-122.08585</code> (<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS 84</a>).
 	 */
+	@Property(name="longitude")
 	public BigDecimal longitude;
 
 	/**
 	 * A photograph of this place.
 	 */
+	@Property(name="photoImageObject")
 	public String photoImageObject;
 
 	/**
 	 * A photograph of this place.
 	 */
+	@Property(name="photo")
 	public String photo;
-
-	/**
-	 * A review of the item.
-	 */
-	public String review;
-
-	/**
-	 * A slogan or motto associated with the item.
-	 */
-	public String slogan;
 
 	/**
 	 * The telephone number.
 	 */
+	@Property(name="telephone")
 	public String telephone;
-
-	/**
-	 * A page providing information on how to book a tour of some <a class="localLink" href="https://schema.org/Place">Place</a>, such as an <a class="localLink" href="https://schema.org/Accommodation">Accommodation</a> or <a class="localLink" href="https://schema.org/ApartmentComplex">ApartmentComplex</a> in a real estate setting, as well as other kinds of tours as appropriate.
-	 */
-	public String tourBookingPage;
-
-	/**
-	 * Indicates whether some facility (e.g. <a class="localLink" href="https://schema.org/FoodEstablishment">FoodEstablishment</a>, <a class="localLink" href="https://schema.org/CovidTestingFacility">CovidTestingFacility</a>) offers a service that can be used by driving through in a car. In the case of <a class="localLink" href="https://schema.org/CovidTestingFacility">CovidTestingFacility</a> such facilities could potentially help with social distancing from other potentially-infected users.
-	 */
-	public Boolean hasDriveThroughService;
-
-	/**
-	 * A flag to signal that the item, event, or place is accessible for free.
-	 */
-	public Boolean isAccessibleForFree;
 
 	/**
 	 * The total number of individuals that may attend an event or venue.
 	 */
+	@Property(name="maximumAttendeeCapacity")
 	public BigInteger maximumAttendeeCapacity;
 
 	/**
 	 * A flag to signal that the <a class="localLink" href="https://schema.org/Place">Place</a> is open to public visitors.  If this property is omitted there is no assumed default boolean value
 	 */
+	@Property(name="isPublicAccess")
 	public Boolean publicAccess;
 
 	/**
 	 * Indicates whether it is allowed to smoke in the place, e.g. in the restaurant, hotel or hotel room.
 	 */
+	@Property(name="smokingAllowed")
 	public Boolean smokingAllowed;
 
 	/**
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
+	@Property(name="isDefinedBy")
 	public static String isDefinedBy = "https://schema.org/Place";
 }
 

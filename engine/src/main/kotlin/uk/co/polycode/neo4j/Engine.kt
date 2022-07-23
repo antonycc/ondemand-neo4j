@@ -21,10 +21,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EnableTransactionManagement
 @EnableNeo4jRepositories
 @SpringBootApplication
-open class Engine //{
+open class Engine
 
-    fun main(args: Array<String>) {
-        @Suppress("SpreadOperator")
-        SpringApplication.run(Engine::class.java, *args)
-    }
-//}
+fun main(args: Array<String>) {
+    @Suppress("SpreadOperator")
+    SpringApplication.run(Engine::class.java, *args)
+}

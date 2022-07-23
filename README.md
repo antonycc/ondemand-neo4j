@@ -20,6 +20,8 @@ On-demand Neo4j:
 * Export Neo4j as JSON.
 * Can run tests against an embedded database or an official neo4j Docker image.
 * Supports relationship cardinality.
+* REST API from Spring Boot  - https://github.com/spring-guides/gs-accessing-neo4j-data-rest
+* REST API tested via Embedded HTTP and Mock MVC
 
 # Bugs
 
@@ -27,13 +29,16 @@ On-demand Neo4j:
 
 # TODO
 
-* Add a Spring Boot hosted REST API. - https://github.com/spring-guides/gs-accessing-neo4j-data-rest
-* Rest test via HTTP (and run embedded endpoint)
-* Place generated Neo4j export, JSON Schema, Reports: Test, Coverage, Static analysis, and rootDocument in an artefact
+* Cut down circular reference problem to new project with minimal files (all in one test?) and post on stackoverflow.
+* Add the Mapinator (object mapping library so that we can have domain classes for neo4j and json).
+* More co-pilot: https://docs.github.com/en/copilot/getting-started-with-github-copilot/getting-started-with-github-copilot-in-a-jetbrains-ide
+* Don't generate nulls in API responses or Jackson renderings
 * Add open API docs and Swagger: https://www.baeldung.com/spring-rest-openapi-documentation
+* Place generated Neo4j export, JSON Schema, Reports: Test, Coverage, Static analysis, and rootDocument in an artefact
 * Restore state into a containerised instance and backup on shutdown.
-* Add encrypted secrets to the repository.
-* Deploy REST API as an AWS Lambda which synchronously restores from Amazon EC2 into an embedded database.
+* Add encrypted deployment secrets to the repository.
+* Deploy REST API as an AWS Lambda using CDK which synchronously restores from Amazon EC2 into an embedded database.
+* Consider reactive approach for Spring Data Neo4j.
 * Add deferred synchronous AWS Lambda which responds 503 + RetryAfter (start time).
 * Deploy an EC2 hosted static site with demo links to start and query the database.
 * Add open source data sets to import, some of which relate to each other.

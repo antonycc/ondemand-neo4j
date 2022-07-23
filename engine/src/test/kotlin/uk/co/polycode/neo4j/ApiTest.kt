@@ -1,6 +1,5 @@
 package uk.co.polycode.neo4j
 
-import io.restassured.RestAssured.*
 import io.restassured.module.jsv.JsonSchemaValidator
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -36,6 +35,9 @@ import kotlin.test.*
 class ApiTest(
     @Autowired private val testData: TestData,
     @Autowired private val ontologyRepositories: OntologyRepositories,
+    @Autowired private val personRepository: PersonRepository,
+    @Autowired private val placeRepository: PlaceRepository,
+    @Autowired private val organizationRepository: OrganizationRepository,
     @Autowired private val postalAddressRepository: PostalAddressRepository,
     @Autowired private val mvc: MockMvc
 ) {
@@ -145,23 +147,19 @@ class ApiTest(
         }
     }
 
-    // TODO: Use REST Assured with MvcMock
-    //@Test
+    @Test()
+    @Ignore("This test fails marshalling the JSON to/from an object with references.")
     fun validatesWithJsonSchemaWhenPopulated() {
 
-        // TODO: Validate with full test data set
         testData::class.memberProperties.asSequence()
             .forEach {
                 when(val testDataEntity = it.getter.call(testData)){
                     //is Person -> personRepository.save<Person>(testDataEntity)
                     //is Place -> placeRepository.save<Place>(testDataEntity)
-                    //is Organization -> organizationRepository.save<Organization>(testDataEntity)
+                    is Organization -> organizationRepository.save<Organization>(testDataEntity)
                     is PostalAddress -> postalAddressRepository.save<PostalAddress>(testDataEntity)
                 }
             }
-
-        // TODO: /persons returns HTTP 500 when populated
-        //personRepository.save<Person>(testData.bilbo)
 
         mvc.get("/"){
             accept = MediaType.APPLICATION_JSON
@@ -195,6 +193,8 @@ class ApiTest(
 
         mvc.get("/organizations"){
             accept = MediaType.APPLICATION_JSON
+        }.andDo {
+            MockMvcResultHandlers.print()
         }.andExpect {
             status { isOk() }
             content { contentType(MediaType.APPLICATION_JSON) }
@@ -218,53 +218,96 @@ class ApiTest(
         /*
         mock.post("/persons") {
           contentType = MediaType.APPLICATION_JSON
-          content = "TODO: Person as JSON"
+          content = "Person as JSON"
           accept = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk }
             content { contentType(MediaType.APPLICATION_JSON) }
-            content { "TODO: Check body" }
+            content { "Check body" }
         }
      */
     }
 
-    // TODO: Use REST Assured with MvcMock
-    //@Test
+    @Test
+    @Ignore("This test fails marshalling the JSON to/from an object with references.")
+    @Suppress("LongMethod")
     fun shouldExportDocuments() {
 
-        // TODO: Export with full test data set
         testData::class.memberProperties.asSequence()
             .forEach {
                 when(val testDataEntity = it.getter.call(testData)){
-                    //is Person -> personRepository.save<Person>(testDataEntity)
-                    //is Place -> placeRepository.save<Place>(testDataEntity)
-                    //is Organization -> organizationRepository.save<Organization>(testDataEntity)
+                    is Person -> personRepository.save<Person>(testDataEntity)
+                    is Place -> placeRepository.save<Place>(testDataEntity)
+                    is Organization -> organizationRepository.save<Organization>(testDataEntity)
                     is PostalAddress -> postalAddressRepository.save<PostalAddress>(testDataEntity)
                 }
             }
 
-        val rootDocumentString = get("/").body().prettyPrint()
-        println(rootDocumentString)
+        val rootDocumentString = mvc.get("/"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         rootDocumentFilepath.toFile().printWriter().use { out -> out.println(rootDocumentString) }
         rootDocument = rootDocumentString
 
-        val personsDocumentString = get("/persons").body().prettyPrint()
-        println(personsDocumentString)
+        mvc.get("/no-such-path"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isNotFound() }
+        }
+
+        // The REST Assured way:     get("/persons").body().prettyPrint()
+        // VS The Mock MCV way:  mvc.get("/persons"){}.andReturn().response.contentAsString
+        val personsDocumentString = mvc.get("/persons"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         personsDocumentFilepath.toFile().printWriter().use { out -> out.println(personsDocumentString) }
         personsDocument = personsDocumentString
 
-        val placesDocumentString = get("/places").body().prettyPrint()
-        println(placesDocumentString)
+        val placesDocumentString = mvc.get("/places"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         placesDocumentFilepath.toFile().printWriter().use { out -> out.println(placesDocumentString) }
         placesDocument = placesDocumentString
 
-        val organizationsDocumentString = get("/organizations").body().prettyPrint()
-        println(organizationsDocumentString)
+        val organizationsDocumentString = mvc.get("/organizations"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         organizationsDocumentFilepath.toFile().printWriter().use { out -> out.println(organizationsDocumentString) }
         organizationsDocument = organizationsDocumentString
 
-        val postalAddressesDocumentString = get("/postalAddresses").body().prettyPrint()
-        println(postalAddressesDocumentString)
+        val postalAddressesDocumentString = mvc.get("/postalAddresses"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
         postalAddressesDocumentFilepath.toFile().printWriter().use { out -> out.println(postalAddressesDocumentString) }
         postalAddressesDocument = postalAddressesDocumentString
     }

@@ -22,7 +22,7 @@ updates:
     schedule:
       interval: "daily"
       # UTC
-      time: "01:15"
+      time: "01:30"
 
   # Maintain dependencies for Gradle
   - package-ecosystem: "gradle"
@@ -30,7 +30,7 @@ updates:
     schedule:
       interval: "daily"
       # UTC
-      time: "01:30"
+      time: "01:45"
 
   # Maintain dependencies for GitHub Maven (via Gradle)
 #  - package-ecosystem: "maven"

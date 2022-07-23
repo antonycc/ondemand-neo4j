@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.math.BigInteger;
@@ -27,7 +28,8 @@ import java.util.UUID;
  *
  */
 @Node
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id") // Needed when attributes are nodes
+// Needed when attributes are Nodes (at one time) but now the property="id" can't be found on the object (it is there)
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id") //, property="id"
 public class Organization { // extends Thing {
 
 	/**
@@ -35,283 +37,262 @@ public class Organization { // extends Thing {
 	 */
 	@Id
 	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	@Property(name="id")
 	public UUID id;
-
-	/**
-	 * An additional type for the item, typically used for adding more specific types from external vocabularies in microdata syntax. This is a relationship between something and a class that the thing is in. In RDFa syntax, it is better to use the native RDFa syntax - the 'typeof' attribute - for multiple types. Schema.org tools may have only weaker understanding of extra types, in particular those defined externally.
-	 * (From Thing)
-	 */
-	public String additionalType;
 
 	/**
 	 * An alias for the item.
 	 * (From Thing)
 	 */
+	@Property(name="alternateName")
 	public String alternateName;
 
 	/**
 	 * A description of the item.
 	 * (From Thing)
 	 */
+	@Property(name="description")
 	public String description;
-
-	/**
-	 * A sub property of description. A short description of the item used to disambiguate from other, similar items. Information from other properties (in particular, name) may be necessary for the description to be useful for disambiguation.
-	 * (From Thing)
-	 */
-	public String disambiguatingDescription;
 
 	/**
 	 * The identifier property represents any kind of identifier for any kind of <a class="localLink" href="https://schema.org/Thing">Thing</a>, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links. See <a href="/docs/datamodel.html#identifierBg">background notes</a> for more details.
 	 * (From Thing)
 	 */
+	@Property(name="identifier")
 	public String identifier;
 
 	/**
 	 * An image of the item. This can be a <a class="localLink" href="https://schema.org/URL">URL</a> or a fully described <a class="localLink" href="https://schema.org/ImageObject">ImageObject</a>.
 	 * (From Thing)
 	 */
+	@Property(name="image")
 	public String image;
 
 	/**
 	 * The name of the item.
 	 * (From Thing)
 	 */
+	@Property(name="name")
 	public String name;
 
 	/**
 	 * URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Wikidata entry, or official website.
 	 * (From Thing)
 	 */
+	@Property(name="sameAs")
 	public String sameAs;
 
 	/**
 	 * URL of the item.
 	 * (From Thing)
 	 */
+	@Property(name="url")
 	public URL url;
 
 	/**
 	 * Physical address of the item.
 	 */
+	//@Property(name="address")
 	public PostalAddress address;
 
 	/**
 	 * Alumni of an organization.
 	 */
+	//@Property(name="alumni")
 	public Person alumni;
 
 	/**
 	 * The geographic area where a service or offered item is provided.
 	 */
-	public Place areaServedPlace;
-
-	/**
-	 * The geographic area where a service or offered item is provided.
-	 */
+	//@Property(name="areaServed")
 	public Place areaServed;
 
 	/**
 	 * An award won by or for this item.
 	 */
+	@Property(name="award")
 	public String award;
 
 	/**
 	 * The brand(s) associated with a product or service, or the brand(s) maintained by an organization or business person.
 	 */
+	//@Property(name="brand")
 	public Organization brand;
 
 	/**
 	 * A relationship between an organization and a department of that organization, also described as an organization (allowing different urls, logos, opening hours). For example: a store with a pharmacy, or a bakery with a cafe.
 	 */
+	//@Property(name="department")
 	public Organization department;
-
-	/**
-	 * The Dun &amp; Bradstreet DUNS number for identifying an organization or business person.
-	 */
-	public String duns;
 
 	/**
 	 * Email address.
 	 */
+	@Property(name="email")
 	public String email;
 
 	/**
 	 * Someone working for this organization.
 	 */
+	//@Property(name="employee")
 	public Person employee;
 
 	/**
 	 * The fax number.
 	 */
+	@Property(name="faxNumber")
 	public String faxNumber;
 
 	/**
 	 * A person who founded this organization.
 	 */
+	//@Property(name="founder")
 	public Person founder;
 
 	/**
 	 * The place where the Organization was founded.
 	 */
+	//@Property(name="foundingLocation")
 	public Place foundingLocation;
-
-	/**
-	 * A person or organization that supports (sponsors) something through some kind of financial contribution.
-	 */
-	public Organization funderOrganization;
-
-	/**
-	 * A person or organization that supports (sponsors) something through some kind of financial contribution.
-	 */
-	public Person funder;
 
 	/**
 	 * The <a href="http://www.gs1.org/gln">Global Location Number</a> (GLN, sometimes also referred to as International Location Number or ILN) of the respective organization, person, or place. The GLN is a 13-digit number used to identify parties and physical locations.
 	 */
+	@Property(name="globalLocationNumber")
 	public String globalLocationNumber;
 
 	/**
 	 * The International Standard of Industrial Classification of All Economic Activities (ISIC), Revision 4 code for a particular organization, business person, or place.
 	 */
+	@Property(name="isicV4")
 	public String isicV4;
 
 	/**
 	 * An organization identifier as defined in ISO 6523(-1). Note that many existing organization identifiers such as <a href="https://schema.org/leiCode">leiCode</a>, <a href="https://schema.org/duns">duns</a> and <a href="https://schema.org/vatID">vatID</a> can be expressed as an ISO 6523 identifier by setting the ICD part of the ISO 6523 identifier accordingly.
 	 */
+	@Property(name="iso639Code")
 	public String iso6523Code;
 
 	/**
 	 * Keywords or tags used to describe some item. Multiple textual entries in a keywords list are typically delimited by commas, or by repeating the property.
 	 */
+	@Property(name="keywords")
 	public String keywords;
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
 	 * (Expanded subclass of Thing to literal association)
 	 */
+	//@Property(name="knowsAboutPerson")
 	public Person knowsAboutPerson;
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
 	 * (Expanded subclass of Thing to literal association)
 	 */
+	//@Property(name="knowsAboutOrganization")
 	public Organization knowsAboutOrganization;
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a known language. We do not distinguish skill levels or reading/writing/speaking/signing here. Use language codes from the <a href="http://tools.ietf.org/html/bcp47">IETF BCP 47 standard</a>.
 	 */
+	@Property(name="knowsLanguage")
 	public String knowsLanguage;
 
 	/**
 	 * The official name of the organization, e.g. the registered company name.
 	 */
+	@Property(name="legalName")
 	public String legalName;
-
-	/**
-	 * An organization identifier that uniquely identifies a legal entity as defined in ISO 17442.
-	 */
-	public String leiCode;
 
 	/**
 	 * The location of, for example, where an event is happening, where an organization is located, or where an action takes place.
 	 */
+	//@Property(name="locationPlace")
 	public Place locationPlace;
 
 	/**
 	 * The location of, for example, where an event is happening, where an organization is located, or where an action takes place.
 	 */
+	//@Property(name="location")
 	public PostalAddress location;
 
 	/**
 	 * An associated logo.
 	 */
+	@Property(name="logo")
 	public String logo;
 
 	/**
 	 * A member of an Organization or a ProgramMembership. Organizations can be members of organizations; ProgramMembership is typically for individuals.
 	 */
-	public Organization memberOrganization;
-
-	/**
-	 * A member of an Organization or a ProgramMembership. Organizations can be members of organizations; ProgramMembership is typically for individuals.
-	 */
+	//@Property(name="member")
 	@Relationship(type = "IS_MEMBER_OF", direction = Relationship.Direction.INCOMING)
 	public List<Person> member = new ArrayList<>();
 
 	/**
-	 * An Organization (or ProgramMembership) to which this Person or Organization belongs.
-	 */
-	public Organization memberOfOrganization;
-
-	/**
 	 * An Organization to which this Person or Organization belongs.
 	 */
+	//@Property(name="memberOf")
 	public Organization memberOf;
 
 	/**
 	 * The North American Industry Classification System (NAICS) code for a particular organization or business person.
 	 */
+	@Property(name="naics")
 	public String naics;
 
 	/**
 	 * The number of employees in an organization e.g. business.
 	 */
+	@Property(name="numberOfEmployees")
 	public BigInteger numberOfEmployees;
 
 	/**
 	 * The larger organization that this organization is a <a class="localLink" href="https://schema.org/subOrganization">subOrganization</a> of, if any.
 	 */
+	//@Property(name="parentOrganization")
 	public Organization parentOrganization;
-
-	/**
-	 * A slogan or motto associated with the item.
-	 */
-	public String slogan;
-
-	/**
-	 * A person or organization that supports a thing through a pledge, promise, or financial contribution. e.g. a sponsor of a Medical Study or a corporate sponsor of an event.
-	 */
-	public Organization sponsorOrganization;
-
-	/**
-	 * A person or organization that supports a thing through a pledge, promise, or financial contribution. e.g. a sponsor of a Medical Study or a corporate sponsor of an event.
-	 */
-	public Person sponsor;
 
 	/**
 	 * A relationship between two organizations where the first includes the second, e.g., as a subsidiary. See also: the more specific 'department' property.
 	 */
+	//@Property(name="subOrganization")
 	public Organization subOrganization;
 
 	/**
 	 * The Tax / Fiscal ID of the organization or person, e.g. the TIN in the US or the CIF/NIF in Spain.
 	 */
+	@Property(name="taxID")
 	public String taxID;
 
 	/**
 	 * The telephone number.
 	 */
+	@Property(name="telephone")
 	public String telephone;
 
 	/**
 	 * The Value-added Tax ID of the organization or person.
 	 */
+	@Property(name="vatID")
 	public String vatID;
 
 	/**
 	 * The date that this organization was dissolved.
 	 */
+	@Property(name="dissolutionDate")
 	public ZonedDateTime dissolutionDate;
 
 	/**
 	 * The date that this organization was founded.
 	 */
+	@Property(name="foundingDate")
 	public ZonedDateTime foundingDate;
 
 	/**
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
+	@Property(name="isDefinedBy")
 	public static String isDefinedBy = "https://schema.org/Organization";
 }
-

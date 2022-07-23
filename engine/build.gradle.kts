@@ -23,7 +23,7 @@ plugins {
     `kotlin-dsl`
     application
     jacoco
-    id("org.springframework.boot") version "2.7.1"
+    id("org.springframework.boot") version "2.7.2"
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
     id("org.unbroken-dome.test-sets") version "4.0.0"
     id("org.jetbrains.kotlin.jvm") version "1.7.0"
@@ -73,7 +73,7 @@ dependencies {
 
     // Spring Data Neo4j
     //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
-    implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.1"){
+    implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
         exclude("ch.qos.logback")
         exclude("org.apache.logging.log4j")
         exclude("org.slf4j")
@@ -81,10 +81,10 @@ dependencies {
     implementation("org.springframework.data:spring-data-neo4j:6.3.1") {
         exclude("org.slf4j")
     }
-    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.1")//{
+    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.2")//{
 
     // To string
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
+    //implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
 
     // To JSON Schema
     implementation("com.github.victools:jsonschema-generator:4.25.0")

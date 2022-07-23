@@ -30,34 +30,6 @@ class RepositoryTest(
     @Autowired private val postalAddressRepository: PostalAddressRepository,
 ) {
 
-    /*@TestConfiguration // <.>
-    open class TestHarnessConfig() {
-        @Bean // <.>
-        open fun neo4j(): Neo4j {
-            return Neo4jBuilders.newInProcessBuilder()
-                .withDisabledServer()
-                .build()
-        }
-    }
-
-    @Test
-    fun hasValidNeo4jConfig(@Autowired neo4j: Neo4j) {
-        val expectedDatabase = "neo4j"
-        Assertions.assertThat(neo4j).isNotNull
-        //println("bolt URI: ${neo4j.boltURI()}")
-        //println("http URI: ${neo4j.httpURI()}")
-        //println("https URI: ${neo4j.httpsURI()}")
-        //println(neo4j.config())
-        //val baos = ByteArrayOutputStream()
-        //neo4j.printLogs(PrintStream(baos, true, StandardCharsets.UTF_8.name()))
-        //println(baos.toString(StandardCharsets.UTF_8.name()))
-        val databases = neo4j.databaseManagementService().listDatabases()
-        //println("databases: ${databases}")
-        Assertions.assertThat(databases).hasSizeGreaterThan(0).contains(expectedDatabase)
-        val database = neo4j.databaseManagementService().database(expectedDatabase)
-        Assertions.assertThat(database.isAvailable(1000)).isTrue
-    }*/
-
     private val neo4jTestExportFilepath = Paths.get("./build/neo4j-test-export.json")
 
     @BeforeTest
@@ -184,5 +156,34 @@ class RepositoryTest(
             .printWriter().use { out -> out.println(exportJson) }
 
     }
+
+    /*@TestConfiguration // <.>
+    open class TestHarnessConfig() {
+        @Bean // <.>
+        open fun neo4j(): Neo4j {
+            return Neo4jBuilders.newInProcessBuilder()
+                .withDisabledServer()
+                .build()
+        }
+    }
+
+    @Test
+    fun hasValidNeo4jConfig(@Autowired neo4j: Neo4j) {
+        val expectedDatabase = "neo4j"
+        Assertions.assertThat(neo4j).isNotNull
+        //println("bolt URI: ${neo4j.boltURI()}")
+        //println("http URI: ${neo4j.httpURI()}")
+        //println("https URI: ${neo4j.httpsURI()}")
+        //println(neo4j.config())
+        //val baos = ByteArrayOutputStream()
+        //neo4j.printLogs(PrintStream(baos, true, StandardCharsets.UTF_8.name()))
+        //println(baos.toString(StandardCharsets.UTF_8.name()))
+        val databases = neo4j.databaseManagementService().listDatabases()
+        //println("databases: ${databases}")
+        Assertions.assertThat(databases).hasSizeGreaterThan(0).contains(expectedDatabase)
+        val database = neo4j.databaseManagementService().database(expectedDatabase)
+        Assertions.assertThat(database.isAvailable(1000)).isTrue
+    }*/
+
 }
 

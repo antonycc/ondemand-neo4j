@@ -21,7 +21,7 @@ plugins {
     `kotlin-dsl`
     application
     id("org.unbroken-dome.test-sets") version "4.0.0"
-    id("org.jetbrains.kotlin.jvm") version "1.7.0"
+    id("org.jetbrains.kotlin.jvm") version "1.7.10"
     id("com.github.jk1.dependency-license-report") version "2.1"
 }
 

@@ -78,7 +78,7 @@ dependencies {
         exclude("ch.qos.logback")
         exclude("org.apache.logging.log4j")
     }
-    implementation("org.springframework.data:spring-data-neo4j:6.3.1") {
+    implementation("org.springframework.data:spring-data-neo4j:6.3.2") {
         exclude("org.slf4j")
     }
     implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.2"){

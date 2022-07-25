@@ -100,7 +100,7 @@ dependencies {
     testImplementation(kotlin("test"))
 
     // Spring Boot testing
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.1"){
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.2"){
         exclude("ch.qos.logback")
     }
 

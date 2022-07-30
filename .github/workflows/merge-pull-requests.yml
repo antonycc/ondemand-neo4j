@@ -1,4 +1,4 @@
-name: Build
+name: Merge Pull Requests
 
 on:
   push:

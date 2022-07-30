@@ -71,7 +71,7 @@ dependencies {
     // Run as Jar in Java8+
     implementation(kotlin("stdlib-jdk8"))
 
-    // Spring Data Neo4j
+    // Spring Data Neo4j and Spring Data Rest
     //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
         exclude("org.slf4j")

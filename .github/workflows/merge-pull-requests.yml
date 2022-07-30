@@ -2,16 +2,30 @@ name: Merge Pull Requests
 
 on:
   workflow_dispatch:
-
+  #pull_request:
+  #  types:
+  #    - labeled
+  #    - unlabeled
+  #    - synchronize
+  #    - opened
+  #    - edited
+  #    - ready_for_review
+  #    - reopened
+  #    - unlocked
+  #pull_request_review:
+  #  types:
+  #    - submitted
+  #check_suite:
+  #  types:
+  #    - completed
+  #status: {}
 jobs:
-  build:
+  automerge:
     runs-on: ubuntu-latest
-
+    # https://github.com/marketplace/actions/merge-pull-requests-automerge-action:
     steps:
-    - name: Merge Pull Request
-      uses: juliangruber/merge-pull-request-action@v1
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        number: 1
-        method: squash
-        repo: antonycc/ondemand-neo4j
+      - id: automerge
+        name: Merge pull requests (automerge-action)
+        uses: "pascalgn/automerge-action@v0.15.3"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

@@ -1,8 +1,6 @@
 name: Merge Pull Requests
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
 
 jobs:

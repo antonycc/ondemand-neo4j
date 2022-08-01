@@ -29,6 +29,7 @@ On-demand Neo4j:
 
 # TODO
 
+* Get ids to appear in output from REST API
 * Cut down circular reference problem to new project with minimal files (all in one test?) and post on stackoverflow.
 * https://www.baeldung.com/spring-rest-openapi-documentation
 * https://spring.io/guides/gs/accessing-neo4j-data-rest/

@@ -1,6 +1,10 @@
 package uk.co.polycode.neo4j
 
 import org.springframework.stereotype.Component
+import uk.co.polycode.neo4j.data.Organization
+import uk.co.polycode.neo4j.data.Person
+import uk.co.polycode.neo4j.data.Place
+import uk.co.polycode.neo4j.data.PostalAddress
 
 /**
  * On-demand Neo4j is an exploration of Neo4j with deployment to AWS
@@ -29,7 +33,8 @@ class TestData {
                 "down on or to eat: it was a Hobbit-hole, and that means comfort."
     }
 
-    val placeWithPhoto:Place = Place().apply {
+    val placeWithPhoto: Place = Place()
+        .apply {
         photo = "test-photo"
     }
     // TODO: Persons should have postal addresses but not countries

@@ -11,6 +11,10 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import uk.co.polycode.neo4j.*
+import uk.co.polycode.neo4j.data.Organization
+import uk.co.polycode.neo4j.data.Person
+import uk.co.polycode.neo4j.data.Place
+import uk.co.polycode.neo4j.data.PostalAddress
 import kotlin.test.*
 
 /**

@@ -1,7 +1,6 @@
-package uk.co.polycode.neo4j;
+package uk.co.polycode.neo4j.data;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -28,8 +27,7 @@ import java.util.UUID;
  *
  */
 @Node
-// Needed when attributes are Nodes (at one time) but now the property="id" can't be found on the object (it is there)
-@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Place { // extends Thing {
 
 	/**
@@ -38,6 +36,7 @@ public class Place { // extends Thing {
 	@Id
 	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
 	@Property(name="id")
+	//@Value("#{target.id}")
 	public UUID id;
 
 	/**
@@ -85,14 +84,14 @@ public class Place { // extends Thing {
 	/**
 	 * The subjective concept of the most famous person associated with this place.
 	 */
-	//@Property(name="famousPerson")
+	@Property(name="famousPerson")
 	@Relationship(type = "HAS_FAMOUS_PERSON", direction = Relationship.Direction.OUTGOING)
 	public List<Person> famousPerson = new ArrayList<>();
 
 	/**
 	 * Physical address of the item.
 	 */
-	//@Property(name="address")
+	@Property(name="address")
 	public PostalAddress address;
 
 	/**
@@ -106,13 +105,13 @@ public class Place { // extends Thing {
 	/**
 	 * The basic containment relation between a place and one that contains it.
 	 */
-	//@Property(name="containedInPlace")
+	@Property(name="containedInPlace")
 	public Place containedInPlace;
 
 	/**
 	 * The basic containment relation between a place and another that it contains.
 	 */
-	//@Property(name="containedIn")
+	@Property(name="containedIn")
 	public Place containsPlace;
 
 

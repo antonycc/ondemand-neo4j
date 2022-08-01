@@ -3,6 +3,8 @@ package uk.co.polycode.neo4j
 import org.neo4j.driver.Driver
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import uk.co.polycode.neo4j.data.Person
+import uk.co.polycode.neo4j.data.Place
 import java.util.UUID
 import java.util.stream.Collectors
 

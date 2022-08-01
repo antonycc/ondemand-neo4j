@@ -1,5 +1,6 @@
-package uk.co.polycode.neo4j;
+package uk.co.polycode.neo4j.data;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -21,6 +22,7 @@ import java.util.UUID;
  *
  */
 @Node
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PostalAddress { // extends Thing {
 
 	/**
@@ -28,6 +30,8 @@ public class PostalAddress { // extends Thing {
 	 */
 	@Id
 	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	@Property(name="id")
+	//@Value("#{target.id}")
 	public UUID id;
 
 	/**

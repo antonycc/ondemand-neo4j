@@ -4,6 +4,8 @@ import org.assertj.core.api.Assertions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import uk.co.polycode.neo4j.*
+import uk.co.polycode.neo4j.data.Person
+import uk.co.polycode.neo4j.data.Place
 import kotlin.test.*
 
 /**

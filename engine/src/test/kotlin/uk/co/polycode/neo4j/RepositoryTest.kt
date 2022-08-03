@@ -133,6 +133,8 @@ class RepositoryTest(
             .contains(testData.frodo.name)
     }
 
+    // TODO: (next) Query by Place and Organisation repositories
+
     // TODO: Wildcard relationships
 
     // TODO: Add Place for "Bag End" in The Shire and see place of birth at the end of the tree
@@ -142,8 +144,8 @@ class RepositoryTest(
     // TODO: Reactive and imperative comparison
 
     @Test
-    @Ignore("This test fails marshalling the JSON to/from an object with references.")
-    // TODO: Test fails marshalling the JSON to/from an object with references.
+    @Ignore("TODO: (in string) This test fails marshalling the JSON to/from an object with references.")
+    // TODO: Test fails marshalling the JSON to/from an object with references. See OntologyRepositories.toJsonString()
     fun shouldExportModelAsJson() {
 
         testData::class.memberProperties.asSequence()

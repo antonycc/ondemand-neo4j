@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
 val targetJvmVersion: String by project
-val testWithEmbeddedNeo4j = false
+val testWithEmbeddedNeo4j = true
 
 buildscript {
 }

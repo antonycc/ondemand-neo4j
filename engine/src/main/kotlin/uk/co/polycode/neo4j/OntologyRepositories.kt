@@ -58,6 +58,8 @@ open class OntologyRepositories {
                 FieldUtils.getAllFields(this::class.java).asSequence()
                     .map { it.name }
                     .associateWith { findAll(it) }
+                    // TODO: .map {  } to get the list of objects as JSON annotated equivalents
+                    // TODO: Can we apply @JsonIdentityInfo on the fly
             )
     fun deleteFromAllRepositories() {
         FieldUtils.getAllFields(this::class.java).asSequence()

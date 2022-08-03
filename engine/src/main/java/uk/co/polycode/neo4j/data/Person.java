@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.rest.core.config.Projection;
 
 import java.math.BigInteger;
 import java.time.ZonedDateTime;
@@ -27,9 +28,7 @@ import java.util.UUID;
  */
 @Node
 @JsonInclude(JsonInclude.Include.NON_NULL)
-//@Projection(types = { Person.class })
-//		name = "birthPlace",
-//		types = { Place.class })
+@Projection(types = { Person.class })
 public class Person { // extends Thing {
 
 	/**
@@ -45,309 +44,259 @@ public class Person { // extends Thing {
 	 * An alias for the item.
 	 * (From Thing)
 	 */
-	@Property(name="alternateName")
 	public String alternateName;
 
 	/**
 	 * A description of the item.
 	 * (From Thing)
 	 */
-	@Property(name="description")
 	public String description;
 
 	/**
 	 * The identifier property represents any kind of identifier for any kind of <a class="localLink" href="https://schema.org/Thing">Thing</a>, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links. See <a href="/docs/datamodel.html#identifierBg">background notes</a> for more details.
 	 * (From Thing)
 	 */
-	@Property(name="identifier")
 	public String identifier;
 
 	/**
 	 * An image of the item. This can be a <a class="localLink" href="https://schema.org/URL">URL</a> or a fully described <a class="localLink" href="https://schema.org/ImageObject">ImageObject</a>.
 	 * (From Thing)
 	 */
-	@Property(name="image")
 	public String image;
 
 	/**
 	 * The name of the item.
 	 * (From Thing)
 	 */
-	@Property(name="name")
 	public String name;
 
 	/**
 	 * URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Wikidata entry, or official website.
 	 * (From Thing)
 	 */
-	@Property(name="sameAs")
 	public String sameAs;
 
 	/**
 	 * An additional name for a Person, can be used for a middle name.
 	 */
-	@Property(name="additionalName")
 	public String additionalName;
 
 	/**
 	 * Physical address of the item.
 	 */
-	@Property(name="address")
 	public PostalAddress address;
 
 	/**
 	 * An organization that this person is affiliated with. For example, a school/university, a club, or a team.
 	 */
-	@Property(name="affiliation")
 	public List<Organization> affiliation = new ArrayList<>();
 
 	/**
 	 * An organization that the person is an alumni of.
 	 */
-	@Property(name="alumniOf")
 	public Organization alumniOf;
 
 	/**
 	 * An award won by or for this item.
 	 */
-	@Property(name="award")
 	public String award;
 
 	/**
 	 * The place where the person was born.
 	 */
-	@Property(name="birthPlace")
 	public Place birthPlace;
 
 	/**
 	 * The brand(s) associated with a product or service, or the brand(s) maintained by an organization or business person.
 	 */
-	@Property(name="brand")
 	public Organization brand;
 
 	/**
 	 * A child of the person.
 	 */
-	@Property(name="children")
 	public Person children;
 
 	/**
 	 * A colleague of the person.
 	 */
-	@Property(name="colleague")
 	public Person colleague;
 
 	/**
 	 * The place where the person died.
 	 */
-	@Property(name="deathPlace")
 	public Place deathPlace;
 
 	/**
 	 * Email address.
 	 */
-	@Property(name="email")
 	public String email;
 
 	/**
 	 * Family name. In the U.S., the last name of a Person.
 	 */
-	@Property(name="familyName")
 	public String familyName;
 
 	/**
 	 * The most generic uni-directional social relation.
 	 */
-	@Property(name="follows")
 	public Person follows;
 
 	/**
 	 * Gender of something, typically a <a class="localLink" href="https://schema.org/Person">Person</a>, but possibly also fictional characters, animals, etc. While https://schema.org/Male and https://schema.org/Female may be used, text strings are also acceptable for people who do not identify as a binary gender. The <a class="localLink" href="https://schema.org/gender">gender</a> property can also be used in an extended sense to cover e.g. the gender of sports teams. As with the gender of individuals, we do not try to enumerate all possibilities. A mixed-gender <a class="localLink" href="https://schema.org/SportsTeam">SportsTeam</a> can be indicated with a text value of "Mixed".
 	 */
-	@Property(name="gender")
 	public String gender;
 
 	/**
 	 * Given name. In the U.S., the first name of a Person.
 	 */
-	@Property(name="givenName")
 	public String givenName;
 
 	/**
 	 * A credential awarded to the Person or Organization.
 	 */
-	@Property(name="hasCredential")
 	public String hasCredential;
 
 	/**
 	 * The Person's occupation. For past professions, use Role for expressing dates.
 	 */
-	@Property(name="hasOccupation")
 	public String hasOccupation;
 
 	/**
 	 * The height of the item.
 	 */
-	@Property(name="height")
 	public BigInteger height;
 
 	/**
 	 * A contact location for a person's residence.
 	 */
-	@Property(name="homeLocation")
 	public Place homeLocation;
 
 	/**
 	 * An honorific prefix preceding a Person's name such as Dr/Mrs/Mr.
 	 */
-	@Property(name="honorificPrefix")
 	public String honorificPrefix;
 
 	/**
 	 * An honorific suffix following a Person's name such as M.D. /PhD/MSCSW.
 	 */
-	@Property(name="honorificSuffix")
 	public String honorificSuffix;
 
 	/**
 	 * The International Standard of Industrial Classification of All Economic Activities (ISIC), Revision 4 code for a particular organization, business person, or place.
 	 */
-	@Property(name="isicV4")
 	public String isicV4;
 
 	/**
 	 * The job title of the person (for example, Financial Manager).
 	 */
-	@Property(name="jobTitle")
 	public String jobTitle;
 
 	/**
 	 * The most generic bi-directional social/work relation.
 	 */
-	@Property(name="knows")
 	public Person knows;
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
 	 * (Expanded subclass of Thing to literal association)
 	 */
-	@Property(name="knowsAboutPerson")
 	public Person knowsAboutPerson;
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
 	 * (Expanded subclass of Thing to literal association)
 	 */
-	@Property(name="knowsAboutOrganization")
 	public Organization knowsAboutOrganization;
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a known language. We do not distinguish skill levels or reading/writing/speaking/signing here. Use language codes from the <a href="http://tools.ietf.org/html/bcp47">IETF BCP 47 standard</a>.
 	 */
-	@Property(name="knowsLanguage")
 	public String knowsLanguage;
 
 	/**
 	 * An Organization (or ProgramMembership) to which this Person or Organization belongs.
 	 */
-	@Property(name="memberOf")
 	@Relationship(type = "IS_MEMBER_OF", direction = Relationship.Direction.OUTGOING)
 	public List<Organization> memberOf = new ArrayList<>();
 
 	/**
 	 * The North American Industry Classification System (NAICS) code for a particular organization or business person.
 	 */
-	@Property(name="naics")
 	public String naics;
 
 	/**
 	 * Nationality of the person.
 	 */
-	@Property(name="nationality")
 	public String nationality;
 
 	/**
 	 * A parent of this person.
 	 */
-	@Property(name="parent")
 	public Person parent;
 
 	/**
 	 * The most generic familial relation.
 	 */
-	@Property(name="parentOf")
 	public Person relatedTo;
 
 	/**
 	 * A sibling of the person.
 	 */
-	@Property(name="sibling")
 	public Person sibling;
 
 	/**
 	 * A person or organization that supports a thing through a pledge, promise, or financial contribution. e.g. a sponsor of a Medical Study or a corporate sponsor of an event.
 	 */
-	@Property(name="sponsor")
 	public Person sponsor;
 
 	/**
 	 * The person's spouse.
 	 */
-	@Property(name="spouse")
 	public Person spouse;
 
 	/**
 	 * The Tax / Fiscal ID of the organization or person, e.g. the TIN in the US or the CIF/NIF in Spain.
 	 */
-	@Property(name="taxID")
 	public String taxID;
 
 	/**
 	 * The telephone number.
 	 */
-	@Property(name="telephone")
 	public String telephone;
 
 	/**
 	 * The Value-added Tax ID of the organization or person.
 	 */
-	@Property(name="vatID")
 	public String vatID;
 
 	/**
 	 * The weight of the product or person.
 	 */
-	@Property(name="weight")
 	public BigInteger weight;
 
 	/**
 	 * A contact location for a person's place of work.
 	 */
-	@Property(name="workLocation")
 	public Place workLocation;
 
 	/**
 	 * Organizations that the person works for.
 	 */
-	@Property(name="worksFor")
 	public Organization worksFor;
 
 	/**
 	 * Date of birth.
 	 */
-	@Property(name="birthDate")
 	public ZonedDateTime birthDate;
 
 	/**
 	 * Date of death.
 	 */
-	@Property(name="deathDate")
 	public ZonedDateTime deathDate;
 
 	/**
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
-	@Property(name="isDefinedBy")
 	public static String isDefinedBy = "https://schema.org/Person";
 }
 

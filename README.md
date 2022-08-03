@@ -29,7 +29,14 @@ On-demand Neo4j:
 
 # TODO
 
-* Get ids to appear in output from REST API
+* Try out projections: http://localhost/persons/1f7f9a5e-6723-4f37-9723-7b8c517aa808{?projection}
+* Expose a repository as /places (which swaps embedded for references), then find the projection to expand it.
+* Create /enriched-persons endpoint that returns a person with their places embedded.
+* APIs to export pure JSON from the Jackson annotated classes.
+* Use Spring to detect classes for config.exposeIdsFor
+* Move what can be configured to application.yml
+* Get logging working in test
+* Decide what the shipped properties are (if any), default could be an embedded database.
 * Cut down circular reference problem to new project with minimal files (all in one test?) and post on stackoverflow.
 * https://www.baeldung.com/spring-rest-openapi-documentation
 * https://spring.io/guides/gs/accessing-neo4j-data-rest/

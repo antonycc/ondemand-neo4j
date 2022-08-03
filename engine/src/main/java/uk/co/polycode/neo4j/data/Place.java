@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.rest.core.config.Projection;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -28,6 +29,7 @@ import java.util.UUID;
  */
 @Node
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Projection(types = { Place.class })
 public class Place { // extends Thing {
 
 	/**
@@ -43,55 +45,47 @@ public class Place { // extends Thing {
 	 * A description of the item.
 	 * (From Thing)
 	 */
-	@Property(name="description")
 	public String description;
 
 	/**
 	 * The identifier property represents any kind of identifier for any kind of <a class="localLink" href="https://schema.org/Thing">Thing</a>, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links. See <a href="/docs/datamodel.html#identifierBg">background notes</a> for more details.
 	 * (From Thing)
 	 */
-	@Property(name="identifier")
 	public String identifier;
 
 	/**
 	 * An image of the item. This can be a <a class="localLink" href="https://schema.org/URL">URL</a> or a fully described <a class="localLink" href="https://schema.org/ImageObject">ImageObject</a>.
 	 * (From Thing)
 	 */
-	@Property(name="image")
 	public String image;
 
 	/**
 	 * The name of the item.
 	 * (From Thing)
 	 */
-	@Property(name="name")
 	public String name;
 
 	/**
 	 * URL of a reference Web page that unambiguously indicates the item's identity. E.g. the URL of the item's Wikipedia page, Wikidata entry, or official website.
 	 * (From Thing)
 	 */
-	@Property(name="sameAs")
 	public String sameAs;
 
 	/**
 	 * URL of the item.
 	 * (From Thing)
 	 */
-	@Property(name="url")
 	public URL url;
 
 	/**
 	 * The subjective concept of the most famous person associated with this place.
 	 */
-	@Property(name="famousPerson")
 	@Relationship(type = "HAS_FAMOUS_PERSON", direction = Relationship.Direction.OUTGOING)
 	public List<Person> famousPerson = new ArrayList<>();
 
 	/**
 	 * Physical address of the item.
 	 */
-	@Property(name="address")
 	public PostalAddress address;
 
 	/**
@@ -99,98 +93,82 @@ public class Place { // extends Thing {
 	 *
 	 * For example, in the URL <a href="http://www.starbucks.co.uk/store-locator/etc/detail/3047">...</a> the code "3047" is a branchCode for a particular branch.
 	 */
-	@Property(name="branchCode")
 	public String branchCode;
 
 	/**
 	 * The basic containment relation between a place and one that contains it.
 	 */
-	@Property(name="containedInPlace")
 	public Place containedInPlace;
 
 	/**
 	 * The basic containment relation between a place and another that it contains.
 	 */
-	@Property(name="containedIn")
 	public Place containsPlace;
 
 
 	/**
 	 * A URL to a map of the place.
 	 */
-	@Property(name="hasMap")
 	public String hasMap;
 
 	/**
 	 * The International Standard of Industrial Classification of All Economic Activities (ISIC), Revision 4 code for a particular organization, business person, or place.
 	 */
-	@Property(name="isicV4")
 	public String isicV4;
 
 	/**
 	 * Keywords or tags used to describe some item. Multiple textual entries in a keywords list are typically delimited by commas, or by repeating the property.
 	 */
-	@Property(name="keywords")
 	public String keywords;
 
 	/**
 	 * The latitude of a location. For example <code>37.42242</code> (<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS 84</a>).
 	 */
-	@Property(name="latitude")
 	public BigDecimal latitude;
 
 	/**
 	 * An associated logo.
 	 */
-	@Property(name="logo")
 	public String logo;
 
 	/**
 	 * The longitude of a location. For example <code>-122.08585</code> (<a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS 84</a>).
 	 */
-	@Property(name="longitude")
 	public BigDecimal longitude;
 
 	/**
 	 * A photograph of this place.
 	 */
-	@Property(name="photoImageObject")
 	public String photoImageObject;
 
 	/**
 	 * A photograph of this place.
 	 */
-	@Property(name="photo")
 	public String photo;
 
 	/**
 	 * The telephone number.
 	 */
-	@Property(name="telephone")
 	public String telephone;
 
 	/**
 	 * The total number of individuals that may attend an event or venue.
 	 */
-	@Property(name="maximumAttendeeCapacity")
 	public BigInteger maximumAttendeeCapacity;
 
 	/**
 	 * A flag to signal that the <a class="localLink" href="https://schema.org/Place">Place</a> is open to public visitors.  If this property is omitted there is no assumed default boolean value
 	 */
-	@Property(name="isPublicAccess")
 	public Boolean publicAccess;
 
 	/**
 	 * Indicates whether it is allowed to smoke in the place, e.g. in the restaurant, hotel or hotel room.
 	 */
-	@Property(name="smokingAllowed")
 	public Boolean smokingAllowed;
 
 	/**
 	 * Where to find the definition of the OWL Class used to generate this Java class.
 	 */
-	@Property(name="isDefinedBy")
 	public static String isDefinedBy = "https://schema.org/Place";
 }
 

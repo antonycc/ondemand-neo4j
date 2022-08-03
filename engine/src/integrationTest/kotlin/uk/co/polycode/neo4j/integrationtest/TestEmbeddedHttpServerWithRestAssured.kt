@@ -33,7 +33,7 @@ import kotlin.test.*
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TestEmbeddedHttpServerWithRestAssured(
-    @Autowired private val engine: Engine,
+    @Autowired private val engine: Application,
     @Autowired private val ontologyRepositories: OntologyRepositories,
     @Autowired private val restTemplate: TestRestTemplate,
     @LocalServerPort private val port: Int

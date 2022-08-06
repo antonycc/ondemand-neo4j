@@ -2,6 +2,7 @@ package uk.co.polycode.neo4j
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.neo4j.core.schema.Node
 import org.springframework.data.neo4j.repository.Neo4jRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.data.rest.core.annotation.RepositoryRestResource

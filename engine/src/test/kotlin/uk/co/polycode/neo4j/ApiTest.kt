@@ -57,7 +57,7 @@ class ApiTest(
     private var rootDocument: String = "The root document not been generated."
     private val rootDocumentFilepath = Paths.get("./build/index.json")
     private var personsDocument: String = "The persons document not been generated."
-    private val personsDocumentFilepath = Paths.get("./build/persons.json")
+    private val personsDocumentFilepath = Paths.get("./build/persons-hateoas.json")
     //private var placesDocument: String = "The places document not been generated."
     //private val placesDocumentFilepath = Paths.get("./build/places.json")
     //private var organizationsDocument: String = "The organizations document not been generated."
@@ -313,7 +313,8 @@ class ApiTest(
         //}.andDo {
         //    MockMvcResultHandlers.print()
         //}.andReturn().response.contentAsString
-        //postalAddressesDocumentFilepath.toFile().printWriter().use { out -> out.println(postalAddressesDocumentString) }
+        //postalAddressesDocumentFilepath.toFile().printWriter().use
+        // { out -> out.println(postalAddressesDocumentString) }
         //postalAddressesDocument = postalAddressesDocumentString
     }
 }

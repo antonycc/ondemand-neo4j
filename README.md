@@ -31,10 +31,12 @@ On-demand Neo4j:
 
 # TODO
 
-* Stop using commons collections
 * TODO clean up
 * Move what can be configured to application.yml
 * Postman examples run by newman
+* Split URLs as: /api/browse (data rest api), /api/search (cypher queries), /api/export (export to json)
+* Then check we have: /api, /actuator -> /manage, /swagger-ui
+* Add security to all endpoints, perhaps an easy to generate token to start with.
 * Example of load via REST API and browse via the UI
 * Newman run against locally run Spring Boot app
 * Extract example docs directly from Postman scripts

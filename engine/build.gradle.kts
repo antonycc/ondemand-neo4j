@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
 val targetJvmVersion: String by project
-val testWithEmbeddedNeo4j = true
+val testWithEmbeddedNeo4j = false
 
 // Literal constants for otherwise over duplicated strings
 val slf4jGroup = "org.slf4j"
@@ -109,11 +109,8 @@ dependencies {
     // To JSON Schema
     implementation("com.github.victools:jsonschema-generator:4.25.0")
 
-    // Reflection utilities
+    // Utilities
     implementation("org.apache.commons:commons-lang3:3.12.0")
-
-    // TODO: Force these versions another way, these are not needed (or were not directly needed).
-    //implementation("org.eclipse.jetty:jetty-http:11.0.11")
     implementation("io.netty:netty-common:4.1.79.Final")
     implementation("org.apache.commons:commons-collections4:4.4")
 
@@ -136,7 +133,6 @@ dependencies {
         }
         //testImplementation("org.eclipse.jetty:jetty-http:11.0.11")
         testImplementation("io.netty:netty-common:4.1.79.Final")
-        //testImplementation("org.apache.commons:commons-collections4:4.4")
         testImplementation("commons-collections:commons-collections:3.2.2")
         testImplementation("org.neo4j.test:neo4j-harness:4.4.9") {
             exclude(slf4jGroup)
@@ -156,6 +152,7 @@ dependencies {
     }
     testImplementation("io.rest-assured:kotlin-extensions:5.1.1"){
         exclude("org.apache.groovy")
+        exclude("commons-codec")
     }
     testImplementation("io.rest-assured:json-schema-validator:5.1.1")
     {

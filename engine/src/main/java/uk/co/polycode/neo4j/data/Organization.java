@@ -34,9 +34,8 @@ public class Organization { // extends Thing {
 	 * The synthetic key for this item.
 	 */
 	@Id
-	@GeneratedValue // TODO: generate UUID and check best version to use. (generatorRef = "uuid")
+	@GeneratedValue
 	@Property(name="id")
-	//@Value("#{target.id}")
 	public UUID id;
 
 	/**

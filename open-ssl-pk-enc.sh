@@ -10,18 +10,6 @@
 #   https://www.openssl.org/docs/man1.0.2/man1/openssl-enc.html
 #   https://www.czeskis.com/random/openssl-encrypt-file.html
 #   https://rietta.com/blog/openssl-generating-rsa-key-from-command/
-# TODO:
-#   Decrypt files and consult in the current shell
-#   Is there a standard way to locate the local .PEMs?
-#   Allow parameter override of KEY_DIR
-#   Standard approach for parameter handling
-#   Document manual equivelant in README
-#   Docker execution
-#   Capture Macos (Brew) and Debian package manager dependencies
-#   Test package dependencies
-#   Test suite
-#   Key structure diagram
-#   Adopt Google Coding standards: https://google.github.io/styleguide/shell.xml
 
 # Constants
 readonly KEY_DIR=~/.ssh

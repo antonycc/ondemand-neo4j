@@ -6,13 +6,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import uk.co.polycode.neo4j.data.Organization
 import uk.co.polycode.neo4j.data.Person
 import uk.co.polycode.neo4j.data.Place
 import uk.co.polycode.neo4j.data.PostalAddress
-
 
 /**
  * On-demand Neo4j is an exploration of Neo4j with deployment to AWS
@@ -53,16 +50,5 @@ open class RestConfiguration {
                 PostalAddress::class.java
             )
         }
-    }
-}
-
-@Configuration
-open class SwaggerConfiguration : WebMvcConfigurer {
-
-    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry.addResourceHandler("swagger-ui.html")
-            .addResourceLocations("classpath:/META-INF/resources/")
-        registry.addResourceHandler("/webjars/**")
-            .addResourceLocations("classpath:/META-INF/resources/webjars/")
     }
 }

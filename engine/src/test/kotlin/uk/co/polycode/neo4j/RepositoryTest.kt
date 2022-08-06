@@ -34,7 +34,7 @@ class RepositoryTest(
     @Autowired private val postalAddressRepository: PostalAddressRepository
 ) {
 
-    private val neo4jTestExportFilepath = Paths.get("./build/neo4j-test-export.json")
+    private val neo4jTestExportFilepath = Paths.get("./build/persons-export.json")
 
     @BeforeTest
     fun deleteFromAllRepositories() {
@@ -141,11 +141,7 @@ class RepositoryTest(
 
     // TODO: Relationship properties. e.g. Person::Organization affiliation since
 
-    // TODO: Reactive and imperative comparison
-
     @Test
-    @Ignore("TODO: (in string) This test fails marshalling the JSON to/from an object with references.")
-    // TODO: Test fails marshalling the JSON to/from an object with references. See OntologyRepositories.toJsonString()
     fun shouldExportModelAsJson() {
 
         testData::class.memberProperties.asSequence()
@@ -159,10 +155,10 @@ class RepositoryTest(
             }
 
         val exportJson = ontologyRepositories.toJsonString()
-        Assertions.assertThat(exportJson).contains(testData.theShire.name).contains(testData.bilbo.familyName)
         neo4jTestExportFilepath.toFile()
             .printWriter().use { out -> out.println(exportJson) }
 
+        Assertions.assertThat(exportJson).contains(testData.theShire.name).contains(testData.bilbo.familyName)
     }
 
     /*@TestConfiguration // <.>

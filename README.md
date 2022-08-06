@@ -32,6 +32,7 @@ On-demand Neo4j:
 # TODO
 
 * TODO clean up
+* Stop using commons collections
 * Move what can be configured to application.yml
 * Postman examples run by newman
 * Split URLs as: /api/browse (data rest api), /api/search (cypher queries), /api/export (export to json)

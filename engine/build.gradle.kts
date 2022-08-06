@@ -114,6 +114,11 @@ dependencies {
     implementation("org.apache.commons:commons-collections4:4.4")
     implementation("org.reflections:reflections:0.10.2")
 
+    // TODO: Force these versions another way, these are not needed (or were not directly needed).
+    //implementation("org.eclipse.jetty:jetty-http:11.0.11")
+    implementation("io.netty:netty-common:4.1.79.Final")
+    implementation("org.apache.commons:commons-collections4:4.4")
+
     // Testing
     testImplementation(kotlin("test"))
 
@@ -133,6 +138,7 @@ dependencies {
         }
         //testImplementation("org.eclipse.jetty:jetty-http:11.0.11")
         testImplementation("io.netty:netty-common:4.1.79.Final")
+        //testImplementation("org.apache.commons:commons-collections4:4.4")
         testImplementation("commons-collections:commons-collections:3.2.2")
         testImplementation("org.neo4j.test:neo4j-harness:4.4.10") {
             exclude(slf4jGroup)

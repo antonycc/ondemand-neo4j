@@ -31,16 +31,23 @@ On-demand Neo4j:
 
 # TODO
 
+* Stop using commons collections
+* TODO clean up
+* Move what can be configured to application.yml
+* Postman examples run by newman
+* Example of load via REST API and browse via the UI
+* Newman run against locally run Spring Boot app
+* Extract example docs directly from Postman scripts
+* Assign extra checks which must pass before an auto-merge (but can be run from gradle).
+* Find an easy way to label PRs with a tag to be picked up by the auto-merge.
 * Expose a repository as /places (which swaps embedded for references), then find the projection to expand it.
 * Create /enriched-persons endpoint that returns a person with their places embedded.
 * APIs to export pure JSON from the Jackson annotated classes.
 * Use Spring to detect classes for config.exposeIdsFor
-* Move what can be configured to application.yml
 * Get logging working in test
 * Try validation from ModelPropertyBuilderPlugin e.g. https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
 * Decide what the shipped properties are (if any), default could be an embedded database.
 * Cut down circular reference problem to new project with minimal files (all in one test?) and post on stackoverflow.
-* https://www.baeldung.com/spring-rest-openapi-documentation
 * https://spring.io/guides/gs/accessing-neo4j-data-rest/
 * Add the Mapinator (object mapping library so that we can have domain classes for neo4j and json).
 * More co-pilot: https://docs.github.com/en/copilot/getting-started-with-github-copilot/getting-started-with-github-copilot-in-a-jetbrains-ide

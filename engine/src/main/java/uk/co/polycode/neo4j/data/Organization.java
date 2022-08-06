@@ -6,7 +6,6 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
-import org.springframework.data.rest.core.config.Projection;
 
 import java.math.BigInteger;
 import java.net.URL;
@@ -29,7 +28,6 @@ import java.util.UUID;
  */
 @Node
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Projection(types = { Organization.class })
 public class Organization { // extends Thing {
 
 	/**

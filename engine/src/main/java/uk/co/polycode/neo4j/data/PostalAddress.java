@@ -5,7 +5,6 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
-import org.springframework.data.rest.core.config.Projection;
 
 import java.net.URL;
 import java.util.UUID;
@@ -24,7 +23,6 @@ import java.util.UUID;
  */
 @Node
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Projection(types = { PostalAddress.class })
 public class PostalAddress { // extends Thing {
 
 	/**

@@ -35,36 +35,36 @@ class CypherTest {
     private val place = Place().apply { photo = "testPhoto" }
 
     @Test
-    fun shouldRetrieveFamilyNames(@Autowired ontologyService: OntologyService,
+    fun shouldRetrieveFamilyNames(@Autowired queries: Queries,
                                   @Autowired personRepository: PersonRepository
     ) {
         personRepository.deleteAll()
-        ontologyService.runQuery(OntologyService.toCypher(person1))
-        ontologyService.runQuery(OntologyService.toCypher(person2))
-        Assertions.assertThat(ontologyService.getFamilyNameForPersons())
+        queries.runQuery(Queries.toCypher(person1))
+        queries.runQuery(Queries.toCypher(person2))
+        Assertions.assertThat(queries.getFamilyNameForPersons())
             .hasSize(2)
             .contains("Baggins")
     }
 
     @Test
-    fun shouldRetrieveGivenNames(@Autowired ontologyService: OntologyService,
+    fun shouldRetrieveGivenNames(@Autowired queries: Queries,
                                  @Autowired personRepository: PersonRepository
     ) {
         personRepository.deleteAll()
-        ontologyService.runQuery(OntologyService.toCypher(person1))
-        Assertions.assertThat(ontologyService.getGivenNameForPersons())
+        queries.runQuery(Queries.toCypher(person1))
+        Assertions.assertThat(queries.getGivenNameForPersons())
             .hasSize(1)
             .first()
             .isEqualTo("Bilbo")
     }
 
     @Test
-    fun shouldRetrievePhotos(@Autowired ontologyService: OntologyService,
+    fun shouldRetrievePhotos(@Autowired queries: Queries,
                              @Autowired placeRepository: PlaceRepository
     ) {
         placeRepository.deleteAll()
-        ontologyService.runQuery(OntologyService.toCypher(place))
-        Assertions.assertThat(ontologyService.getPhotoForPlaces())
+        queries.runQuery(Queries.toCypher(place))
+        Assertions.assertThat(queries.getPhotoForPlaces())
             .hasSize(1)
             .first()
             .isEqualTo("testPhoto")

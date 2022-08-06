@@ -58,12 +58,12 @@ class ApiTest(
     private val rootDocumentFilepath = Paths.get("./build/index.json")
     private var personsDocument: String = "The persons document not been generated."
     private val personsDocumentFilepath = Paths.get("./build/persons.json")
-    private var placesDocument: String = "The places document not been generated."
-    private val placesDocumentFilepath = Paths.get("./build/places.json")
-    private var organizationsDocument: String = "The organizations document not been generated."
-    private val organizationsDocumentFilepath = Paths.get("./build/organizations.json")
-    private var postalAddressesDocument: String = "The postalAddresses document not been generated."
-    private val postalAddressesDocumentFilepath = Paths.get("./build/postalAddresses.json")
+    //private var placesDocument: String = "The places document not been generated."
+    //private val placesDocumentFilepath = Paths.get("./build/places.json")
+    //private var organizationsDocument: String = "The organizations document not been generated."
+    //private val organizationsDocumentFilepath = Paths.get("./build/organizations.json")
+    //private var postalAddressesDocument: String = "The postalAddresses document not been generated."
+    //private val postalAddressesDocumentFilepath = Paths.get("./build/postalAddresses.json")
 
     @BeforeAll
     fun jsonSchemaGenerator() {

@@ -1,3 +1,21 @@
+# ./src/main/application.yml (distributed with the application)
+application:
+  config:
+    test: false
+
+spring:
+  data:
+    rest:
+      basePath: /api
+  # https://fasterxml.github.io/jackson-databind/javadoc/2.6/com/fasterxml/jackson/databind/SerializationFeature.html
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+  neo4j:
+    uri: "bolt://localhost:7687"
+    authentication:
+      username: "neo4j"
+      password: "secret"
 #org.neo4j.driver.uri=bolt://localhost:7687
 #org.neo4j.driver.authentication.username=neo4j
 #org.neo4j.driver.authentication.password=secret
@@ -11,12 +29,23 @@
 #spring.neo4j.uri=bolt://localhost:7687
 #spring.neo4j.authentication.username=neo4j
 #spring.neo4j.authentication.password=secret
-spring:
-  neo4j:
-    uri: "bolt://localhost:7687"
-    authentication:
-      username: "neo4j"
-      password: "secret"
-application:
-  config:
-    test: false
+
+logging:
+  level:
+    uk.co.polycode.loglevel: INFO
+    org.springframework: INFO
+    org.springframework.data.neo4j: INFO
+
+# https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/production-ready-endpoints.html
+management:
+  contextPath: /actuator
+  endpoints:
+    jmx:
+      exposure:
+        include: "*"
+    web:
+      exposure:
+        include: "*"
+
+springdoc:
+  show-actuator: true

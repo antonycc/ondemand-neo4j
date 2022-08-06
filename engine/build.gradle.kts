@@ -71,7 +71,7 @@ dependencies {
     // Run as Jar in Java8+
     implementation(kotlin("stdlib-jdk8"))
 
-    // Spring Data Neo4j and Spring Data Rest
+    // Spring Data Neo4j and Spring Data Rest, Spring Boot Actuator and Spring Doc
     //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
         exclude("org.slf4j")
@@ -86,6 +86,16 @@ dependencies {
         exclude("ch.qos.logback")
         exclude("org.apache.logging.log4j")
     }
+    implementation("org.springframework.boot:spring-boot-starter-actuator:2.7.2") {
+        exclude("org.slf4j")
+        exclude("ch.qos.logback")
+        exclude("org.apache.logging.log4j")
+    }
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.9")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.9")
+    implementation("org.springdoc:springdoc-openapi-data-rest:1.6.9")
+    implementation("org.springdoc:springdoc-openapi-hateoas:1.6.9")
 
     // To string
     //implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")

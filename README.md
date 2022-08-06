@@ -22,6 +22,8 @@ On-demand Neo4j:
 * Supports relationship cardinality.
 * REST API from Spring Boot  - https://github.com/spring-guides/gs-accessing-neo4j-data-rest
 * REST API tested via Embedded HTTP and Mock MVC
+* Swagger docs: http://localhost:8080/swagger-ui/index.html
+* Monitoring endpoints: http://localhost:8080/actuator/healt
 
 # Bugs
 
@@ -29,13 +31,13 @@ On-demand Neo4j:
 
 # TODO
 
-* Try out projections: http://localhost/persons/1f7f9a5e-6723-4f37-9723-7b8c517aa808{?projection}
 * Expose a repository as /places (which swaps embedded for references), then find the projection to expand it.
 * Create /enriched-persons endpoint that returns a person with their places embedded.
 * APIs to export pure JSON from the Jackson annotated classes.
 * Use Spring to detect classes for config.exposeIdsFor
 * Move what can be configured to application.yml
 * Get logging working in test
+* Try validation from ModelPropertyBuilderPlugin e.g. https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
 * Decide what the shipped properties are (if any), default could be an embedded database.
 * Cut down circular reference problem to new project with minimal files (all in one test?) and post on stackoverflow.
 * https://www.baeldung.com/spring-rest-openapi-documentation
@@ -82,6 +84,10 @@ Warning:(82, 24)  Provides transitive vulnerable dependency commons-collections:
 
 # Examples
 
+http://localhost:8080/api/profile - see application.yml for /api
+
+
+
 Running with Docker
 Run Neo4j as defined in the `docker-compose.yml`:
 ```shell
@@ -105,7 +111,7 @@ Query Rest API:
 {
   "_links" : {
     "places" : {
-      "href" : "http://localhost:8080/places{?page,size,sort}",
+      "href" : "http://localhost:8080/api/places{?page,size,sort}",
       "templated" : true
 % 
 ```

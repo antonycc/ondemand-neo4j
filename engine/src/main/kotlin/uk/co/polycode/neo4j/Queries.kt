@@ -9,7 +9,7 @@ import java.util.UUID
 import java.util.stream.Collectors
 
 @Service
-open class OntologyService {
+open class Queries {
 
     @Autowired
     private var driver: Driver? = null

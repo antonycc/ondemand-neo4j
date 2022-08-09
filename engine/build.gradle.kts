@@ -123,7 +123,7 @@ dependencies {
             exclude("org.slf4j")
             exclude("org.apache.logging.log4j")
         }
-        testImplementation("org.neo4j.test:neo4j-harness:4.4.9") {
+        testImplementation("org.neo4j.test:neo4j-harness:4.4.10") {
             exclude("org.slf4j")
             exclude("org.apache.logging.log4j")
         }

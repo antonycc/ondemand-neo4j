@@ -134,7 +134,7 @@ dependencies {
         //testImplementation("org.eclipse.jetty:jetty-http:11.0.11")
         testImplementation("io.netty:netty-common:4.1.79.Final")
         testImplementation("commons-collections:commons-collections:3.2.2")
-        testImplementation("org.neo4j.test:neo4j-harness:4.4.9") {
+        testImplementation("org.neo4j.test:neo4j-harness:4.4.10") {
             exclude(slf4jGroup)
             exclude(log4jGroup)
             exclude("org.eclipse.jetty:jetty-http")

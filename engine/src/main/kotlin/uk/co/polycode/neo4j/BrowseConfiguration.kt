@@ -1,7 +1,6 @@
 package uk.co.polycode.neo4j
 
 import mu.KotlinLogging
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration
@@ -24,18 +23,6 @@ import uk.co.polycode.neo4j.data.PostalAddress
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * Mozilla Public License, v. 2.0 for more details.
  */
-
-private val logger = KotlinLogging.logger {}
-
-@Configuration
-open class ConfigurationProperties(@Value("\${application.config.test}") private val test: Boolean?) {
-
-    @Bean
-    open fun configTest(): Boolean {
-        logger.info { "ConfigurationProperties.configTest(): read property for \"application.config.test\": ${test}" }
-        return test ?: false
-    }
-}
 
 @Configuration
 open class RestConfiguration {

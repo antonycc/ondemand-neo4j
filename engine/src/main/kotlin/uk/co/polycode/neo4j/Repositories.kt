@@ -2,7 +2,6 @@ package uk.co.polycode.neo4j
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.neo4j.core.schema.Node
 import org.springframework.data.neo4j.repository.Neo4jRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
@@ -40,9 +39,10 @@ interface PersonRepository : Neo4jRepository<Person, UUID>{
 @Repository
 @RepositoryRestResource(exported = false)
 @ExportCollection(name = "places")
-interface PlaceRepository : Neo4jRepository<Place, UUID>{
-    @RestResource(path="byName", rel="byName")
+interface PlaceRepository : Neo4jRepository<Place, UUID> {
+    @RestResource(path = "byName", rel = "byName")
     fun findByName(@Param("name") name: String): List<Place>
+}
 
 @Repository
 @RepositoryRestResource(exported = false)

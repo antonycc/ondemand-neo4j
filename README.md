@@ -73,6 +73,17 @@ On-demand Neo4j:
 * Use AWS Cognito generate a session API key accepted by the provisioning APIs.
 * Import Neo4j into Prolog and run prolog consultations. e.g. grandfather(_, person)
 * Parameterise Gradle to switch tests between embedded Neo4j and dockerized environment using docker compose
+* Use exit code 1 on auto-merge fail:
+```
+* 2022-08-11T20:31:44.654Z INFO  Action result: { mergeResult: 'merge_failed', pullRequestNumber: 15 }
+
+::set-output name=mergeResult::merge_failed
+##[debug]steps.automerge.outputs.mergeResult='merge_failed'
+
+::set-output name=pullRequestNumber::15
+##[debug]steps.automerge.outputs.pullRequestNumber='15'
+##[debug]Node Action run completed with exit code 0
+```
 
 For owl-to-java:
 * Inline superclasses

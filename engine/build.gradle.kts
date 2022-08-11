@@ -16,6 +16,12 @@ val kotlinVersion: String by project
 val targetJvmVersion: String by project
 val testWithEmbeddedNeo4j = true
 
+// Literal constants for otherwise over duplicated strings
+val slf4jGroup = "org.slf4j"
+val logbackGroup = "ch.qos.logback"
+val log4jGroup = "org.apache.logging.log4j"
+val integrationTestPhase = "integrationTest"
+
 buildscript {
 }
 
@@ -52,8 +58,8 @@ repositories {
 
 configurations {
     all {
-        exclude(group = "org.slf4j", module = "slf4j-log4j12")
-        exclude(group = "org.slf4j", module = "slf4j-nop")
+        exclude(group = slf4jGroup, module = "slf4j-log4j12")
+        exclude(group = slf4jGroup, module = "slf4j-nop")
     }
 }
 
@@ -65,7 +71,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.23"){
         exclude("org.jetbrains.kotlin")
-        exclude("org.slf4j")
+        exclude(log4jGroup)
     }
 
     // Run as Jar in Java8+
@@ -74,22 +80,22 @@ dependencies {
     // Spring Data Neo4j and Spring Data Rest, Spring Boot Actuator and Spring Doc
     //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
-        exclude("org.slf4j")
-        exclude("ch.qos.logback")
-        exclude("org.apache.logging.log4j")
+        exclude(slf4jGroup)
+        exclude(logbackGroup)
+        exclude(log4jGroup)
     }
     implementation("org.springframework.data:spring-data-neo4j:6.3.2") {
-        exclude("org.slf4j")
+        exclude(log4jGroup)
     }
     implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.2"){
-        exclude("org.slf4j")
-        exclude("ch.qos.logback")
-        exclude("org.apache.logging.log4j")
+        exclude(slf4jGroup)
+        exclude(logbackGroup)
+        exclude(log4jGroup)
     }
     implementation("org.springframework.boot:spring-boot-starter-actuator:2.7.2") {
-        exclude("org.slf4j")
-        exclude("ch.qos.logback")
-        exclude("org.apache.logging.log4j")
+        exclude(slf4jGroup)
+        exclude(logbackGroup)
+        exclude(log4jGroup)
     }
     implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.9")
@@ -103,29 +109,43 @@ dependencies {
     // To JSON Schema
     implementation("com.github.victools:jsonschema-generator:4.25.0")
 
-    // Reflection utilities
+    // Utilities
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("io.netty:netty-common:4.1.79.Final")
+    implementation("org.apache.commons:commons-collections4:4.4")
+    implementation("org.reflections:reflections:0.10.2")
+
+    // TODO: Force these versions another way, these are not needed (or were not directly needed).
+    //implementation("org.eclipse.jetty:jetty-http:11.0.11")
+    implementation("io.netty:netty-common:4.1.79.Final")
+    implementation("org.apache.commons:commons-collections4:4.4")
 
     // Testing
     testImplementation(kotlin("test"))
 
     // Spring Boot testing
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.2"){
-        exclude("ch.qos.logback")
+        exclude(logbackGroup)
     }
 
     // Spring Boot Neo4J autoconfigured test harness
     if(testWithEmbeddedNeo4j) {
-        // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency org.eclipse.jetty:jetty-http:9.4.43.v20210629 CVE-2021-28169 5.3 Exposure of Sensitive Information to an Unauthorized Actor vulnerability with medium severity found  Results powered by Checkmarx(c)
-        // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency io.netty:netty-common:4.1.75.Final CVE-2022-24823 5.5 Exposure of Resource to Wrong Sphere vulnerability with medium severity found  Results powered by Checkmarx(c)
-        // TODO: Warning:(91, 24)  Provides transitive vulnerable dependency commons-collections:commons-collections:3.2.2 Cx78f40514-81ff 7.5 Uncontrolled Recursion vulnerability with medium severity found  Results powered by Checkmarx(c)
         testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0"){
-            exclude("org.slf4j")
-            exclude("org.apache.logging.log4j")
+            exclude(slf4jGroup)
+            exclude(log4jGroup)
+            exclude("org.eclipse.jetty:jetty-http")
+            exclude("io.netty:netty-common")
+            exclude("commons-collections")
         }
+        //testImplementation("org.eclipse.jetty:jetty-http:11.0.11")
+        testImplementation("io.netty:netty-common:4.1.79.Final")
+        testImplementation("commons-collections:commons-collections:3.2.2")
         testImplementation("org.neo4j.test:neo4j-harness:4.4.10") {
-            exclude("org.slf4j")
-            exclude("org.apache.logging.log4j")
+            exclude(slf4jGroup)
+            exclude(log4jGroup)
+            exclude("org.eclipse.jetty:jetty-http")
+            exclude("io.netty:netty-common")
+            exclude("commons-collections")
         }
     }else{
         // Uses config from: ${projectRoot}/engine/src/test/resources/application.properties
@@ -136,12 +156,15 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured-all:5.1.1") {
         exclude("org.apache.groovy")
     }
-    // Warning:(121, 24)  Provides transitive vulnerable dependency commons-codec:commons-codec:1.11 Cxeb68d52e-5509 3.7 Exposure of Sensitive Information to an Unauthorized Actor vulnerability with low severity found  Results powered by Checkmarx(c)
     testImplementation("io.rest-assured:kotlin-extensions:5.1.1"){
         exclude("org.apache.groovy")
+        exclude("commons-codec")
     }
-    // TODO: Warning:(121, 24)  Provides transitive vulnerable dependency com.google.guava:guava:28.2-android CVE-2020-8908 3.3 Incorrect Permission Assignment for Critical Resource vulnerability with low severity found  Results powered by Checkmarx(c)
     testImplementation("io.rest-assured:json-schema-validator:5.1.1")
+    {
+        exclude("com.google.guava:guava:28.2-android")
+    }
+    testImplementation("com.google.guava:guava:31.1-jre")
 }
 
 tasks.test {
@@ -156,9 +179,9 @@ tasks.named("check").configure {
 
 kotlin {
     sourceSets {
-        create("integrationTest") {
-            kotlin.srcDir("src/integrationTest/kotlin")
-            resources.srcDir("src/integrationTest/resources")
+        create(integrationTestPhase) {
+            kotlin.srcDir("src/${integrationTestPhase}/kotlin")
+            resources.srcDir("src/${integrationTestPhase}/resources")
         }
     }
 }
@@ -172,22 +195,22 @@ val integrationTestRuntime: Configuration by configurations.creating {
 
 testSets {
     libraries {
-        create("integrationTest")
+        create(integrationTestPhase)
     }
 }
 
-task<Test>("integrationTest"){
+task<Test>(integrationTestPhase){
     description = "Runs the integration tests project: engine"
     group = "verification"
-    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
-    classpath = sourceSets["integrationTest"].runtimeClasspath
+    testClassesDirs = sourceSets[integrationTestPhase].output.classesDirs
+    classpath = sourceSets[integrationTestPhase].runtimeClasspath
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
 }
 
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html
 tasks.jacocoTestReport {
-    dependsOn("integrationTest")
+    dependsOn(integrationTestPhase)
     dependsOn(tasks.test) // normal unit tests are also required to run before generating the report
 }
 
@@ -198,10 +221,11 @@ detekt {
     baseline = file("$projectDir/../detekt/baseline.xml")
     //ignoreFailures = false
 }
-tasks.named("integrationTest").configure {
+tasks.named(integrationTestPhase).configure {
     dependsOn("detekt")
 }
 
+// TODO: reinstate coverage
 //kover {
     // runAllTestsForProjectTask = true
 //  //isDisabled = true
@@ -211,6 +235,6 @@ tasks.named("integrationTest").configure {
 //        it is TaskProvider<*> && it.name == "koverMergedReport"
 //    })
 //}
-//tasks.named("integrationTest").configure {
+//tasks.named(integrationTestPhase).configure {
 //    dependsOn("koverMergedReport")
 //}

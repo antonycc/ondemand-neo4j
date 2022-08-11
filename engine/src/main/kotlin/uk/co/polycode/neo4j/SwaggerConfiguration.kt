@@ -1,9 +1,9 @@
 package uk.co.polycode.neo4j
 
-import mu.KotlinLogging
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+
 
 /**
  * On-demand Neo4j is an exploration of Neo4j with deployment to AWS
@@ -19,14 +19,13 @@ import org.springframework.context.annotation.Configuration
  * Mozilla Public License, v. 2.0 for more details.
  */
 
-private val logger = KotlinLogging.logger {}
-
 @Configuration
-open class ConfigurationProperties(@Value("\${application.config.test}") private val test: Boolean?) {
+open class SwaggerConfiguration : WebMvcConfigurer {
 
-    @Bean
-    open fun configTest(): Boolean {
-        logger.info { "ConfigurationProperties.configTest(): read property for \"application.config.test\": ${test}" }
-        return test ?: false
+    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
+        registry.addResourceHandler("swagger-ui.html")
+            .addResourceLocations("classpath:/META-INF/resources/")
+        registry.addResourceHandler("/webjars/**")
+            .addResourceLocations("classpath:/META-INF/resources/webjars/")
     }
 }

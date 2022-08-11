@@ -1,9 +1,6 @@
 package uk.co.polycode.neo4j
 
-import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.apache.commons.lang3.reflect.FieldUtils
-import org.apache.commons.lang3.reflect.MethodUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.neo4j.repository.Neo4jRepository
 import org.springframework.data.repository.query.Param
@@ -15,20 +12,19 @@ import uk.co.polycode.neo4j.data.Organization
 import uk.co.polycode.neo4j.data.Person
 import uk.co.polycode.neo4j.data.Place
 import uk.co.polycode.neo4j.data.PostalAddress
-import java.util.*
-
-//internal interface PhotosOnly {
-//    val photo: String?
-//}
+import java.util.Locale
+import java.util.UUID
 
 @Repository
 @RepositoryRestResource(exported = false)
+@ExportCollection(name = "organizations")
 interface OrganizationRepository : Neo4jRepository<Organization, UUID>{
     @RestResource(path="byName", rel="byName")
     fun findByName(@Param("name") name: String): List<Organization>
 }
 
 @Repository
+@ExportCollection(name = "people")
 interface PersonRepository : Neo4jRepository<Person, UUID>{
     @RestResource(path="byName", rel="byName")
     fun findByName(@Param("name") name: String): List<Person>
@@ -42,13 +38,15 @@ interface PersonRepository : Neo4jRepository<Person, UUID>{
 
 @Repository
 @RepositoryRestResource(exported = false)
-interface PlaceRepository : Neo4jRepository<Place, UUID>{
-    //fun findByName(@Param("name") name: String): List<Place>
-    // TODO: Test lightweight return: fun findAll(): List<PhotosOnly>
+@ExportCollection(name = "places")
+interface PlaceRepository : Neo4jRepository<Place, UUID> {
+    @RestResource(path = "byName", rel = "byName")
+    fun findByName(@Param("name") name: String): List<Place>
 }
 
 @Repository
 @RepositoryRestResource(exported = false)
+@ExportCollection(name = "postalAddresses")
 interface PostalAddressRepository : Neo4jRepository<PostalAddress, UUID>{
     @RestResource(path="byName", rel="byName")
     fun findByName(@Param("name") name: String): List<PostalAddress>
@@ -56,33 +54,37 @@ interface PostalAddressRepository : Neo4jRepository<PostalAddress, UUID>{
 
 @Service
 open class OntologyRepositories {
-    @Autowired
-    lateinit var organization: OrganizationRepository
-    @Autowired
-    lateinit var person: PersonRepository
-    @Autowired
-    lateinit var place: PlaceRepository
-    //@Autowired
-    //lateinit var postalAddress: PostalAddressRepository
+    @Autowired(required = false)
+    lateinit var repositories: List<Neo4jRepository<*, UUID>>
 
-    fun toJsonString(): String =
-        ObjectMapper()
-            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-            .writerWithDefaultPrettyPrinter()
-            .writeValueAsString(
-                FieldUtils.getAllFields(this::class.java).asSequence()
-                    .map { it.name }
-                    .associateWith { findAll(it) }
-                    // TODO: .map {  } to get the list of objects as JSON annotated equivalents
-                    // TODO: Can we apply @JsonIdentityInfo on the fly
-            )
+    fun exportAllRepositoriesAsMapOfJsonStrings(): Map<String, String> =
+        repositories.asSequence()
+            .map { repository -> mapAllToExportable(findAll(repository)) }
+            .filter { it.isNotEmpty() }
+            .map { friendlyNameFor(it.first()) to toJsonString(it) }
+            .toMap()
+
     fun deleteFromAllRepositories() {
-        FieldUtils.getAllFields(this::class.java).asSequence()
-                    .forEach { deleteAll(it.name) }
+        repositories.asSequence()
+            .forEach { repository -> deleteAll(repository) }
     }
-    private fun findAll(it: String?) =
-        MethodUtils.invokeExactMethod(FieldUtils.readDeclaredField(this, it), "findAll")
-    private fun deleteAll(it: String?) =
-        MethodUtils.invokeExactMethod(FieldUtils.readDeclaredField(this, it), "deleteAll")
-}
 
+    private fun toJsonString(objects: Any): String =
+        ObjectMapper()
+            .writerWithDefaultPrettyPrinter()
+            .writeValueAsString(objects)
+
+    private fun friendlyNameFor(o: Any): String =
+        o.javaClass.simpleName.lowercase(Locale.getDefault())
+
+    // TODO: Find a way to chunk this into multiple requests and measure the memory usage.
+    private fun findAll(repository: Neo4jRepository<*, UUID>) =
+        repository.findAll()
+
+    private fun mapAllToExportable(nodes: List<Any>) =
+        nodes.map { MappingUtils.mapToExportable(it) }.toList()
+
+    private fun deleteAll(repository: Neo4jRepository<*, UUID>){
+        repository.deleteAll()
+    }
+}

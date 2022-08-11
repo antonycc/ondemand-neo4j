@@ -31,16 +31,26 @@ On-demand Neo4j:
 
 # TODO
 
+* TODO clean up
+* Stop using commons collections
+* Move what can be configured to application.yml
+* Postman examples run by newman
+* Split URLs as: /api/browse (data rest api), /api/search (cypher queries), /api/export (export to json)
+* Then check we have: /api, /actuator -> /manage, /swagger-ui
+* Add security to all endpoints, perhaps an easy to generate token to start with.
+* Example of load via REST API and browse via the UI
+* Newman run against locally run Spring Boot app
+* Extract example docs directly from Postman scripts
+* Assign extra checks which must pass before an auto-merge (but can be run from gradle).
+* Find an easy way to label PRs with a tag to be picked up by the auto-merge.
 * Expose a repository as /places (which swaps embedded for references), then find the projection to expand it.
 * Create /enriched-persons endpoint that returns a person with their places embedded.
 * APIs to export pure JSON from the Jackson annotated classes.
 * Use Spring to detect classes for config.exposeIdsFor
-* Move what can be configured to application.yml
 * Get logging working in test
 * Try validation from ModelPropertyBuilderPlugin e.g. https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
 * Decide what the shipped properties are (if any), default could be an embedded database.
 * Cut down circular reference problem to new project with minimal files (all in one test?) and post on stackoverflow.
-* https://www.baeldung.com/spring-rest-openapi-documentation
 * https://spring.io/guides/gs/accessing-neo4j-data-rest/
 * Add the Mapinator (object mapping library so that we can have domain classes for neo4j and json).
 * More co-pilot: https://docs.github.com/en/copilot/getting-started-with-github-copilot/getting-started-with-github-copilot-in-a-jetbrains-ide
@@ -63,6 +73,17 @@ On-demand Neo4j:
 * Use AWS Cognito generate a session API key accepted by the provisioning APIs.
 * Import Neo4j into Prolog and run prolog consultations. e.g. grandfather(_, person)
 * Parameterise Gradle to switch tests between embedded Neo4j and dockerized environment using docker compose
+* Use exit code 1 on auto-merge fail:
+```
+* 2022-08-11T20:31:44.654Z INFO  Action result: { mergeResult: 'merge_failed', pullRequestNumber: 15 }
+
+::set-output name=mergeResult::merge_failed
+##[debug]steps.automerge.outputs.mergeResult='merge_failed'
+
+::set-output name=pullRequestNumber::15
+##[debug]steps.automerge.outputs.pullRequestNumber='15'
+##[debug]Node Action run completed with exit code 0
+```
 
 For owl-to-java:
 * Inline superclasses

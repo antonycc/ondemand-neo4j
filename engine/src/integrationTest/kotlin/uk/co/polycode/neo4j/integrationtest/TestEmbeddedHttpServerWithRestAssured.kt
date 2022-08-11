@@ -10,12 +10,15 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
-import uk.co.polycode.neo4j.*
+import uk.co.polycode.neo4j.Application
+import uk.co.polycode.neo4j.JavaToJsonSchema
+import uk.co.polycode.neo4j.OntologyRepositories
 import uk.co.polycode.neo4j.data.Organization
 import uk.co.polycode.neo4j.data.Person
 import uk.co.polycode.neo4j.data.Place
 import uk.co.polycode.neo4j.data.PostalAddress
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 /**
  * On-demand Neo4j is an exploration of Neo4j with deployment to AWS
@@ -74,7 +77,6 @@ class TestEmbeddedHttpServerWithRestAssured(
         ).isEqualTo(HttpStatus.OK.value())
     }
 
-    // TODO: Start an embedded HTTP Server and use REST Assured
     @Test
     fun getIndexExpectingJsonRestAssured() {
         get("http://localhost:$port/").then().assertThat()

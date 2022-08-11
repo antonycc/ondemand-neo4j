@@ -138,8 +138,6 @@ class RepositoryTest(
     // TODO: Relationship properties. e.g. Person::Organization affiliation since
 
     @Test
-    @Ignore("TODO: (in string) This test fails marshalling the JSON to/from an object with references.")
-    // TODO: Test fails marshalling the JSON to/from an object with references. See OntologyRepositories.toJsonString()
     fun shouldExportModelAsJson() {
 
         testData::class.memberProperties.asSequence()
@@ -155,8 +153,6 @@ class RepositoryTest(
         val exportJson = ontologyRepositories.exportAllRepositoriesAsMapOfJsonStrings()
         exportJson.asSequence()
             .forEach { Paths.get("./build/${it.key}-export.json").toFile().writeText(it.value) }
-        //neo4jTestExportFilepath.toFile()
-        //    .printWriter().use { out -> out.println(exportJson) }
 
         Assertions.assertThat(exportJson["person"]).contains(testData.bilbo.familyName)
         Assertions.assertThat(exportJson["place"]).contains(testData.theShire.name)

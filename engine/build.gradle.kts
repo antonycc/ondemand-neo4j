@@ -78,6 +78,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     // Spring Data Neo4j and Spring Data Rest, Spring Boot Actuator and Spring Doc
+    //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
         exclude(slf4jGroup)
         exclude(logbackGroup)

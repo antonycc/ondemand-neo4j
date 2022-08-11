@@ -43,7 +43,6 @@ interface PersonRepository : Neo4jRepository<Person, UUID>{
 interface PlaceRepository : Neo4jRepository<Place, UUID>{
     @RestResource(path="byName", rel="byName")
     fun findByName(@Param("name") name: String): List<Place>
-}
 
 @Repository
 @RepositoryRestResource(exported = false)
@@ -89,5 +88,3 @@ open class OntologyRepositories {
         repository.deleteAll()
     }
 }
-
-

@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
 val targetJvmVersion: String by project
-val testWithEmbeddedNeo4j = false
+val testWithEmbeddedNeo4j = true
 
 // Literal constants for otherwise over duplicated strings
 val slf4jGroup = "org.slf4j"
@@ -78,7 +78,6 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     // Spring Data Neo4j and Spring Data Rest, Spring Boot Actuator and Spring Doc
-    //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
         exclude(slf4jGroup)
         exclude(logbackGroup)
@@ -113,6 +112,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("io.netty:netty-common:4.1.79.Final")
     implementation("org.apache.commons:commons-collections4:4.4")
+    implementation("org.reflections:reflections:0.10.2")
 
     // Testing
     testImplementation(kotlin("test"))
@@ -219,6 +219,7 @@ tasks.named(integrationTestPhase).configure {
     dependsOn("detekt")
 }
 
+// TODO: reinstate coverage
 //kover {
     // runAllTestsForProjectTask = true
 //  //isDisabled = true

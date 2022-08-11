@@ -22,7 +22,7 @@ import uk.co.polycode.neo4j.data.PostalAddress
 @Component
 class TestData {
 
-    val bagEnd = PostalAddress().apply {
+    val bagEndAddress = PostalAddress().apply {
         name = "Bag End"
         streetAddress = "1 Bagshot Row"
         addressLocality = "Hobbiton"
@@ -37,13 +37,17 @@ class TestData {
         .apply {
         photo = "test-photo"
     }
-    // TODO: Persons should have postal addresses but not countries
-    val theShire = Place().apply {
+
+    val theShire: Place = Place().apply {
         name = "The Shire"
-        address = bagEnd
+        containsPlace = bagEnd
     }
-    val valinor = Place().apply {
+    val valinor: Place = Place().apply {
         name = "Valinor"
+    }
+    val bagEnd: Place = Place().apply {
+        name = "Bag End"
+        containedInPlace = theShire
     }
 
     val theFellowship = Organization().apply {
@@ -74,12 +78,16 @@ class TestData {
         givenName = "Bilbo"
         familyName = "Baggins"
         birthPlace = theShire
+        address = bagEndAddress
+        homeLocation = bagEnd
     }
     val frodo = Person().apply {
         name = "Frodo"
         givenName = "Frodo"
         familyName = "Baggins"
         birthPlace = theShire
+        address = bagEndAddress
+        homeLocation = bagEnd
         memberOf.add(theFellowship)
     }
 

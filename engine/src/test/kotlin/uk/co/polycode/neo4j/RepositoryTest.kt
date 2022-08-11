@@ -34,8 +34,6 @@ class RepositoryTest(
     @Autowired private val postalAddressRepository: PostalAddressRepository
 ) {
 
-    private val neo4jTestExportFilepath = Paths.get("./build/persons-export.json")
-
     @BeforeTest
     fun deleteFromAllRepositories() {
         ontologyRepositories.deleteFromAllRepositories()
@@ -88,7 +86,7 @@ class RepositoryTest(
             .hasSize(2)
             .contains(testData.theShire.name)
         Assertions.assertThat(placeRepository.findAll())
-            .hasSize(1)
+            .hasSize(2)
     }
 
     @Test
@@ -99,7 +97,7 @@ class RepositoryTest(
         Assertions.assertThat(personRepository.findByGivenName(testData.bilbo.givenName))
             .hasSize(1)
         Assertions.assertThat(placeRepository.findAll().map { it.name })
-            .hasSize(1)
+            .hasSize(2)
             .contains(testData.theShire.name)
         Assertions.assertThat(placeRepository.findAll().map { it.famousPerson }.flatten().map { it.givenName } )
             .hasSize(2)
@@ -119,7 +117,7 @@ class RepositoryTest(
         Assertions.assertThat(personRepository.findByGivenName(testData.frodo.givenName))
             .hasSize(1)
         Assertions.assertThat(placeRepository.findAll().map { it.name })
-            .hasSize(2)
+            .hasSize(3)
             .contains(testData.theShire.name)
         Assertions.assertThat(placeRepository.findAll().map { it.famousPerson }.flatten().map { it.givenName } )
             .hasSize(2)
@@ -137,8 +135,6 @@ class RepositoryTest(
 
     // TODO: Wildcard relationships
 
-    // TODO: Add Place for "Bag End" in The Shire and see place of birth at the end of the tree
-
     // TODO: Relationship properties. e.g. Person::Organization affiliation since
 
     @Test
@@ -154,11 +150,14 @@ class RepositoryTest(
                 }
             }
 
-        val exportJson = ontologyRepositories.toJsonString()
-        neo4jTestExportFilepath.toFile()
-            .printWriter().use { out -> out.println(exportJson) }
+        val exportJson = ontologyRepositories.exportAllRepositoriesAsMapOfJsonStrings()
+        exportJson.asSequence()
+            .forEach { Paths.get("./build/${it.key}-export.json").toFile().writeText(it.value) }
+        //neo4jTestExportFilepath.toFile()
+        //    .printWriter().use { out -> out.println(exportJson) }
 
-        Assertions.assertThat(exportJson).contains(testData.theShire.name).contains(testData.bilbo.familyName)
+        Assertions.assertThat(exportJson["person"]).contains(testData.bilbo.familyName)
+        Assertions.assertThat(exportJson["place"]).contains(testData.theShire.name)
     }
 
     /*@TestConfiguration // <.>

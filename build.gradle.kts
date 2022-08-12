@@ -21,7 +21,7 @@ buildscript {
         mavenCentral() // or gradlePluginPortal()
     }
     dependencies {
-        classpath("com.dipien:semantic-version-gradle-plugin:1.2.0")
+        classpath("com.dipien:semantic-version-gradle-plugin:1.3.0")
     }
 }
 apply(plugin = "com.dipien.semantic-version")

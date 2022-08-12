@@ -162,9 +162,9 @@ dependencies {
     }
     testImplementation("io.rest-assured:json-schema-validator:5.1.1")
     {
-        exclude("com.google.guava:guava:28.2-android")
+        exclude("com.google.guava:guava:31.1-android")
     }
-    testImplementation("com.google.guava:guava:31.1-jre")
+    testImplementation("com.google.guava:guava:31.1-android")
 }
 
 tasks.test {

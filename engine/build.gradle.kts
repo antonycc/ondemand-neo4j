@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
 val targetJvmVersion: String by project
-val testWithEmbeddedNeo4j = true
+val testWithEmbeddedNeo4j = !project.hasProperty("testWithLocalNeo4j") // e.g. -PtestWithLocalNeo4j
 
 // Literal constants for otherwise over duplicated strings
 val slf4jGroup = "org.slf4j"
@@ -25,6 +25,7 @@ val integrationTestPhase = "integrationTest"
 buildscript {
 }
 
+// https://plugins.gradle.org/search?term=org.springframework.boot
 plugins {
     `kotlin-dsl`
     application
@@ -64,38 +65,40 @@ configurations {
 }
 
 // Check: gradle -q dependencies --configuration compileClasspath
-// gradle -q dependencies --configuration testRuntimeClasspath | grep -n --color=always -e "^" -e 'polycode'
+// ./gradlew -q dependencies --configuration testRuntimeClasspath | grep -n --color=always -e "^" -e 'polycode'
+// ../gradlew dependencyInsight --dependency commons-collections:commons-collections --configuration runtimeClasspath
+// (No matches)
+// https://nieldw.medium.com/exclude-a-transitive-dependency-with-gradles-kotlin-dsl-82fb41da67f
 dependencies {
 
     // All logging via SLF4J
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.23"){
-        exclude("org.jetbrains.kotlin")
-        exclude(log4jGroup)
+        exclude(group = "org.jetbrains.kotlin")
+        exclude(group = log4jGroup)
     }
 
     // Run as Jar in Java8+
     implementation(kotlin("stdlib-jdk8"))
 
     // Spring Data Neo4j and Spring Data Rest, Spring Boot Actuator and Spring Doc
-    //implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
-        exclude(slf4jGroup)
-        exclude(logbackGroup)
-        exclude(log4jGroup)
+        exclude(group = slf4jGroup)
+        exclude(group = logbackGroup)
+        exclude(group = log4jGroup)
     }
     implementation("org.springframework.data:spring-data-neo4j:6.3.2") {
-        exclude(log4jGroup)
+        exclude(group = log4jGroup)
     }
     implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.2"){
-        exclude(slf4jGroup)
-        exclude(logbackGroup)
-        exclude(log4jGroup)
+        exclude(group = slf4jGroup)
+        exclude(group = logbackGroup)
+        exclude(group = log4jGroup)
     }
     implementation("org.springframework.boot:spring-boot-starter-actuator:2.7.2") {
-        exclude(slf4jGroup)
-        exclude(logbackGroup)
-        exclude(log4jGroup)
+        exclude(group = slf4jGroup)
+        exclude(group = logbackGroup)
+        exclude(group = log4jGroup)
     }
     implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.9")
@@ -103,68 +106,59 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-data-rest:1.6.9")
     implementation("org.springdoc:springdoc-openapi-hateoas:1.6.9")
 
-    // To string
-    //implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
-
     // To JSON Schema
     implementation("com.github.victools:jsonschema-generator:4.25.0")
 
     // Utilities
+    // TODO: Consider Spring, Guava or Kotlin specific replacements
+    // There is currently a test dependency for this: testImplementation("com.google.guava:guava:31.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("io.netty:netty-common:4.1.79.Final")
-    implementation("org.apache.commons:commons-collections4:4.4")
     implementation("org.reflections:reflections:0.10.2")
-
-    // TODO: Force these versions another way, these are not needed (or were not directly needed).
-    //implementation("org.eclipse.jetty:jetty-http:11.0.11")
-    implementation("io.netty:netty-common:4.1.79.Final")
-    implementation("org.apache.commons:commons-collections4:4.4")
 
     // Testing
     testImplementation(kotlin("test"))
 
     // Spring Boot testing
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.2"){
-        exclude(logbackGroup)
+        exclude(group = logbackGroup)
     }
 
     // Spring Boot Neo4J autoconfigured test harness
     if(testWithEmbeddedNeo4j) {
         testImplementation("org.neo4j.driver:neo4j-java-driver-test-harness-spring-boot-autoconfigure:4.3.6.0"){
-            exclude(slf4jGroup)
-            exclude(log4jGroup)
-            exclude("org.eclipse.jetty:jetty-http")
-            exclude("io.netty:netty-common")
-            exclude("commons-collections")
+            exclude(group = slf4jGroup)
+            exclude(group = log4jGroup)
         }
-        //testImplementation("org.eclipse.jetty:jetty-http:11.0.11")
-        testImplementation("io.netty:netty-common:4.1.79.Final")
-        testImplementation("commons-collections:commons-collections:3.2.2")
         testImplementation("org.neo4j.test:neo4j-harness:4.4.10") {
-            exclude(slf4jGroup)
-            exclude(log4jGroup)
-            exclude("org.eclipse.jetty:jetty-http")
-            exclude("io.netty:netty-common")
-            exclude("commons-collections")
+            exclude(group = slf4jGroup)
+            exclude(group = log4jGroup)
         }
+        testImplementation("org.eclipse.jetty:jetty-http") { version { require("9.4.48.v20220622") } }
+        testImplementation("org.eclipse.jetty:jetty-server") { version { require("9.4.48.v20220622") } }
+        testImplementation("io.netty:netty-common:4.1.79.Final")
+        // TODO: Resolve Commons Collections test dependency vulnerability: Cx78f40514-81ff
+        // see: https://advisory.checkmarx.net/advisory/vulnerability/Cx78f40514-81ff/
+        testImplementation("commons-collections:commons-collections:3.2.2")
     }else{
-        // Uses config from: ${projectRoot}/engine/src/test/resources/application.properties
+        // Uses config from: ${projectRoot}/engine/src/test/resources/application.yml
         // Before executing tests open a shell at the ${projectRoot} and run: docker compose up
+        // Then in another shell
+        // ../gradlew clean build -PtestWithLocalNeo4j
     }
 
     // API Testing with REST Assured (included with org.springframework.boot:spring-boot-starter-test)
     testImplementation("io.rest-assured:rest-assured-all:5.1.1") {
-        exclude("org.apache.groovy")
+        exclude(group = "org.apache.groovy")
     }
     testImplementation("io.rest-assured:kotlin-extensions:5.1.1"){
-        exclude("org.apache.groovy")
-        exclude("commons-codec")
+        exclude(group = "org.apache.groovy")
+        exclude(group = "commons-codec")
     }
     testImplementation("io.rest-assured:json-schema-validator:5.1.1")
     {
-        exclude("com.google.guava:guava:31.1-android")
+        exclude(group = "com.google.guava", module = "guava")
     }
-    testImplementation("com.google.guava:guava:31.1-android")
+    testImplementation("com.google.guava:guava:31.1-jre")
 }
 
 tasks.test {

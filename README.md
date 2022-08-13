@@ -95,8 +95,6 @@ For owl-to-java:
 * Define relationships explicitly and infer multiplicity
 * Make isDefinedBy static
 * JSON schema generator
-* Generate models for persistence and export to JSON
-* Anything with an outbound relationship should be an exported rest resource to avoid circular references.
 
 # Annoyances
 
@@ -215,9 +213,11 @@ On-demand Neo4j is released under the Mozilla Public License, v. 2.0:
 /**
  * On-demand Neo4j is an exploration of Neo4j with deployment to AWS.
  * Copyright (C) 2022  Antony Cartwright, Polycode Limited
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -242,9 +242,11 @@ libschemaorg is released under the Mozilla Public License, v. 2.0:
 /**
  * libschemaorg builds Source Code from the Schema.org OWL file
  * Copyright (C) 2022  Antony Cartwright, Polycode Limited
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the

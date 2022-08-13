@@ -111,7 +111,7 @@ dependencies {
     implementation("com.github.victools:jsonschema-generator:4.25.0")
 
     // Utilities
-    // TODO: Consider Spring, Guava replacements for these utility classes (and check the imports too)
+    // TODO: Consider Spring, Guava or Kotlin specific replacements
     // There is currently a test dependency for this: testImplementation("com.google.guava:guava:31.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.reflections:reflections:0.10.2")

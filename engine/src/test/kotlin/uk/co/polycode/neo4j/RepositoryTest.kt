@@ -62,6 +62,82 @@ class RepositoryTest(
     }
 
     @Test
+    fun shouldRetrievePhotosForPlaceByName() {
+
+        placeRepository.save<Place>(testData.placeWithPhoto)
+        placeRepository.save<Place>(testData.theShire)
+        placeRepository.save<Place>(testData.valinor)
+
+        Assertions.assertThat(placeRepository.findByName(testData.placeWithPhoto.name).map { it.photo })
+            .hasSize(1)
+            .contains(testData.placeWithPhoto.photo)
+    }
+
+    @Test
+    fun shouldRetrievePlaceByFamousPersonName() {
+
+        placeRepository.save<Place>(testData.theShire)
+        placeRepository.save<Place>(testData.valinor)
+
+        Assertions.assertThat(placeRepository.findByFamousPersonName(testData.frodo.name).map { it.name })
+            .hasSize(1)
+            .contains(testData.theShire.name)
+    }
+
+    @Test
+    fun shouldRetrievePlaceByFamousPersonId() {
+
+        placeRepository.save<Place>(testData.theShire)
+        placeRepository.save<Place>(testData.valinor)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        Assertions.assertThat(placeRepository.findByFamousPersonId(frodo.id).map { it.name })
+            .hasSize(1)
+            .contains(testData.theShire.name)
+    }
+
+    //@Test shouldRetrievePlaceByPersonIdBornInPlace
+    fun shouldRetrievePlaceByPersonIdBornInPlace() {
+
+        placeRepository.save<Place>(testData.theShire)
+        placeRepository.save<Place>(testData.valinor)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        Assertions.assertThat(placeRepository.findByPersonIdBornInPlace(frodo.id).map { it.name })
+            .hasSize(1)
+            .contains(testData.theShire.name)
+    }
+
+    // https://stackoverflow.com/questions/71444286/spring-boot-neo4j-query-param
+//    // TODO: @Test
+//    fun shouldRetrievePlaceByConnectedPerson() {
+//
+//        placeRepository.save<Place>(testData.theShire)
+//
+//        Assertions.assertThat(placeRepository.findByConnectedPerson(testData.frodo).map { it.name })
+//            .hasSize(1)
+//            .contains(theShire.name)
+//    }
+
+    // TODO: Query organizations with members
+
+    // TODO: Query persons related to an organisation without specifying a relationship type
+
+    // TODO: Relationship properties. e.g. Person::Organization affiliation since
+
+    @Test
     fun shouldSaveAggregatedObject() {
 
         personRepository.save<Person>(testData.gandalfTheGrey)
@@ -131,12 +207,6 @@ class RepositoryTest(
             .contains(testData.frodo.name)
     }
 
-    // TODO: (next) Query by Place and Organisation repositories
-
-    // TODO: Wildcard relationships
-
-    // TODO: Relationship properties. e.g. Person::Organization affiliation since
-
     @Test
     fun shouldExportModelAsJson() {
 
@@ -157,34 +227,5 @@ class RepositoryTest(
         Assertions.assertThat(exportJson["person"]).contains(testData.bilbo.familyName)
         Assertions.assertThat(exportJson["place"]).contains(testData.theShire.name)
     }
-
-    /*@TestConfiguration // <.>
-    open class TestHarnessConfig() {
-        @Bean // <.>
-        open fun neo4j(): Neo4j {
-            return Neo4jBuilders.newInProcessBuilder()
-                .withDisabledServer()
-                .build()
-        }
-    }
-
-    @Test
-    fun hasValidNeo4jConfig(@Autowired neo4j: Neo4j) {
-        val expectedDatabase = "neo4j"
-        Assertions.assertThat(neo4j).isNotNull
-        //println("bolt URI: ${neo4j.boltURI()}")
-        //println("http URI: ${neo4j.httpURI()}")
-        //println("https URI: ${neo4j.httpsURI()}")
-        //println(neo4j.config())
-        //val baos = ByteArrayOutputStream()
-        //neo4j.printLogs(PrintStream(baos, true, StandardCharsets.UTF_8.name()))
-        //println(baos.toString(StandardCharsets.UTF_8.name()))
-        val databases = neo4j.databaseManagementService().listDatabases()
-        //println("databases: ${databases}")
-        Assertions.assertThat(databases).hasSizeGreaterThan(0).contains(expectedDatabase)
-        val database = neo4j.databaseManagementService().database(expectedDatabase)
-        Assertions.assertThat(database.isAvailable(1000)).isTrue
-    }*/
-
 }
 

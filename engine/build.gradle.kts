@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val kotlinVersion: String by project
 val targetJvmVersion: String by project
 val testWithEmbeddedNeo4j = !project.hasProperty("testWithLocalNeo4j") // e.g. -PtestWithLocalNeo4j
+//val testWithEmbeddedNeo4j = false
 
 // Literal constants for otherwise over duplicated strings
 val slf4jGroup = "org.slf4j"
@@ -110,7 +111,7 @@ dependencies {
     implementation("com.github.victools:jsonschema-generator:4.25.0")
 
     // Utilities
-    // TODO: Consider Spring, Guava or Kotlin specific replacements
+    // TODO: Consider Spring, Guava replacements for these utility classes (and check the imports too)
     // There is currently a test dependency for this: testImplementation("com.google.guava:guava:31.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.reflections:reflections:0.10.2")
@@ -219,7 +220,7 @@ tasks.named(integrationTestPhase).configure {
     dependsOn("detekt")
 }
 
-// TODO: reinstate coverage
+// TODO: Reinstate code coverage analysis
 //kover {
     // runAllTestsForProjectTask = true
 //  //isDisabled = true

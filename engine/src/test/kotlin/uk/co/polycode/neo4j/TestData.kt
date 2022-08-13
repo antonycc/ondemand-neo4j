@@ -33,8 +33,8 @@ class TestData {
                 "down on or to eat: it was a Hobbit-hole, and that means comfort."
     }
 
-    val placeWithPhoto: Place = Place()
-        .apply {
+    val placeWithPhoto: Place = Place().apply {
+        name = "photoPlace"
         photo = "test-photo"
     }
 

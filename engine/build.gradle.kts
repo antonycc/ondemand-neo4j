@@ -101,7 +101,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.9")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.9")
     implementation("org.springdoc:springdoc-openapi-data-rest:1.6.9")
-    implementation("org.springdoc:springdoc-openapi-hateoas:1.6.9")
+    implementation("org.springdoc:springdoc-openapi-hateoas:1.6.10")
 
     // To string
     //implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")

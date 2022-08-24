@@ -32,6 +32,9 @@ On-demand Neo4j:
 # TODO
 
 * TODO clean up
+* Get logging working from tests
+* Get logging working from running app
+* Capture logging from running app in a test
 * Move what can be configured to application.yml
 * Postman examples run by newman
 * Split URLs as: /api/browse (data rest api), /api/search (cypher queries), /api/export (export to json)
@@ -93,6 +96,7 @@ For owl-to-java:
 * Make isDefinedBy static
 * JSON schema generator
 * Generate models for persistence and export to JSON
+* Anything with an outbound relationship should be an exported rest resource to avoid circular references.
 
 # Annoyances
 

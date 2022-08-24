@@ -56,6 +56,7 @@ public class Place { // extends Thing {
 	/**
 	 * The name of the item.
 	 * (From Thing)
+	 * TODO: Create a relationship to name and attempt to search using the name property.
 	 */
 	public String name;
 
@@ -80,7 +81,8 @@ public class Place { // extends Thing {
 	/**
 	 * Physical address of the item.
 	 */
-	public PostalAddress address;
+	@Relationship(type = "HAS_ADDRESS", direction = Relationship.Direction.OUTGOING)
+	public List<PostalAddress> address = new ArrayList<>();
 
 	/**
 	 * A short textual code (also called "store code") that uniquely identifies a place of business. The code is typically assigned by the parentOrganization and used in structured URLs.<br/><br/>
@@ -92,13 +94,15 @@ public class Place { // extends Thing {
 	/**
 	 * The basic containment relation between a place and one that contains it.
 	 */
-	public Place containedInPlace;
+	@Relationship(type = "IS_CONTAINED_IN", direction = Relationship.Direction.OUTGOING)
+	public List<Place> containedInPlace = new ArrayList<>();
 
 	/**
 	 * The basic containment relation between a place and another that it contains.
 	 */
-	public Place containsPlace;
-
+	//@Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
+	@Relationship(type = "IS_CONTAINED_IN", direction = Relationship.Direction.INCOMING)
+	public List<Place> containsPlace = new ArrayList<>();
 
 	/**
 	 * A URL to a map of the place.

@@ -3,12 +3,12 @@ application:
   config:
     test: true
 
-logging:
-  level:
-    uk.co.polycode: DEBUG
-    uk.co.polycode.loglevel: DEBUG
-    org.springframework.data.neo4j: DEBUG
-    org.springframework.web.server: INFO
+#logging:
+#  level:
+#    uk.co.polycode: DEBUG
+#    uk.co.polycode.loglevel: DEBUG
+#    org.springframework.data.neo4j: DEBUG
+#    org.springframework.web.server: INFO
 
 spring:
   neo4j:

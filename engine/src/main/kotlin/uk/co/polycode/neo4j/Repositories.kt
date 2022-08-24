@@ -17,7 +17,7 @@ import java.util.Locale
 import java.util.UUID
 
 @Repository
-@RepositoryRestResource(exported = false)
+//@RepositoryRestResource(exported = false)
 @ExportCollection(name = "organizations")
 interface OrganizationRepository : Neo4jRepository<Organization, UUID>{
     @RestResource(path="byName", rel="byName")
@@ -38,7 +38,7 @@ interface PersonRepository : Neo4jRepository<Person, UUID>{
 }
 
 @Repository
-@RepositoryRestResource(exported = false)
+//@RepositoryRestResource(exported = false)
 @ExportCollection(name = "places")
 interface PlaceRepository : Neo4jRepository<Place, UUID> {
     @RestResource(path = "byName", rel = "byName")
@@ -48,12 +48,13 @@ interface PlaceRepository : Neo4jRepository<Place, UUID> {
     @Query("MATCH (place:Place)-[:HAS_FAMOUS_PERSON]->(person:Person {name: \$paramName}) RETURN place")
     fun findByFamousPersonName(@Param("paramName") paramName: String): List<Place>
 
+    //@Query("MATCH (place:Place)-[:HAS_FAMOUS_PERSON]->(person:Person) WHERE person.id = \$paramPersonId RETURN place")
     @Query("MATCH (place:Place)-[:HAS_FAMOUS_PERSON]->(person:Person) WHERE person.id = \$paramPersonId RETURN place")
     @RestResource(path = "byFamousPerson", rel = "byFamousPerson")
     fun findByFamousPersonId(@Param("paramPersonId") paramPersonId: UUID): List<Place>
 
     @RestResource(path = "byPersonIdNameBornInPlace", rel = "byPersonNameBornInPlace")
-    @Query("MATCH (person:Person) WHERE person.id = \$paramPersonId RETURN person.birthPlace")
+    @Query("MATCH (place:Place)<-[:HAS_BIRTH_PLACE]-(person:Person) WHERE person.id = \$paramPersonId RETURN place")
     fun findByPersonIdBornInPlace(@Param("paramPersonId") paramPersonId: UUID): List<Place>
 
     //@RestResource(path = "byConnectedPersonName", rel = "byConnectedPersonName")

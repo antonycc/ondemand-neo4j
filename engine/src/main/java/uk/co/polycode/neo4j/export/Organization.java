@@ -82,17 +82,20 @@ public class Organization {
 	/**
 	 * Physical address of the item.
 	 */
-	public PostalAddress address;
+	@ExportableToListOf(clazz=PostalAddress.class)
+	public List<PostalAddress> address;
 
 	/**
 	 * Alumni of an organization.
 	 */
-	public Person alumni;
+	@ExportableToListOf(clazz=Person.class)
+	public List<Person> alumni;
 
 	/**
 	 * The geographic area where a service or offered item is provided.
 	 */
-	public Place areaServed;
+	@ExportableToListOf(clazz=Place.class)
+	public List<Place> areaServed;
 
 	/**
 	 * An award won by or for this item.
@@ -102,12 +105,14 @@ public class Organization {
 	/**
 	 * The brand(s) associated with a product or service, or the brand(s) maintained by an organization or business person.
 	 */
-	public Organization brand;
+	@ExportableToListOf(clazz=Organization.class)
+	public List<Organization> brand;
 
 	/**
 	 * A relationship between an organization and a department of that organization, also described as an organization (allowing different urls, logos, opening hours). For example: a store with a pharmacy, or a bakery with a cafe.
 	 */
-	public Organization department;
+	@ExportableToListOf(clazz=Organization.class)
+	public List<Organization> department;
 
 	/**
 	 * Email address.
@@ -117,7 +122,8 @@ public class Organization {
 	/**
 	 * Someone working for this organization.
 	 */
-	public Person employee;
+	@ExportableToListOf(clazz=Person.class)
+	public List<Person> employee;
 
 	/**
 	 * The fax number.
@@ -127,12 +133,14 @@ public class Organization {
 	/**
 	 * A person who founded this organization.
 	 */
-	public Person founder;
+	@ExportableToListOf(clazz=Person.class)
+	public List<Person> founder;
 
 	/**
 	 * The place where the Organization was founded.
 	 */
-	public Place foundingLocation;
+	@ExportableToListOf(clazz=Place.class)
+	public List<Place> foundingLocation;
 
 	/**
 	 * The <a href="http://www.gs1.org/gln">Global Location Number</a> (GLN, sometimes also referred to as International Location Number or ILN) of the respective organization, person, or place. The GLN is a 13-digit number used to identify parties and physical locations.
@@ -158,13 +166,15 @@ public class Organization {
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
 	 * (Expanded subclass of Thing to literal association)
 	 */
-	public Person knowsAboutPerson;
+	@ExportableToListOf(clazz=Person.class)
+	public List<Person> knowsAboutPerson;
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
 	 * (Expanded subclass of Thing to literal association)
 	 */
-	public Organization knowsAboutOrganization;
+	@ExportableToListOf(clazz=Organization.class)
+	public List<Organization> knowsAboutOrganization;
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a known language. We do not distinguish skill levels or reading/writing/speaking/signing here. Use language codes from the <a href="http://tools.ietf.org/html/bcp47">IETF BCP 47 standard</a>.
@@ -179,12 +189,14 @@ public class Organization {
 	/**
 	 * The location of, for example, where an event is happening, where an organization is located, or where an action takes place.
 	 */
-	public Place locationPlace;
+	@ExportableToListOf(clazz=Place.class)
+	public List<Place> locationPlace;
 
 	/**
 	 * The location of, for example, where an event is happening, where an organization is located, or where an action takes place.
 	 */
-	public PostalAddress location;
+	@ExportableToListOf(clazz=PostalAddress.class)
+	public List<PostalAddress> location;
 
 	/**
 	 * An associated logo.
@@ -193,14 +205,17 @@ public class Organization {
 
 	/**
 	 * A member of an Organization or a ProgramMembership. Organizations can be members of organizations; ProgramMembership is typically for individuals.
+	 * TODO: Move all custom attributes to the data classes.
 	 */
 	@ExportableToListOf(clazz=Person.class)
+	//@JsonIgnore
 	public List<Person> member = new ArrayList<>();
 
 	/**
 	 * An Organization to which this Person or Organization belongs.
 	 */
-	public Organization memberOf;
+	@ExportableToListOf(clazz=Organization.class)
+	public List<Organization> memberOf;
 
 	/**
 	 * The North American Industry Classification System (NAICS) code for a particular organization or business person.
@@ -215,12 +230,15 @@ public class Organization {
 	/**
 	 * The larger organization that this organization is a <a class="localLink" href="https://schema.org/subOrganization">subOrganization</a> of, if any.
 	 */
-	public Organization parentOrganization;
+	@ExportableToListOf(clazz=Organization.class)
+	public List<Organization> parentOrganization;
 
 	/**
 	 * A relationship between two organizations where the first includes the second, e.g., as a subsidiary. See also: the more specific 'department' property.
 	 */
-	public Organization subOrganization;
+	@ExportableToListOf(clazz=Organization.class)
+	//@JsonIgnore
+	public List<Organization> subOrganization;
 
 	/**
 	 * The Tax / Fiscal ID of the organization or person, e.g. the TIN in the US or the CIF/NIF in Spain.

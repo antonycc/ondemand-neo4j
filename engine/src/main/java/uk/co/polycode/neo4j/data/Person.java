@@ -77,18 +77,22 @@ public class Person { // extends Thing {
 
 	/**
 	 * Physical address of the item.
+	 * TODO: Recall why the Lists needed to be initialised. This makes it awkward to deserialize the JSON with missing lists.
 	 */
-	public PostalAddress address;
+	@Relationship(type = "HAS_ADDRESS", direction = Relationship.Direction.OUTGOING)
+	public List<PostalAddress> address = new ArrayList<>();
 
 	/**
 	 * An organization that this person is affiliated with. For example, a school/university, a club, or a team.
 	 */
+	@Relationship(type = "HAS_AFFILIATION", direction = Relationship.Direction.OUTGOING)
 	public List<Organization> affiliation = new ArrayList<>();
 
 	/**
 	 * An organization that the person is an alumni of.
 	 */
-	public Organization alumniOf;
+	@Relationship(type = "IS_ALUMNI_OF", direction = Relationship.Direction.OUTGOING)
+	public List<Organization> alumniOf = new ArrayList<>();
 
 	/**
 	 * An award won by or for this item.
@@ -97,30 +101,34 @@ public class Person { // extends Thing {
 
 	/**
 	 * The place where the person was born.
+	 * TODO: define singe relationship and test
 	 */
-	//@Relationship(type = "HAS_BIRTH_PLACE", direction = Relationship.Direction.OUTGOING)
-	//TODO: define singe relationship
-	public Place birthPlace;
+	@Relationship(type = "HAS_BIRTH_PLACE", direction = Relationship.Direction.OUTGOING)
+	public List<Place> birthPlace = new ArrayList<>();
 
 	/**
 	 * The brand(s) associated with a product or service, or the brand(s) maintained by an organization or business person.
 	 */
-	public Organization brand;
+	@Relationship(type = "HAS_BRAND", direction = Relationship.Direction.OUTGOING)
+	public List<Organization> brand = new ArrayList<>();
 
 	/**
 	 * A child of the person.
 	 */
-	public Person children;
+	@Relationship(type = "HAS_CHILD", direction = Relationship.Direction.OUTGOING)
+	public List<Person> children = new ArrayList<>();
 
 	/**
 	 * A colleague of the person.
 	 */
-	public Person colleague;
+	@Relationship(type = "IS_COLLEAGUE_OF", direction = Relationship.Direction.OUTGOING)
+	public List<Person> colleague = new ArrayList<>();
 
 	/**
 	 * The place where the person died.
 	 */
-	public Place deathPlace;
+	@Relationship(type = "HAS_DEATH_PLACE", direction = Relationship.Direction.OUTGOING)
+	public List<Place> deathPlace = new ArrayList<>();
 
 	/**
 	 * Email address.
@@ -135,7 +143,8 @@ public class Person { // extends Thing {
 	/**
 	 * The most generic uni-directional social relation.
 	 */
-	public Person follows;
+	@Relationship(type = "FOLLOWS", direction = Relationship.Direction.OUTGOING)
+	public List<Person> follows = new ArrayList<>();
 
 	/**
 	 * Gender of something, typically a <a class="localLink" href="https://schema.org/Person">Person</a>, but possibly also fictional characters, animals, etc. While https://schema.org/Male and https://schema.org/Female may be used, text strings are also acceptable for people who do not identify as a binary gender. The <a class="localLink" href="https://schema.org/gender">gender</a> property can also be used in an extended sense to cover e.g. the gender of sports teams. As with the gender of individuals, we do not try to enumerate all possibilities. A mixed-gender <a class="localLink" href="https://schema.org/SportsTeam">SportsTeam</a> can be indicated with a text value of "Mixed".
@@ -165,7 +174,8 @@ public class Person { // extends Thing {
 	/**
 	 * A contact location for a person's residence.
 	 */
-	public Place homeLocation;
+	@Relationship(type = "HAS_HOME_LOCATION", direction = Relationship.Direction.OUTGOING)
+	public List<Place> homeLocation = new ArrayList<>();
 
 	/**
 	 * An honorific prefix preceding a Person's name such as Dr/Mrs/Mr.
@@ -190,19 +200,23 @@ public class Person { // extends Thing {
 	/**
 	 * The most generic bi-directional social/work relation.
 	 */
-	public Person knows;
+	@Relationship(type = "KNOWS", direction = Relationship.Direction.OUTGOING)
+	public List<Person> knows = new ArrayList<>();
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
 	 * (Expanded subclass of Thing to literal association)
 	 */
-	public Person knowsAboutPerson;
+	@Relationship(type = "KNOWS_ABOUT", direction = Relationship.Direction.OUTGOING)
+	public List<Person> knowsAboutPerson = new ArrayList<>();
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a topic that is known about - suggesting possible expertise but not implying it. We do not distinguish skill levels here, or relate this to educational content, events, objectives or <a class="localLink" href="https://schema.org/JobPosting">JobPosting</a> descriptions.
 	 * (Expanded subclass of Thing to literal association)
+	 * TODO: Can we query either the Person or the Organization on the same named relationship?
 	 */
-	public Organization knowsAboutOrganization;
+	@Relationship(type = "KNOWS_ABOUT_ORGANIZATION", direction = Relationship.Direction.OUTGOING)
+	public List<Organization> knowsAboutOrganization = new ArrayList<>();
 
 	/**
 	 * Of a <a class="localLink" href="https://schema.org/Person">Person</a>, and less typically of an <a class="localLink" href="https://schema.org/Organization">Organization</a>, to indicate a known language. We do not distinguish skill levels or reading/writing/speaking/signing here. Use language codes from the <a href="http://tools.ietf.org/html/bcp47">IETF BCP 47 standard</a>.
@@ -211,9 +225,10 @@ public class Person { // extends Thing {
 
 	/**
 	 * An Organization (or ProgramMembership) to which this Person or Organization belongs.
+	 * TODO: owl-to-java this was generated as memberOf not member.
 	 */
 	@Relationship(type = "IS_MEMBER_OF", direction = Relationship.Direction.OUTGOING)
-	public List<Organization> memberOf = new ArrayList<>();
+	public List<Organization> member = new ArrayList<>();
 
 	/**
 	 * The North American Industry Classification System (NAICS) code for a particular organization or business person.
@@ -228,27 +243,32 @@ public class Person { // extends Thing {
 	/**
 	 * A parent of this person.
 	 */
-	public Person parent;
+	@Relationship(type = "HAS_PARENT", direction = Relationship.Direction.OUTGOING)
+	public List<Person> parent = new ArrayList<>();
 
 	/**
 	 * The most generic familial relation.
 	 */
-	public Person relatedTo;
+	@Relationship(type = "IS_RELATED_TO", direction = Relationship.Direction.OUTGOING)
+	public List<Person> relatedTo = new ArrayList<>();
 
 	/**
 	 * A sibling of the person.
 	 */
-	public Person sibling;
+	@Relationship(type = "HAS_SIBLING", direction = Relationship.Direction.OUTGOING)
+	public List<Person> sibling = new ArrayList<>();
 
 	/**
 	 * A person or organization that supports a thing through a pledge, promise, or financial contribution. e.g. a sponsor of a Medical Study or a corporate sponsor of an event.
 	 */
-	public Person sponsor;
+	@Relationship(type = "HAS_SPONSOR", direction = Relationship.Direction.OUTGOING)
+	public List<Person> sponsor = new ArrayList<>();
 
 	/**
 	 * The person's spouse.
 	 */
-	public Person spouse;
+	@Relationship(type = "HAS_SPOUSE", direction = Relationship.Direction.OUTGOING)
+	public List<Person> spouse = new ArrayList<>();
 
 	/**
 	 * The Tax / Fiscal ID of the organization or person, e.g. the TIN in the US or the CIF/NIF in Spain.
@@ -273,12 +293,14 @@ public class Person { // extends Thing {
 	/**
 	 * A contact location for a person's place of work.
 	 */
-	public Place workLocation;
+	@Relationship(type = "HAS_WORK_LOCATION", direction = Relationship.Direction.OUTGOING)
+	public List<Place> workLocation = new ArrayList<>();
 
 	/**
 	 * Organizations that the person works for.
 	 */
-	public Organization worksFor;
+	@Relationship(type = "WORKS_FOR", direction = Relationship.Direction.OUTGOING)
+	public List<Organization> worksFor;
 
 	/**
 	 * Date of birth.

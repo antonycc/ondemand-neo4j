@@ -102,7 +102,7 @@ class RepositoryTest(
             .contains(testData.theShire.name)
     }
 
-    //@Test shouldRetrievePlaceByPersonIdBornInPlace
+    @Test
     fun shouldRetrievePlaceByPersonIdBornInPlace() {
 
         placeRepository.save<Place>(testData.theShire)
@@ -158,7 +158,7 @@ class RepositoryTest(
 
         Assertions.assertThat(personRepository.findByFamilyName(testData.bilbo.familyName))
             .hasSize(2)
-        Assertions.assertThat(personRepository.findAll().map { it.birthPlace.name })
+        Assertions.assertThat(personRepository.findAll().map { it.birthPlace.first().name })
             .hasSize(2)
             .contains(testData.theShire.name)
         Assertions.assertThat(placeRepository.findAll())
@@ -199,7 +199,12 @@ class RepositoryTest(
             .hasSize(2)
             .contains(testData.bilbo.givenName)
             .contains(testData.frodo.givenName)
+
         // Query both ways
+        val findTheFellowshipByName = organizationRepository
+            .findByName(testData.theFellowship.name)
+        Assertions.assertThat(findTheFellowshipByName)
+            .hasSize(1)
         Assertions.assertThat(organizationRepository
             .findByName(testData.theFellowship.name).map { it.member }.flatten().map { it.name } )
             .hasSize(2)

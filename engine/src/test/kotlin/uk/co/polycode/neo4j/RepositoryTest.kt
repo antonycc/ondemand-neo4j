@@ -76,8 +76,7 @@ class RepositoryTest(
     @Test
     fun shouldRetrievePlaceByFamousPersonName() {
 
-        placeRepository.save<Place>(testData.theShire)
-        placeRepository.save<Place>(testData.valinor)
+        personRepository.save<Person>(testData.frodo)
 
         Assertions.assertThat(placeRepository.findByFamousPersonName(testData.frodo.name).map { it.name })
             .hasSize(1)
@@ -87,8 +86,7 @@ class RepositoryTest(
     @Test
     fun shouldRetrievePlaceByFamousPersonId() {
 
-        placeRepository.save<Place>(testData.theShire)
-        placeRepository.save<Place>(testData.valinor)
+        personRepository.save<Person>(testData.frodo)
 
         Assertions.assertThat(personRepository.findByName(testData.frodo.name))
             .hasSize(1)
@@ -105,8 +103,7 @@ class RepositoryTest(
     @Test
     fun shouldRetrievePlaceByPersonIdBornInPlace() {
 
-        placeRepository.save<Place>(testData.theShire)
-        placeRepository.save<Place>(testData.valinor)
+        personRepository.save<Person>(testData.frodo)
 
         Assertions.assertThat(personRepository.findByName(testData.frodo.name))
             .hasSize(1)
@@ -120,16 +117,63 @@ class RepositoryTest(
             .contains(testData.theShire.name)
     }
 
-    // https://stackoverflow.com/questions/71444286/spring-boot-neo4j-query-param
-//    // TODO: @Test
-//    fun shouldRetrievePlaceByConnectedPerson() {
-//
-//        placeRepository.save<Place>(testData.theShire)
-//
-//        Assertions.assertThat(placeRepository.findByConnectedPerson(testData.frodo).map { it.name })
-//            .hasSize(1)
-//            .contains(theShire.name)
-//    }
+    // @Test TODO: query by  relationship to a none-node (and possibly remove the relationship)
+    fun shouldRetrievePlaceByPersonIdWithAddressAtPlace() {
+
+        personRepository.save<Person>(testData.frodo)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        //Assertions.assertThat(placeRepository.findByPersonIdWithAddressAtPlace(frodo.id).map { it.name })
+        //    .hasSize(1)
+        //    .contains(testData.bagEnd.name)
+    }
+
+    @Test
+    fun shouldRetrievePlaceByPersonIdWithHomeLocationAtPlace() {
+
+        personRepository.save<Person>(testData.frodo)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        Assertions.assertThat(placeRepository.findByPersonIdWithHomeLocationAtPlace(frodo.id).map { it.name })
+            .hasSize(1)
+            .contains(testData.bagEnd.name)
+    }
+
+    @Test
+    fun shouldRetrievePlaceRelatedToPerson() {
+
+        //placeRepository.save<Place>(testData.theShire)
+        //placeRepository.save<Place>(testData.bagEnd) // TODO: Does the test still work without this?
+        //placeRepository.save<Place>(testData.valinor)
+        personRepository.save<Person>(testData.frodo)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+        Assertions.assertThat(placeRepository.findByName(testData.theShire.name))
+            .hasSize(1)
+        Assertions.assertThat(placeRepository.findByName(testData.bagEnd.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        Assertions.assertThat(placeRepository.findByPersonIdRelatedToPlace(frodo.id).map { it.name })
+            .contains(testData.theShire.name)
+            .contains(testData.bagEnd.name)
+    }
 
     // TODO: Query organizations with members
 

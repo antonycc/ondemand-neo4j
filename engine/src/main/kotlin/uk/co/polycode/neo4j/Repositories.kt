@@ -53,12 +53,20 @@ interface PlaceRepository : Neo4jRepository<Place, UUID> {
     @RestResource(path = "byFamousPerson", rel = "byFamousPerson")
     fun findByFamousPersonId(@Param("paramPersonId") paramPersonId: UUID): List<Place>
 
-    @RestResource(path = "byPersonIdNameBornInPlace", rel = "byPersonNameBornInPlace")
+    @RestResource(path = "byPersonIdBornInPlace", rel = "byPersonIdBornInPlace")
     @Query("MATCH (place:Place)<-[:HAS_BIRTH_PLACE]-(person:Person) WHERE person.id = \$paramPersonId RETURN place")
     fun findByPersonIdBornInPlace(@Param("paramPersonId") paramPersonId: UUID): List<Place>
 
-    //@RestResource(path = "byConnectedPersonName", rel = "byConnectedPersonName")
-    //fun findByConnectedPerson(@Param("name") name: String): List<Place>
+    @RestResource(path = "byPersonIdWithHomeLocationAtPlace", rel = "byPersonIdWithHomeLocationAtPlace")
+    @Query("MATCH (place:Place)<-[:HAS_HOME_LOCATION]-(person:Person) WHERE person.id = \$paramPersonId RETURN place")
+    fun findByPersonIdWithHomeLocationAtPlace(@Param("paramPersonId") paramPersonId: UUID): List<Place>
+
+    // See also: https://stackoverflow.com/questions/71444286/spring-boot-neo4j-query-param
+    @RestResource(path = "byPersonIdRelatedToPlace", rel = "byPersonIdRelatedToPlace")
+    //@Query("MATCH (place:Place)<-[:HAS_BIRTH_PLACE]-(person:Person) WHERE person.id = \$paramPersonId RETURN place")
+    //@Query("MATCH (place:Place)<-[:HAS_HOME_LOCATION]-(person:Person) WHERE person.id = \$paramPersonId RETURN place")
+    @Query("MATCH (place:Place)<-[*]-(person:Person) WHERE person.id = \$paramPersonId RETURN place")
+    fun findByPersonIdRelatedToPlace(@Param("paramPersonId") paramPersonId: UUID): List<Place>
 }
 
 @Repository

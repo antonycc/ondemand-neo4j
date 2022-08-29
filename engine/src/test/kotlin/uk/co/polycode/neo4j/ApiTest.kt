@@ -58,12 +58,12 @@ class ApiTest(
     private val rootDocumentFilepath = Paths.get("./build/index.json")
     private var personsDocument: String = "The persons document not been generated."
     private val personsDocumentFilepath = Paths.get("./build/persons-hateoas.json")
-    //private var placesDocument: String = "The places document not been generated."
-    //private val placesDocumentFilepath = Paths.get("./build/places.json")
-    //private var organizationsDocument: String = "The organizations document not been generated."
-    //private val organizationsDocumentFilepath = Paths.get("./build/organizations.json")
+    private var placesDocument: String = "The places document not been generated."
+    private val placesDocumentFilepath = Paths.get("./build/places-hateoas.json")
+    private var organizationsDocument: String = "The organizations document not been generated."
+    private val organizationsDocumentFilepath = Paths.get("./build/organizations-hateoas.json")
     //private var postalAddressesDocument: String = "The postalAddresses document not been generated."
-    //private val postalAddressesDocumentFilepath = Paths.get("./build/postalAddresses.json")
+    //private val postalAddressesDocumentFilepath = Paths.get("./build/postalAddresses-hateoas.json")
 
     @BeforeAll
     fun jsonSchemaGenerator() {
@@ -126,21 +126,21 @@ class ApiTest(
             content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
         }
 
-//        mvc.get("/places"){
-//            accept = MediaType.APPLICATION_JSON
-//        }.andExpect {
-//            status { isOk() }
-//            content { contentType(MediaType.APPLICATION_JSON) }
-//            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
-//        }
-//
-//        mvc.get("/organizations"){
-//            accept = MediaType.APPLICATION_JSON
-//        }.andExpect {
-//            status { isOk() }
-//            content { contentType(MediaType.APPLICATION_JSON) }
-//            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
-//        }
+        mvc.get("/places"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
+
+        mvc.get("/organizations"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
 
         // TODO: Find a way to explicitly query non-repository entities e.g. @RepositoryRestResource(exported = false)
 //        mvc.get("/postalAddresses"){
@@ -187,23 +187,23 @@ class ApiTest(
             content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
         }
 
-//        mvc.get("/places"){
-//            accept = MediaType.APPLICATION_JSON
-//        }.andExpect {
-//            status { isOk() }
-//            content { contentType(MediaType.APPLICATION_JSON) }
-//            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
-//        }
-//
-//        mvc.get("/organizations"){
-//            accept = MediaType.APPLICATION_JSON
-//        }.andDo {
-//            MockMvcResultHandlers.print()
-//        }.andExpect {
-//            status { isOk() }
-//            content { contentType(MediaType.APPLICATION_JSON) }
-//            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
-//        }
+        mvc.get("/places"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
+
+        mvc.get("/organizations"){
+            accept = MediaType.APPLICATION_JSON
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }
 
         // TODO: Find a way to explicitly query non-repository entities e.g. @RepositoryRestResource(exported = false)
 //        mvc.get("/postalAddresses"){
@@ -279,29 +279,29 @@ class ApiTest(
         personsDocumentFilepath.toFile().printWriter().use { out -> out.println(personsDocumentString) }
         personsDocument = personsDocumentString
 
-//        val placesDocumentString = mvc.get("/places"){
-//            accept = MediaType.APPLICATION_JSON
-//        }.andExpect {
-//            status { isOk() }
-//            content { contentType(MediaType.APPLICATION_JSON) }
-//            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
-//        }.andDo {
-//            MockMvcResultHandlers.print()
-//        }.andReturn().response.contentAsString
-//        placesDocumentFilepath.toFile().printWriter().use { out -> out.println(placesDocumentString) }
-//        placesDocument = placesDocumentString
-//
-//        val organizationsDocumentString = mvc.get("/organizations"){
-//            accept = MediaType.APPLICATION_JSON
-//        }.andExpect {
-//            status { isOk() }
-//            content { contentType(MediaType.APPLICATION_JSON) }
-//            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
-//        }.andDo {
-//            MockMvcResultHandlers.print()
-//        }.andReturn().response.contentAsString
-//        organizationsDocumentFilepath.toFile().printWriter().use { out -> out.println(organizationsDocumentString) }
-//        organizationsDocument = organizationsDocumentString
+        val placesDocumentString = mvc.get("/places"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
+        placesDocumentFilepath.toFile().printWriter().use { out -> out.println(placesDocumentString) }
+        placesDocument = placesDocumentString
+
+        val organizationsDocumentString = mvc.get("/organizations"){
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            content { JsonSchemaValidator.matchesJsonSchema(jsonSchema) }
+        }.andDo {
+            MockMvcResultHandlers.print()
+        }.andReturn().response.contentAsString
+        organizationsDocumentFilepath.toFile().printWriter().use { out -> out.println(organizationsDocumentString) }
+        organizationsDocument = organizationsDocumentString
 
         // TODO: Find a way to explicitly query non-repository entities e.g. @RepositoryRestResource(exported = false)
         //val postalAddressesDocumentString = mvc.get("/postalAddresses"){

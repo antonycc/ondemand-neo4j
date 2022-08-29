@@ -62,6 +62,128 @@ class RepositoryTest(
     }
 
     @Test
+    fun shouldRetrievePhotosForPlaceByName() {
+
+        placeRepository.save<Place>(testData.placeWithPhoto)
+        placeRepository.save<Place>(testData.theShire)
+        placeRepository.save<Place>(testData.valinor)
+
+        Assertions.assertThat(placeRepository.findByName(testData.placeWithPhoto.name).map { it.photo })
+            .hasSize(1)
+            .contains(testData.placeWithPhoto.photo)
+    }
+
+    @Test
+    fun shouldRetrievePlaceByFamousPersonName() {
+
+        personRepository.save<Person>(testData.frodo)
+
+        Assertions.assertThat(placeRepository.findByFamousPersonName(testData.frodo.name).map { it.name })
+            .hasSize(1)
+            .contains(testData.theShire.name)
+    }
+
+    @Test
+    fun shouldRetrievePlaceByFamousPersonId() {
+
+        personRepository.save<Person>(testData.frodo)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        Assertions.assertThat(placeRepository.findByFamousPersonId(frodo.id).map { it.name })
+            .hasSize(1)
+            .contains(testData.theShire.name)
+    }
+
+    @Test
+    fun shouldRetrievePlaceByPersonIdBornInPlace() {
+
+        personRepository.save<Person>(testData.frodo)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        Assertions.assertThat(placeRepository.findByPersonIdBornInPlace(frodo.id).map { it.name })
+            .hasSize(1)
+            .contains(testData.theShire.name)
+    }
+
+    // TODO: shouldRetrievePersonWithAddress @Test
+    fun shouldRetrievePersonWithAddress() {
+
+        personRepository.save<Person>(testData.frodo)
+        personRepository.save<Person>(testData.bilbo)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        Assertions.assertThat(personRepository.findPersonWithAddressName(testData.bagEndAddress.name).map { it.name })
+            .hasSize(2)
+            .contains(testData.frodo.name)
+            .contains(testData.bilbo.name)
+    }
+
+    @Test
+    fun shouldRetrievePlaceByPersonIdWithHomeLocationAtPlace() {
+
+        personRepository.save<Person>(testData.frodo)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        Assertions.assertThat(placeRepository.findByPersonIdWithHomeLocationAtPlace(frodo.id).map { it.name })
+            .hasSize(1)
+            .contains(testData.bagEnd.name)
+    }
+
+    @Test
+    fun shouldRetrievePlaceRelatedToPerson() {
+
+        personRepository.save<Person>(testData.frodo)
+
+        Assertions.assertThat(personRepository.findByName(testData.frodo.name))
+            .hasSize(1)
+        Assertions.assertThat(placeRepository.findByName(testData.theShire.name))
+            .hasSize(1)
+        Assertions.assertThat(placeRepository.findByName(testData.bagEnd.name))
+            .hasSize(1)
+
+        val frodo = personRepository.findByName(testData.frodo.name).first()
+        Assertions.assertThat(frodo).isNotNull
+        Assertions.assertThat(frodo.id).isNotNull
+
+        Assertions.assertThat(placeRepository.findByPersonIdRelatedToPlace(frodo.id).map { it.name })
+            .contains(testData.theShire.name)
+            .contains(testData.bagEnd.name)
+    }
+
+    // TODO: Query organizations with members
+
+    // TODO: Query persons related to an organisation without specifying a relationship type
+
+    // TODO: Relationship properties. e.g. Person::Organization affiliation since
+
+    // TODO: return paths and distances for connected persons
+    // See https://stackoverflow.com/questions/71444286/spring-boot-neo4j-query-param
+
+    @Test
     fun shouldSaveAggregatedObject() {
 
         personRepository.save<Person>(testData.gandalfTheGrey)
@@ -82,7 +204,7 @@ class RepositoryTest(
 
         Assertions.assertThat(personRepository.findByFamilyName(testData.bilbo.familyName))
             .hasSize(2)
-        Assertions.assertThat(personRepository.findAll().map { it.birthPlace.name })
+        Assertions.assertThat(personRepository.findAll().map { it.birthPlace.first().name })
             .hasSize(2)
             .contains(testData.theShire.name)
         Assertions.assertThat(placeRepository.findAll())
@@ -123,7 +245,12 @@ class RepositoryTest(
             .hasSize(2)
             .contains(testData.bilbo.givenName)
             .contains(testData.frodo.givenName)
+
         // Query both ways
+        val findTheFellowshipByName = organizationRepository
+            .findByName(testData.theFellowship.name)
+        Assertions.assertThat(findTheFellowshipByName)
+            .hasSize(1)
         Assertions.assertThat(organizationRepository
             .findByName(testData.theFellowship.name).map { it.member }.flatten().map { it.name } )
             .hasSize(2)
@@ -131,15 +258,7 @@ class RepositoryTest(
             .contains(testData.frodo.name)
     }
 
-    // TODO: (next) Query by Place and Organisation repositories
-
-    // TODO: Wildcard relationships
-
-    // TODO: Relationship properties. e.g. Person::Organization affiliation since
-
     @Test
-    @Ignore("TODO: (in string) This test fails marshalling the JSON to/from an object with references.")
-    // TODO: Test fails marshalling the JSON to/from an object with references. See OntologyRepositories.toJsonString()
     fun shouldExportModelAsJson() {
 
         testData::class.memberProperties.asSequence()
@@ -155,40 +274,9 @@ class RepositoryTest(
         val exportJson = ontologyRepositories.exportAllRepositoriesAsMapOfJsonStrings()
         exportJson.asSequence()
             .forEach { Paths.get("./build/${it.key}-export.json").toFile().writeText(it.value) }
-        //neo4jTestExportFilepath.toFile()
-        //    .printWriter().use { out -> out.println(exportJson) }
 
         Assertions.assertThat(exportJson["person"]).contains(testData.bilbo.familyName)
         Assertions.assertThat(exportJson["place"]).contains(testData.theShire.name)
     }
-
-    /*@TestConfiguration // <.>
-    open class TestHarnessConfig() {
-        @Bean // <.>
-        open fun neo4j(): Neo4j {
-            return Neo4jBuilders.newInProcessBuilder()
-                .withDisabledServer()
-                .build()
-        }
-    }
-
-    @Test
-    fun hasValidNeo4jConfig(@Autowired neo4j: Neo4j) {
-        val expectedDatabase = "neo4j"
-        Assertions.assertThat(neo4j).isNotNull
-        //println("bolt URI: ${neo4j.boltURI()}")
-        //println("http URI: ${neo4j.httpURI()}")
-        //println("https URI: ${neo4j.httpsURI()}")
-        //println(neo4j.config())
-        //val baos = ByteArrayOutputStream()
-        //neo4j.printLogs(PrintStream(baos, true, StandardCharsets.UTF_8.name()))
-        //println(baos.toString(StandardCharsets.UTF_8.name()))
-        val databases = neo4j.databaseManagementService().listDatabases()
-        //println("databases: ${databases}")
-        Assertions.assertThat(databases).hasSizeGreaterThan(0).contains(expectedDatabase)
-        val database = neo4j.databaseManagementService().database(expectedDatabase)
-        Assertions.assertThat(database.isAvailable(1000)).isTrue
-    }*/
-
 }
 

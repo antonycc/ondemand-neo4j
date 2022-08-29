@@ -33,21 +33,22 @@ class TestData {
                 "down on or to eat: it was a Hobbit-hole, and that means comfort."
     }
 
-    val placeWithPhoto: Place = Place()
-        .apply {
+    val placeWithPhoto: Place = Place().apply {
+        name = "photoPlace"
         photo = "test-photo"
     }
 
+    // TODO: Check for other reflexive relationships
     val theShire: Place = Place().apply {
         name = "The Shire"
-        containsPlace = bagEnd
+        //containsPlace = mutableListOf(bagEnd)
     }
     val valinor: Place = Place().apply {
         name = "Valinor"
     }
     val bagEnd: Place = Place().apply {
         name = "Bag End"
-        containedInPlace = theShire
+        containedInPlace = mutableListOf(theShire)
     }
 
     val theFellowship = Organization().apply {
@@ -61,34 +62,32 @@ class TestData {
         name = "Gandalf"
         givenName = "Gandalf"
         familyName = "The Grey"
-        birthPlace = valinor
-        memberOf.add(theFellowship)
-        memberOf.add(theOrderOfWizards)
+        birthPlace = mutableListOf(valinor)
+        member = mutableListOf(theFellowship, theOrderOfWizards)
     }
     val gandalfTheWhite = Person().apply {
         name = "Gandalf"
         givenName = "Gandalf"
         familyName = "The White"
-        birthPlace = valinor
-        memberOf.add(theFellowship)
-        memberOf.add(theOrderOfWizards)
+        birthPlace = mutableListOf(valinor)
+        member = mutableListOf(theFellowship, theOrderOfWizards)
     }
     val bilbo = Person().apply {
         name = "Bilbo"
         givenName = "Bilbo"
         familyName = "Baggins"
-        birthPlace = theShire
-        address = bagEndAddress
-        homeLocation = bagEnd
+        birthPlace = mutableListOf(theShire)
+        address = mutableListOf(bagEndAddress)
+        homeLocation = mutableListOf(bagEnd)
     }
     val frodo = Person().apply {
         name = "Frodo"
         givenName = "Frodo"
         familyName = "Baggins"
-        birthPlace = theShire
-        address = bagEndAddress
-        homeLocation = bagEnd
-        memberOf.add(theFellowship)
+        birthPlace = mutableListOf(theShire)
+        address = mutableListOf(bagEndAddress)
+        homeLocation = mutableListOf(bagEnd)
+        member = mutableListOf(theFellowship)
     }
 
     // Create recursive relationships

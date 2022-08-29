@@ -24,7 +24,7 @@ import java.util.UUID;
  *
  */
 @ExportableFor(clazz=uk.co.polycode.neo4j.data.Place.class)
-@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Place {
 
@@ -82,7 +82,8 @@ public class Place {
 	/**
 	 * Physical address of the item.
 	 */
-	public PostalAddress address;
+	@ExportableToListOf(clazz=PostalAddress.class)
+	public List<PostalAddress> address;
 
 	/**
 	 * A short textual code (also called "store code") that uniquely identifies a place of business. The code is typically assigned by the parentOrganization and used in structured URLs.<br/><br/>
@@ -94,12 +95,16 @@ public class Place {
 	/**
 	 * The basic containment relation between a place and one that contains it.
 	 */
-	public Place containedInPlace;
+	@ExportableToListOf(clazz=Place.class)
+	public List<Place> containedInPlace;
 
 	/**
 	 * The basic containment relation between a place and another that it contains.
+	 * TODO: In owl-to-java Relationship.Direction.INCOMING relations are hidden?
 	 */
-	public Place containsPlace;
+	@ExportableToListOf(clazz=Place.class)
+	//@JsonIgnore
+	public List<Place> containsPlace;
 
 
 	/**

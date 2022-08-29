@@ -14,8 +14,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
 val targetJvmVersion: String by project
-//val testWithEmbeddedNeo4j = !project.hasProperty("testWithLocalNeo4j") // e.g. -PtestWithLocalNeo4j
-val testWithEmbeddedNeo4j = false
+val testWithEmbeddedNeo4j = !project.hasProperty("testWithLocalNeo4j") // e.g. -PtestWithLocalNeo4j
 
 // Literal constants for otherwise over duplicated strings
 val slf4jGroup = "org.slf4j"

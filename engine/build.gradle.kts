@@ -83,7 +83,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     // Spring Data Neo4j and Spring Data Rest, Spring Boot Actuator and Spring Doc
-    implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.2"){
+    implementation("org.springframework.boot:spring-boot-starter-data-rest:2.7.3"){
         exclude(group = slf4jGroup)
         exclude(group = logbackGroup)
         exclude(group = log4jGroup)
@@ -96,12 +96,13 @@ dependencies {
         exclude(group = logbackGroup)
         exclude(group = log4jGroup)
     }
-    implementation("org.springframework.boot:spring-boot-starter-actuator:2.7.2") {
+    implementation("org.springframework.boot:spring-boot-starter-actuator:2.7.3") {
         exclude(group = slf4jGroup)
         exclude(group = logbackGroup)
         exclude(group = log4jGroup)
     }
     implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.11")
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.11")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.11")
     implementation("org.springdoc:springdoc-openapi-data-rest:1.6.11")

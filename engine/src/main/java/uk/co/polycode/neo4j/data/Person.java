@@ -77,13 +77,14 @@ public class Person { // extends Thing {
 
 	/**
 	 * Physical address of the item.
-	 * TODO: Recall why the Lists needed to be initialised. This makes it awkward to deserialize the JSON with missing lists.
 	 */
+	// TODO: Can remove relationships to non-node entities?
 	@Relationship(type = "HAS_ADDRESS", direction = Relationship.Direction.OUTGOING)
 	public List<PostalAddress> address = new ArrayList<>();
 
 	/**
 	 * An organization that this person is affiliated with. For example, a school/university, a club, or a team.
+	 * TODO: Recall why the Lists needed to be initialised. This makes it awkward to deserialize the JSON with missing lists.
 	 */
 	@Relationship(type = "HAS_AFFILIATION", direction = Relationship.Direction.OUTGOING)
 	public List<Organization> affiliation = new ArrayList<>();

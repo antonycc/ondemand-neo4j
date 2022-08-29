@@ -117,10 +117,11 @@ class RepositoryTest(
             .contains(testData.theShire.name)
     }
 
-    // @Test TODO: query by  relationship to a none-node (and possibly remove the relationship)
-    fun shouldRetrievePlaceByPersonIdWithAddressAtPlace() {
+    // TODO: shouldRetrievePersonWithAddress @Test
+    fun shouldRetrievePersonWithAddress() {
 
         personRepository.save<Person>(testData.frodo)
+        personRepository.save<Person>(testData.bilbo)
 
         Assertions.assertThat(personRepository.findByName(testData.frodo.name))
             .hasSize(1)
@@ -129,9 +130,10 @@ class RepositoryTest(
         Assertions.assertThat(frodo).isNotNull
         Assertions.assertThat(frodo.id).isNotNull
 
-        //Assertions.assertThat(placeRepository.findByPersonIdWithAddressAtPlace(frodo.id).map { it.name })
-        //    .hasSize(1)
-        //    .contains(testData.bagEnd.name)
+        Assertions.assertThat(personRepository.findPersonWithAddressName(testData.bagEndAddress.name).map { it.name })
+            .hasSize(2)
+            .contains(testData.frodo.name)
+            .contains(testData.bilbo.name)
     }
 
     @Test
@@ -154,9 +156,6 @@ class RepositoryTest(
     @Test
     fun shouldRetrievePlaceRelatedToPerson() {
 
-        //placeRepository.save<Place>(testData.theShire)
-        //placeRepository.save<Place>(testData.bagEnd) // TODO: Does the test still work without this?
-        //placeRepository.save<Place>(testData.valinor)
         personRepository.save<Person>(testData.frodo)
 
         Assertions.assertThat(personRepository.findByName(testData.frodo.name))
@@ -180,6 +179,9 @@ class RepositoryTest(
     // TODO: Query persons related to an organisation without specifying a relationship type
 
     // TODO: Relationship properties. e.g. Person::Organization affiliation since
+
+    // TODO: return paths and distances for connected persons
+    // See https://stackoverflow.com/questions/71444286/spring-boot-neo4j-query-param
 
     @Test
     fun shouldSaveAggregatedObject() {

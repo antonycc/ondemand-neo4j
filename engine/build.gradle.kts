@@ -159,7 +159,7 @@ dependencies {
     {
         exclude(group = "com.google.guava", module = "guava")
     }
-    testImplementation("com.google.guava:guava:31.1-jre")
+    testImplementation("com.google.guava:guava:31.1-android")
 }
 
 tasks.test {

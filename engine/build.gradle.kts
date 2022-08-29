@@ -73,7 +73,7 @@ configurations {
 dependencies {
 
     // All logging via SLF4J
-    implementation("org.slf4j:slf4j-api:1.7.36")
+    implementation("org.slf4j:slf4j-api:2.0.0")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.23"){
         exclude(group = "org.jetbrains.kotlin")
         exclude(group = log4jGroup)

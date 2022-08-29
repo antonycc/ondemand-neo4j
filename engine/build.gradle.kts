@@ -121,7 +121,7 @@ dependencies {
     testImplementation(kotlin("test"))
 
     // Spring Boot testing
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.2"){
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.3"){
         exclude(group = logbackGroup)
     }
 

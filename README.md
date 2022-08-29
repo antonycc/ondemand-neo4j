@@ -142,7 +142,8 @@ Query Rest API:
 
 * Install Git: https://github.com/git-guides/install-git
 * Install Java 18: https://docs.oracle.com/en/java/javase/18/install/installation-jdk-microsoft-windows-platforms.html
-* Install Docker Desktop: https://docs.docker.com/desktop/install/windows-install/
+* Install Postman: https://www.postman.com/downloads/
+* Install Docker Desktop: https://docs.docker.com/desktop/install/windows-install/ (A restart may be required.)
 * Clone the repository: `git clone git@github.com:antonycc/ondemand-neo4j.git`
 * Run the Docker compose file: `docker compose up`
 * Run the Application: `./gradlew engine:bootRun -PtestWithLocalNeo4j`
@@ -150,7 +151,6 @@ Query Rest API:
 * API Docs: http://localhost:8080/swagger-ui/index.html
 * Login to http://localhost:7474/ using neo4j/secret\
 * Connect to the database and query all objects: `MATCH (o) RETURN o` (expecting to see no people)
-* Install Postman: https://www.postman.com/downloads/
 * Run Postman and create a new personal workspace.
 * Import Postman collection from: `./api-tests.postman.json`
 * Open "API Tests" and run "Test person"

@@ -29,9 +29,10 @@ docker compose up
 * Run the Application by opening the Command Prompt and running:
 ```shell
 cd ondemand-neo4j
-set JAVA_HOME="C:\Program Files\Java\jdk-18.0.2.1" (Or whichever version you have installed in "C:\Program Files\Java")
+set JAVA_HOME="C:\Program Files\Java\jdk-18.0.2.1"
 gradlew engine:bootRun -PtestWithLocalNeo4j
 ```
+(Assuming the version you have installed in `C:\Program Files\Java` is `jdk-18.0.2.1`.)
 * Browse: http://localhost:8080/api/
 * API Docs: http://localhost:8080/swagger-ui/index.html
 * Login to http://localhost:7474/ using neo4j/secret\
@@ -40,6 +41,13 @@ gradlew engine:bootRun -PtestWithLocalNeo4j
 * Import Postman collection from: `./api-tests.postman.json`
 * Open "API Tests" and run "Test person"
 * Return to the browser on http://localhost:7474/ and query all objects: `MATCH (o) RETURN o` to see the new person.
+* Test and Populate using the test data from `./engine/src/test/kotlin/uk/co/polycode/neo4j/TestData.kt` set by running:
+```shell
+cd ondemand-neo4j
+set JAVA_HOME="C:\Program Files\Java\jdk-18.0.2.1"
+gradlew engine:clean engine:test --tests "uk.co.polycode.neo4j.ApiTest.shouldExportDocuments" -PtestWithLocalNeo4j 
+```
+* Return to the browser on http://localhost:7474/ and query all objects: `MATCH (o) RETURN o` to see the test data set.
 
 # Done
 

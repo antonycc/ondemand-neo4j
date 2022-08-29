@@ -19,7 +19,7 @@ Be a useful starting point for a low utilisation project using Neo4j and a demon
 * Install Docker Desktop: https://docs.docker.com/desktop/install/windows-install/ (A restart may be required.)
 * Clone the repository: `git clone https://github.com/antonycc/ondemand-neo4j.git`
 * Run the Docker compose file by opening the Command Prompt and running: `cd ondemand-neo4j; docker compose up`
-* Run the Application by opening the Command Prompt and running: `./gradlew engine:bootRun -PtestWithLocalNeo4j`
+* Run the Application by opening the Command Prompt and running: `cd ondemand-neo4j; ./gradlew engine:bootRun -PtestWithLocalNeo4j`
 * Browse: http://localhost:8080/api/
 * API Docs: http://localhost:8080/swagger-ui/index.html
 * Login to http://localhost:7474/ using neo4j/secret\

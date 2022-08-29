@@ -121,8 +121,7 @@ Connect to the database and query all objects: `MATCH (o) RETURN o`
 
 Launch Rest API:
 ```shell
-% cd ./engine
-% ../gradlew bootRun
+% ./gradlew engine:bootRun -PtestWithLocalNeo4j
 ...
 <===========--> 85% EXECUTING [3m 6s]
 > :engine:bootRun
@@ -130,7 +129,7 @@ Launch Rest API:
 
 Query Rest API:
 ```shell
-% curl --silent http://localhost:8080 | head -5
+% curl --silent http://localhost:8080/api/ | head -5
 {
   "_links" : {
     "places" : {
@@ -138,6 +137,24 @@ Query Rest API:
       "templated" : true
 % 
 ```
+
+# Windows set up
+
+Install Git: https://github.com/git-guides/install-git
+Install Java 18: https://docs.oracle.com/en/java/javase/18/install/installation-jdk-microsoft-windows-platforms.html
+Install Docker Desktop: https://docs.docker.com/desktop/install/windows-install/
+Clone the repository: `git clone git@github.com:antonycc/ondemand-neo4j.git`
+Run the Docker compose file: `docker compose up`
+Run the Application: `./gradlew engine:bootRun -PtestWithLocalNeo4j`
+Browse: http://localhost:8080/api/
+API Docs: http://localhost:8080/swagger-ui/index.html
+Login to http://localhost:7474/ using neo4j/secret\
+Connect to the database and query all objects: `MATCH (o) RETURN o` (expecting to see no people)
+Install Postman: https://www.postman.com/downloads/
+Run Postman and create a new personal workspace.
+Import Postman collection from: `./api-tests.postman.json`
+Open "API Tests" and run "Test person"
+Return to the browser on http://localhost:7474/ and query all objects: `MATCH (o) RETURN o` to see the new person.
 
 # Contributions
 
@@ -213,11 +230,9 @@ On-demand Neo4j is released under the Mozilla Public License, v. 2.0:
 /**
  * On-demand Neo4j is an exploration of Neo4j with deployment to AWS.
  * Copyright (C) 2022  Antony Cartwright, Polycode Limited
- *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -242,11 +257,9 @@ libschemaorg is released under the Mozilla Public License, v. 2.0:
 /**
  * libschemaorg builds Source Code from the Schema.org OWL file
  * Copyright (C) 2022  Antony Cartwright, Polycode Limited
- *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the

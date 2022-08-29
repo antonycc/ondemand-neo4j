@@ -101,6 +101,7 @@ dependencies {
         exclude(group = logbackGroup)
         exclude(group = log4jGroup)
     }
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
     implementation("org.springdoc:springdoc-openapi-ui:1.6.11")
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.6.11")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.6.11")
@@ -108,7 +109,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-hateoas:1.6.11")
 
     // To JSON Schema
-    implementation("com.github.victools:jsonschema-generator:4.25.0")
+    implementation("com.github.victools:jsonschema-generator:4.26.0")
 
     // Utilities
     // TODO: Consider Spring, Guava or Kotlin specific replacements

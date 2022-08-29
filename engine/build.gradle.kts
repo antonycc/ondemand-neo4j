@@ -137,7 +137,7 @@ dependencies {
         }
         testImplementation("org.eclipse.jetty:jetty-http") { version { require("9.4.48.v20220622") } }
         testImplementation("org.eclipse.jetty:jetty-server") { version { require("9.4.48.v20220622") } }
-        testImplementation("io.netty:netty-common:4.1.79.Final")
+        testImplementation("io.netty:netty-common:4.1.80.Final")
         // TODO: Resolve Commons Collections test dependency vulnerability: Cx78f40514-81ff
         // see: https://advisory.checkmarx.net/advisory/vulnerability/Cx78f40514-81ff/
         testImplementation("commons-collections:commons-collections:3.2.2")

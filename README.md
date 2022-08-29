@@ -47,6 +47,11 @@ cd ondemand-neo4j
 set JAVA_HOME="C:\Program Files\Java\jdk-18.0.2.1"
 gradlew engine:clean engine:test --tests "uk.co.polycode.neo4j.ApiTest.shouldExportDocuments" -PtestWithLocalNeo4j 
 ```
+Or via Docker
+```shell
+docker run --interactive --tty --mount type=bind,source="$(pwd)",target=/workspace openjdk:18-alpine sh -c 'cd /workspace && ./gradlew engine:bootRun'
+```
+
 * Return to the browser on http://localhost:7474/ and query all objects: `MATCH (o) RETURN o` to see the test data set.
 
 # Done

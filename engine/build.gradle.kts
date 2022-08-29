@@ -96,7 +96,7 @@ dependencies {
         exclude(group = logbackGroup)
         exclude(group = log4jGroup)
     }
-    implementation("org.springframework.boot:spring-boot-starter-actuator:2.7.2") {
+    implementation("org.springframework.boot:spring-boot-starter-actuator:2.7.3") {
         exclude(group = slf4jGroup)
         exclude(group = logbackGroup)
         exclude(group = log4jGroup)

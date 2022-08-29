@@ -91,7 +91,7 @@ dependencies {
     implementation("org.springframework.data:spring-data-neo4j:6.3.2") {
         exclude(group = log4jGroup)
     }
-    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.2"){
+    implementation("org.springframework.boot:spring-boot-autoconfigure:2.7.3"){
         exclude(group = slf4jGroup)
         exclude(group = logbackGroup)
         exclude(group = log4jGroup)

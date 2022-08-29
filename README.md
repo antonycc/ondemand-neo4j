@@ -17,9 +17,21 @@ Be a useful starting point for a low utilisation project using Neo4j and a demon
 * Install Java 18: https://docs.oracle.com/en/java/javase/18/install/installation-jdk-microsoft-windows-platforms.html
 * Install Postman: https://www.postman.com/downloads/
 * Install Docker Desktop: https://docs.docker.com/desktop/install/windows-install/ (A restart may be required.)
-* Clone the repository: `git clone https://github.com/antonycc/ondemand-neo4j.git`
-* Run the Docker compose file by opening the Command Prompt and running: `cd ondemand-neo4j; docker compose up`
-* Run the Application by opening the Command Prompt and running: `cd ondemand-neo4j; ./gradlew engine:bootRun -PtestWithLocalNeo4j`
+* Clone the repository:
+```shell
+git clone https://github.com/antonycc/ondemand-neo4j.git
+```
+* Run the Docker compose file by opening the Command Prompt and running:
+```shell
+cd ondemand-neo4j
+docker compose up
+```
+* Run the Application by opening the Command Prompt and running:
+```shell
+cd ondemand-neo4j
+set JAVA_HOME="C:\Program Files\Java\jdk-18.0.2.1" (Or whichever version you have installed in "C:\Program Files\Java")
+gradlew engine:bootRun -PtestWithLocalNeo4j
+```
 * Browse: http://localhost:8080/api/
 * API Docs: http://localhost:8080/swagger-ui/index.html
 * Login to http://localhost:7474/ using neo4j/secret\

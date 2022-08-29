@@ -11,6 +11,24 @@ Mission statement:
 Be a useful starting point for a low utilisation project using Neo4j and a demonstration platform that wakes up in under a minute.
 ```
 
+# Getting started on Windows
+
+* Install Git: https://github.com/git-guides/install-git
+* Install Java 18: https://docs.oracle.com/en/java/javase/18/install/installation-jdk-microsoft-windows-platforms.html
+* Install Postman: https://www.postman.com/downloads/
+* Install Docker Desktop: https://docs.docker.com/desktop/install/windows-install/ (A restart may be required.)
+* Clone the repository: `git clone git@github.com:antonycc/ondemand-neo4j.git`
+* Run the Docker compose file: `docker compose up`
+* Run the Application: `./gradlew engine:bootRun -PtestWithLocalNeo4j`
+* Browse: http://localhost:8080/api/
+* API Docs: http://localhost:8080/swagger-ui/index.html
+* Login to http://localhost:7474/ using neo4j/secret\
+* Connect to the database and query all objects: `MATCH (o) RETURN o` (expecting to see no people)
+* Run Postman and create a new personal workspace.
+* Import Postman collection from: `./api-tests.postman.json`
+* Open "API Tests" and run "Test person"
+* Return to the browser on http://localhost:7474/ and query all objects: `MATCH (o) RETURN o` to see the new person.
+
 # Done
 
 On-demand Neo4j:
@@ -137,24 +155,6 @@ Query Rest API:
       "templated" : true
 % 
 ```
-
-# Getting started on Windows
-
-* Install Git: https://github.com/git-guides/install-git
-* Install Java 18: https://docs.oracle.com/en/java/javase/18/install/installation-jdk-microsoft-windows-platforms.html
-* Install Postman: https://www.postman.com/downloads/
-* Install Docker Desktop: https://docs.docker.com/desktop/install/windows-install/ (A restart may be required.)
-* Clone the repository: `git clone git@github.com:antonycc/ondemand-neo4j.git`
-* Run the Docker compose file: `docker compose up`
-* Run the Application: `./gradlew engine:bootRun -PtestWithLocalNeo4j`
-* Browse: http://localhost:8080/api/
-* API Docs: http://localhost:8080/swagger-ui/index.html
-* Login to http://localhost:7474/ using neo4j/secret\
-* Connect to the database and query all objects: `MATCH (o) RETURN o` (expecting to see no people)
-* Run Postman and create a new personal workspace.
-* Import Postman collection from: `./api-tests.postman.json`
-* Open "API Tests" and run "Test person"
-* Return to the browser on http://localhost:7474/ and query all objects: `MATCH (o) RETURN o` to see the new person.
 
 # Contributions
 

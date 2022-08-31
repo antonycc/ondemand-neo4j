@@ -59,11 +59,14 @@ class TestData {
     }
 
     val gandalfTheGrey = Person().apply {
-        name = "Gandalf"
-        givenName = "Gandalf"
-        familyName = "The Grey"
+        name = "XXXXX"
+        givenName = "Charlie"
+        familyName = "XCX"
         birthPlace = mutableListOf(valinor)
-        member = mutableListOf(theFellowship, theOrderOfWizards)
+        member = mutableListOf(theFellowship)
+        birthPlace = mutableListOf(theShire)
+        address = mutableListOf(bagEndAddress)
+        homeLocation = mutableListOf(bagEnd)
     }
     val gandalfTheWhite = Person().apply {
         name = "Gandalf"

@@ -74,6 +74,7 @@ On-demand Neo4j:
 
 # TODO
 
+* Dockerise engine and run with a docker compose file (making the neo4j only option, no longer the default)
 * TODO clean up
 * Get logging working from tests
 * Get logging working from running app

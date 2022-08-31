@@ -28,12 +28,16 @@ buildscript {
 // https://plugins.gradle.org/search?term=org.springframework.boot
 plugins {
     `kotlin-dsl`
+    java
+    kotlin("jvm") version "1.7.10"
+    id("io.spring.dependency-management") version "1.0.13.RELEASE"
+    war
     application
     jacoco
     id("org.springframework.boot") version "2.7.3"
     id("io.gitlab.arturbosch.detekt") version "1.21.0"
     id("org.unbroken-dome.test-sets") version "4.0.0"
-    id("org.jetbrains.kotlin.jvm") version "1.7.10"
+    //id("org.jetbrains.kotlin.jvm") version "1.7.10"
     id("org.barfuin.gradle.taskinfo") version "1.4.0" // ./gradlew tiTree build
 }
 
@@ -149,9 +153,11 @@ dependencies {
 
     // API Testing with REST Assured (included with org.springframework.boot:spring-boot-starter-test)
     testImplementation("io.rest-assured:rest-assured-all:5.1.1") {
+        exclude(group = "org.codehaus.groovy")
         exclude(group = "org.apache.groovy")
     }
     testImplementation("io.rest-assured:kotlin-extensions:5.1.1"){
+        exclude(group = "org.codehaus.groovy")
         exclude(group = "org.apache.groovy")
         exclude(group = "commons-codec")
     }

@@ -1,6 +1,7 @@
 # Purpose: Run neo4j locally with a browser: http://localhost:7474/ with ne04j/secret
 # Usage:
 # $ docker compose up
+# $ docker compose start neo4j
 # Source: docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:4.4.8
 version: '3'
 
@@ -20,3 +21,21 @@ services:
       #- ${HOME}/neo4j/logs:/logs
       #- ${HOME}/neo4j/import:/var/lib/neo4j/import
       #- ${HOME}/neo4j/plugins:/plugins
+    networks:
+      - persistence
+  engine:
+    image: engine:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    environment:
+      - ODN_NEO4J_URI=bolt://neo4j:7687
+      - ODN_NEO4J_AUTH_USERNAME=neo4j
+      - ODN_NEO4J_AUTH_PASSWORD=secret
+    depends_on:
+      - neo4j
+    links:
+      - neo4j
+    networks:
+      - persistence
+networks:
+  persistence: {}

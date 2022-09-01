@@ -28,10 +28,10 @@ buildscript {
 // https://plugins.gradle.org/search?term=org.springframework.boot
 plugins {
     `kotlin-dsl`
-    java
+    //java
     kotlin("jvm") version "1.7.10"
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
-    war
+    //war
     application
     jacoco
     id("org.springframework.boot") version "2.7.3"

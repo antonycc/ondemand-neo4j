@@ -12,10 +12,10 @@ application:
 
 spring:
   neo4j:
-    uri: "bolt://localhost:7687"
+    uri: ${ODN_NEO4J_URI:bolt://localhost:7687}
     authentication:
-      username: "neo4j"
-      password: "secret"
+      username: ${ODN_NEO4J_AUTH_USERNAME:neo4j}
+      password: ${ODN_NEO4J_AUTH_PASSWORD:secret}
 
 #org.neo4j.driver.uri=bolt://localhost:7687
 #org.neo4j.driver.authentication.username=neo4j

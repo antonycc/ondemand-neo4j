@@ -24,7 +24,7 @@ git clone https://github.com/antonycc/ondemand-neo4j.git
 * Run the Docker compose file by opening the Command Prompt and running:
 ```shell
 cd ondemand-neo4j
-docker compose up
+docker compose start neo4j
 ```
 * Run the Application by opening the Command Prompt and running:
 ```shell
@@ -67,14 +67,15 @@ On-demand Neo4j:
 * REST API tested via Embedded HTTP and Mock MVC
 * Swagger docs: http://localhost:8080/swagger-ui/index.html
 * Monitoring endpoints: http://localhost:8080/actuator/healt
-
+* Dockerised engine and run with a docker compose file
+* 
 # Bugs
 
 * None listed
 
 # TODO
 
-* Dockerise engine and run with a docker compose file (making the neo4j only option, no longer the default)
+* Add Newman runner to docker compose file and mount a place pick datasets to load via the REST API.
 * TODO clean up
 * Get logging working from tests
 * Get logging working from running app
@@ -153,12 +154,16 @@ Warning:(82, 24)  Provides transitive vulnerable dependency commons-collections:
 
 http://localhost:8080/api/profile - see application.yml for /api
 
-
+Build and run with Docker
+```shell
+% ./gradlew bootBuildImage
+% docker compose up
+```
 
 Running with Docker
 Run Neo4j as defined in the `docker-compose.yml`:
 ```shell
-% docker compose up
+% docker compose start neo4j
 ```
 Login to http://localhost:7474/ using neo4j/secret\
 Connect to the database and query all objects: `MATCH (o) RETURN o`

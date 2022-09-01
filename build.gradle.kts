@@ -50,6 +50,8 @@ afterEvaluate {
 // ./gradlew printVersion -Psnapshot=false
 //group = "co.uk.polycode"
 //version = "0.0.1-SNAPSHOT"
+group = "co.uk.polycode"
+version = "0.0.1-SNAPSHOT"
 
 // See: https://docs.gradle.org/current/userguide/publishing_maven.html
 // ./gradlew build publishToMavenLocal

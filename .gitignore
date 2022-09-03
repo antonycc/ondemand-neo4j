@@ -6,6 +6,9 @@
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# OliveTin
+**/installation-id.txt
+
 # Gradle files
 **/.gradle
 

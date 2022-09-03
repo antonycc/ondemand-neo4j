@@ -1,0 +1,45 @@
+{
+	"info": {
+		"_postman_id": "a9b60b5f-45f7-41d6-a929-8945274bd53e",
+		"name": "API tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "582530"
+	},
+	"item": [
+		{
+			"name": "Test person",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "accept",
+						"value": "application/hal+json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"testpersonname\",\n  \"familyName\": \"testfirst\",\n  \"givenName\": \"testlast\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/persons",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"persons"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

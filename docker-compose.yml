@@ -4,8 +4,33 @@
 # $ docker compose start neo4j
 # Source: docker run --publish=7474:7474 --publish=7687:7687 -e 'NEO4J_AUTH=neo4j/secret' neo4j:4.4.8
 version: '3'
-
+# TODO: Expose services through port 80
+# TODO: Use a common linux family
 services:
+  dashboard:
+    #container_name: olivetin
+    image: jamesread/olivetin
+    ports:
+      - "1337:1337"
+    volumes:
+      - ./dashboard/olivetin:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - web
+      - agent
+  agent:
+    container_name: agent
+    build:
+      context: ./agent/
+    ports:
+     - "22:22"
+    volumes:
+      - ./postman:/postman
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - agent
+      - persistence
+      - api
   neo4j:
     image: neo4j:4.3.6
     ports:
@@ -22,6 +47,7 @@ services:
       #- ${HOME}/neo4j/import:/var/lib/neo4j/import
       #- ${HOME}/neo4j/plugins:/plugins
     networks:
+      - web
       - persistence
   engine:
     image: engine:0.0.1-SNAPSHOT
@@ -36,6 +62,15 @@ services:
     links:
       - neo4j
     networks:
+      - web
       - persistence
+      - api
 networks:
-  persistence: {}
+  web:
+    driver: bridge
+  agent:
+    driver: bridge
+  api:
+    driver: bridge
+  persistence:
+    driver: bridge

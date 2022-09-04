@@ -9,6 +9,9 @@
 # OliveTin
 **/installation-id.txt
 
+# SSH Keys for inter-container communication
+**/id_rsa*
+
 # Gradle files
 **/.gradle
 

@@ -7,9 +7,12 @@ version: '3'
 # TODO: Expose services through port 80
 # TODO: Use a common linux family
 services:
+  # http://localhost:1337/
   dashboard:
-    #container_name: olivetin
-    image: jamesread/olivetin
+    #image: jamesread/olivetin
+    build:
+      context: ./dashboard/
+    container_name: dashboard
     ports:
       - "1337:1337"
     volumes:
@@ -19,11 +22,16 @@ services:
       - web
       - agent
   agent:
+    depends_on:
+      - dashboard
+    #image: busybox:mlsk
+    #image: sshd
     container_name: agent
     build:
       context: ./agent/
+      #dockerfile: Dockerfile.new
     ports:
-     - "22:22"
+     - "22"
     volumes:
       - ./postman:/postman
       - /var/run/docker.sock:/var/run/docker.sock
@@ -50,6 +58,8 @@ services:
       - web
       - persistence
   engine:
+    depends_on:
+      - neo4j
     image: engine:0.0.1-SNAPSHOT
     ports:
       - "8080:8080"
@@ -57,10 +67,8 @@ services:
       - ODN_NEO4J_URI=bolt://neo4j:7687
       - ODN_NEO4J_AUTH_USERNAME=neo4j
       - ODN_NEO4J_AUTH_PASSWORD=secret
-    depends_on:
-      - neo4j
-    links:
-      - neo4j
+    #links:
+    #  - neo4j
     networks:
       - web
       - persistence

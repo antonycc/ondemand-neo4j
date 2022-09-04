@@ -2,9 +2,13 @@
 actions:
   - title: "Hello world!"
     shell: echo 'Hello World!'
-  - title: "Orientation"
-    shell: pwd ; ls -lart ; cat /etc/hosts
-  - title: "Connectivity"
+  - title: "Dashboard orientation"
+    shell: whoami ; pwd ; ls -lart ; cat /etc/hosts
+  - title: "Internet connectivity"
     shell: ping -c 3 google.com
+  - title: "Inter-container connectivity"
+    shell: ping -c 3 agent
+  - title: "SSH connection to agent"
+    shell: ssh -i /home/olivetin/.ssh/id_rsa_dashboard -o StrictHostKeyChecking=accept-new dashboard@agent 'whoami ; pwd ; ls -lart ; cat /etc/hosts'
   - title: "Newman test"
-    shell: ssh newuser@agent 'newman run "https://www.getpostman.com/collections/8a0c9bc08f062d12dcda"'
+    shell: ssh -i /home/olivetin/.ssh/id_rsa_dashboard -o StrictHostKeyChecking=accept-new dashboard@agent 'newman run "https://www.getpostman.com/collections/8a0c9bc08f062d12dcda"'

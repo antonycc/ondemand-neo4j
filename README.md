@@ -77,6 +77,7 @@ On-demand Neo4j:
 
 * Add Newman runner to docker compose file and mount a place pick datasets to load via the REST API.
 * TODO clean up
+* Stop using "latest" containers and use specific versions with dependabot to keep them up to date.
 * Get logging working from tests
 * Get logging working from running app
 * Capture logging from running app in a test
@@ -154,11 +155,16 @@ Warning:(82, 24)  Provides transitive vulnerable dependency commons-collections:
 
 http://localhost:8080/api/profile - see application.yml for /api
 
-Build and run with Docker
+Build Spring Boot images, generate SSH keys, build supporting Docker containers and run with Docker compose:
 ```shell
 % ./gradlew bootBuildImage
-% docker compose up
+% ./build-docker-ssh-keygen.sh
+% docker compose build --no-cache --pull 
+% docker compose up --force-recreate --detach 
 ```
+* Go here: http://localhost:1337/
+* Click "Newman test"
+* Click "Logs", then "stout" next to "Newman test"
 
 Running with Docker
 Run Neo4j as defined in the `docker-compose.yml`:

@@ -134,7 +134,7 @@ dependencies {
             exclude(group = slf4jGroup)
             exclude(group = log4jGroup)
         }
-        testImplementation("org.neo4j.test:neo4j-harness:4.4.10") {
+        testImplementation("org.neo4j.test:neo4j-harness:4.4.11") {
             exclude(group = slf4jGroup)
             exclude(group = log4jGroup)
         }

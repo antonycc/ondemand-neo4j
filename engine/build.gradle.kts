@@ -161,7 +161,7 @@ dependencies {
         exclude(group = "org.apache.groovy")
         exclude(group = "commons-codec")
     }
-    testImplementation("io.rest-assured:json-schema-validator:5.1.1")
+    testImplementation("io.rest-assured:json-schema-validator:5.2.0")
     {
         exclude(group = "com.google.guava", module = "guava")
     }

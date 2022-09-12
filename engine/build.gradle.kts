@@ -152,7 +152,7 @@ dependencies {
     }
 
     // API Testing with REST Assured (included with org.springframework.boot:spring-boot-starter-test)
-    testImplementation("io.rest-assured:rest-assured-all:5.1.1") {
+    testImplementation("io.rest-assured:rest-assured-all:5.2.0") {
         exclude(group = "org.codehaus.groovy")
         exclude(group = "org.apache.groovy")
     }

@@ -156,7 +156,7 @@ dependencies {
         exclude(group = "org.codehaus.groovy")
         exclude(group = "org.apache.groovy")
     }
-    testImplementation("io.rest-assured:kotlin-extensions:5.1.1"){
+    testImplementation("io.rest-assured:kotlin-extensions:5.3.0"){
         exclude(group = "org.codehaus.groovy")
         exclude(group = "org.apache.groovy")
         exclude(group = "commons-codec")
